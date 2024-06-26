@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import movieApi from '@/api-client/movie'
@@ -7,6 +8,7 @@ import { CirclePlay, MoveRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useLoading } from '../loading-provider'
 
 interface CategoryMovieProps {
   paramCategory: string
@@ -15,8 +17,10 @@ interface CategoryMovieProps {
 export default function CategoryMovie(props: CategoryMovieProps) {
   const { paramCategory } = props
   const [dataMovie, setDataMovie] = useState({} as MovieCategoryItem)
+  const loader = useLoading()
 
   const getMoviesByCate = async (category: string) => {
+    loader.show()
     try {
       const newData = await movieApi.getListCate({ category })
       if (isSuccessResponse(newData)) {
@@ -26,6 +30,8 @@ export default function CategoryMovie(props: CategoryMovieProps) {
       }
     } catch (error) {
       console.error('Lỗi khi tải danh sách phim: ', error)
+    } finally {
+      loader.hidden()
     }
   }
 
