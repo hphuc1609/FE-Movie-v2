@@ -1,6 +1,7 @@
 import { NewMovieResponse } from '@/models/new-movie'
 import { CirclePlay, MoveRight } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface NewUpdateMovieProps {
   dataNew: NewMovieResponse['items']
@@ -37,7 +38,7 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
                   className='w-full h-full object-cover'
                 />
               </div>
-              <a
+              <Link
                 href={`/phim/${item.slug}`}
                 className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-0 cursor-pointer transition-all duration-300 group-hover:bg-opacity-50'
               >
@@ -46,17 +47,20 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
                   strokeWidth={1}
                   className='m-auto h-full opacity-0 group-hover:opacity-100'
                 />
-              </a>
+              </Link>
             </div>
-            <div className='flex flex-1 flex-col gap-2'>
-              <a
-                href={`/phim/${item.slug}`}
-                className='text-sm hover:text-primary-color'
-              >
-                {item.name}
-              </a>
-              <span className='text-xs opacity-70'>{item.year}</span>
-            </div>
+            <Link
+              href={`/phim/${item.slug}`}
+              className='flex-1'
+            >
+              <div className='flex flex-col gap-2 group'>
+                <span className='text-sm group-hover:text-primary-color line-clamp-2 font-medium'>
+                  {item.name}
+                </span>
+                <span className='text-xs opacity-60 line-clamp-1'>{item.origin_name}</span>
+                <span className='text-xs opacity-60'>{item.year}</span>
+              </div>
+            </Link>
           </div>
         ))}
       </div>
