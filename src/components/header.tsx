@@ -23,8 +23,22 @@ import Link from 'next/link'
 
 export default function Header() {
   const pathname = usePathname()
-  const [openDialogSearch, setOpenDialogSearch] = useState(false)
   const isHomePathname = pathname === '/'
+  const scrollPosition = useScrollPosition()
+
+  return (
+    <div
+      className={`w-full h-16 flex items-center justify-between px-20 max-lg:px-[25px] ${
+        isHomePathname ? 'fixed' : 'sticky'
+      } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-black bg-opacity-30'}`}
+    >
+      <HeaderMenubar />
+    </div>
+  )
+}
+
+const HeaderMenubar = React.memo(() => {
+  const [openDialogSearch, setOpenDialogSearch] = useState(false)
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter' || !event.currentTarget.value) {
@@ -42,11 +56,7 @@ export default function Header() {
   }
 
   return (
-    <div
-      className={`w-full h-16 flex items-center justify-between px-20 max-lg:px-[25px] ${
-        isHomePathname ? 'fixed' : 'sticky'
-      } top-0 z-50 transition duration-300 ${useScrollPosition() > 0 && 'bg-black bg-opacity-30'}`}
-    >
+    <>
       <div className='flex gap-14 h-full items-center'>
         <Link
           href='/'
@@ -87,11 +97,12 @@ export default function Header() {
           size={20}
         />
       </div>
-    </div>
+    </>
   )
-}
+})
+HeaderMenubar.displayName = 'HeaderMenubar'
 
-function TextMenubar({ data }: { data: MenuItem }) {
+const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
   const pathname = usePathname()
   const isActive = pathname === data.href
   const checkUrl =
@@ -141,4 +152,5 @@ function TextMenubar({ data }: { data: MenuItem }) {
       </MenubarMenu>
     </Menubar>
   )
-}
+})
+TextMenubar.displayName = 'TextMenubar'

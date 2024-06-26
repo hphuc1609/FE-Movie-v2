@@ -7,14 +7,19 @@ import { useMemo, useState } from 'react'
 import DialogCustom from '../common/dialog'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
+import { useRouter } from 'next/navigation'
 
 interface MovieDetailCardProps {
   detail: DetailResponse['movie']
+  dataEpisode: DetailResponse['episodes']
+  isWatch?: boolean
+  setIsWatch: (value: boolean) => void
 }
 
 export default function MovieDetailCard(props: MovieDetailCardProps) {
-  const { detail } = props
+  const { detail, dataEpisode, isWatch, setIsWatch } = props
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
+  const router = useRouter()
 
   const categories = useMemo(
     () => detail.category?.map((item) => item.name).join(', '),
@@ -46,6 +51,14 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
     { label: 'Năm phát hành', value: detail.year },
   ]
 
+  const handleGoToWatch = () => {
+    setIsWatch(true)
+    sessionStorage.setItem('isWatch', 'true')
+
+    const episode = dataEpisode[0]?.server_data[0]?.slug
+    router.push(`/phim/${detail.slug}?episode=${episode}`)
+  }
+
   return (
     <div className='flex gap-[30px]'>
       <div className='relative w-[300px] h-[440px] rounded-md overflow-hidden'>
@@ -53,30 +66,36 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
           src={detail.poster_url || '/no-image.png'}
           width={300}
           height={440}
-          alt={detail.name}
+          alt={detail.name || ''}
+          priority
           className='w-full h-full object-cover'
         />
-        <div className='absolute h-[56px] flex items-center justify-around gap-2 bottom-0 left-0 w-full bg-black bg-opacity-80'>
-          <Button
-            className='capitalize text-lg font-light hover:bg-transparent bg-transparent group hover:text-primary-color'
-            onClick={() => setOpenDialogTrailer(true)}
-          >
-            <Video
-              size={15}
-              strokeWidth={1}
-              className='mr-2 text-primary-foreground group-hover:text-primary-color'
-              fill='currentColor'
+        {!isWatch && (
+          <div className='absolute h-[56px] flex items-center justify-around gap-2 bottom-0 left-0 w-full bg-black bg-opacity-80'>
+            <Button
+              className='capitalize text-lg font-light hover:bg-transparent bg-transparent group hover:text-primary-color'
+              onClick={() => setOpenDialogTrailer(true)}
+            >
+              <Video
+                size={15}
+                strokeWidth={1}
+                className='mr-2 text-primary-foreground group-hover:text-primary-color'
+                fill='currentColor'
+              />
+              Trailer
+            </Button>
+            <Separator
+              orientation='vertical'
+              className='w-[1px] h-5 opacity-50'
             />
-            Trailer
-          </Button>
-          <Separator
-            orientation='vertical'
-            className='w-[1px] h-5 opacity-50'
-          />
-          <Button className='capitalize text-lg font-light hover:bg-transparent bg-transparent hover:text-primary-color'>
-            Xem Phim
-          </Button>
-        </div>
+            <Button
+              className='capitalize text-lg font-light hover:bg-transparent bg-transparent hover:text-primary-color'
+              onClick={handleGoToWatch}
+            >
+              Xem Phim
+            </Button>
+          </div>
+        )}
       </div>
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>

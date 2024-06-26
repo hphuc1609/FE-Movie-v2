@@ -4,18 +4,25 @@
 import movieApi from '@/api-client/movie'
 import isSuccessResponse from '@/helpers/check-response'
 import { DetailResponse } from '@/models/detail'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import BreadcrumbCustom from '../common/breadcrumb-custom'
-import Reviewbox from '../common/review-box'
+// import Reviewbox from '../common/review-box'
+import { removeCookie } from 'typescript-cookie'
 import { useLoading } from '../loading-provider'
 import MovieDetailCard from './movie-card'
+import MoviePlayer from './movie-player'
 
 export default function Detail() {
   const { path } = useParams()
+  const searchParams = useSearchParams()
   const loader = useLoading()
   const [detail, setDetail] = useState({} as DetailResponse['movie'])
   const [dataEpisode, setDataEpisode] = useState<DetailResponse['episodes']>([])
+  const [isWatch, setIsWatch] = useState(false)
+
+  const nameMovieFromUrl = path[0] || ''
+  const episodeParam = searchParams.get('episode') || ''
 
   const getDetail = async (movieName: string) => {
     loader.show()
@@ -34,18 +41,47 @@ export default function Detail() {
     }
   }
 
+  // Check param episode
   useEffect(() => {
-    if (!path.length) {
+    if (!episodeParam) {
+      sessionStorage.removeItem('isWatch')
+      removeCookie('urlVideo')
+      setIsWatch(false)
+    }
+  }, [episodeParam])
+
+  useEffect(() => {
+    if (!nameMovieFromUrl) {
       return
     }
-    getDetail(path[0])
-  }, [path])
+    getDetail(nameMovieFromUrl)
+  }, [nameMovieFromUrl])
 
-  return (
-    <div className='px-20 py-[35px] flex flex-col gap-[60px]'>
+  useEffect(() => {
+    const getWatchLocal = sessionStorage.getItem('isWatch') === 'true'
+    if (!getWatchLocal) {
+      return
+    }
+    setIsWatch(getWatchLocal)
+  }, [isWatch])
+
+  return detail && dataEpisode.length > 0 ? (
+    <div className='px-20 py-[35px] flex flex-col gap-9'>
       <BreadcrumbCustom movieName={detail.name} />
-      <MovieDetailCard detail={detail} />
-      <Reviewbox />
+      {!isWatch ? (
+        <MovieDetailCard
+          detail={detail}
+          dataEpisode={dataEpisode}
+          isWatch={isWatch}
+          setIsWatch={setIsWatch}
+        />
+      ) : (
+        <MoviePlayer
+          detail={detail}
+          dataEpisode={dataEpisode}
+        />
+      )}
+      {/* <Reviewbox /> */}
     </div>
-  )
+  ) : null
 }

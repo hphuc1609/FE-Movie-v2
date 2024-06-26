@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-sync-scripts */
 import Header from '@/components/header'
 import Loader from '@/components/loader'
 import LoadingProvider from '@/components/loading-provider'

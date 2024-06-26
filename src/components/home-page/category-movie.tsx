@@ -9,6 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useLoading } from '../loading-provider'
+import PlayButton from '../common/play-button'
 
 interface CategoryMovieProps {
   paramCategory: string
@@ -85,13 +86,10 @@ function MovieRowItem(props: MovieRowItemProps) {
                 </div>
                 <Link
                   href={`/phim/${item.slug}`}
-                  className='absolute top-0 left-0 w-full h-full bg-black opacity-0 cursor-pointer transition-all duration-300 group-hover:opacity-50'
+                  className='absolute top-0 left-0 w-full h-full'
                 >
-                  <CirclePlay
-                    size={60}
-                    strokeWidth={1}
-                    className='m-auto h-full'
-                  />
+                  <div className='w-full h-full bg-black opacity-0 transition-all duration-300 group-hover:opacity-50' />
+                  <PlayButton className='opacity-0 group-hover:opacity-100 transition-all duration-300' />
                 </Link>
                 <div className='absolute top-3 left-3 right-3 flex flex-col gap-1 w-fit items-baseline'>
                   <p className='bg-label-color text-xs w-fit font-medium rounded-sm py-1 px-2'>
