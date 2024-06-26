@@ -1,0 +1,44 @@
+'use client'
+
+import Link from 'next/link'
+import React from 'react'
+import { Button } from './ui/button'
+import { ChevronUp } from 'lucide-react'
+
+export default function Footer() {
+  return (
+    <footer className='relative bg-[#181818] dark:bg-gray-900'>
+      <div className='mx-auto max-w-screen-xl px-[25px] py-8 lg:px-20'>
+        <div className='flex items-center justify-between max-md:flex-col max-md:items-baseline'>
+          <Link
+            href='/'
+            className='text-lg font-normal text-primary-color'
+          >
+            Phimsub
+          </Link>
+          <Button
+            size={'icon'}
+            className='rounded-full h-[50px] w-[50px] bg-primary-color absolute left-1/2 -top-4 -translate-x-1/2 hover:bg-primary-color'
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            <ChevronUp
+              size={30}
+              color='white'
+            />
+          </Button>
+          <p className='mt-4 text-center text-sm lg:mt-0 lg:text-right'>
+            <span className='opacity-50'>
+              Copyright &copy; {new Date().getFullYear()}. All rights reserved by{' '}
+            </span>
+            <Link
+              href='https://github.com/hphuc1609'
+              className='hover:underline text-primary-foreground font-semibold'
+            >
+              hphuc1609
+            </Link>
+          </p>
+        </div>
+      </div>
+    </footer>
+  )
+}

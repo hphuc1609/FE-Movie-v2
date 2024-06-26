@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Footer from '@/components/footer'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 
@@ -29,6 +30,7 @@ export default function RootLayout({
           <Loader />
           <Header />
           <main className='min-h-screen overflow-hidden'>{children}</main>
+          <Footer />
         </LoadingProvider>
       </body>
     </html>

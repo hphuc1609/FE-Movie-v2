@@ -11,7 +11,10 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
   return (
     <div className='max-md:hidden flex flex-col gap-5 flex-1'>
       <div className='flex items-center justify-between'>
-        <h2 className='text-lg font-semibold uppercase text-primary-color'>Phim mới cập nhật</h2>
+        <h2 className='text-lg font-semibold uppercase text-primary-color'>
+          Phim mới
+          <span className='ml-1 text-primary-foreground'>cập nhật</span>
+        </h2>
         <div className='flex items-center gap-4 cursor-pointer'>
           <p className='text-xs font-medium uppercase'>Tất cả</p>
           <MoveRight size={20} />

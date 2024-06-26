@@ -46,8 +46,8 @@ export interface MovieItem {
   quality: string
   lang: string
   year: number
-  categories: MovieCategory[]
-  countries: MovieCountry[]
+  category: MovieCategory[]
+  country: MovieCountry[]
 }
 
 interface Modified {

@@ -36,18 +36,18 @@ export default function CategoryMovie(props: CategoryMovieProps) {
   return (
     <MovieRowItem
       data={dataMovie}
-      category={paramCategory}
+      paramCategory={paramCategory}
     />
   )
 }
 
 interface MovieRowItemProps {
   data: MovieCategoryItem
-  category: string
+  paramCategory: string
 }
 
 function MovieRowItem(props: MovieRowItemProps) {
-  const { data, category } = props
+  const { data, paramCategory } = props
 
   return (
     <div className='w-fit flex flex-col gap-6'>
@@ -59,12 +59,12 @@ function MovieRowItem(props: MovieRowItemProps) {
         </div>
       </div>
 
-      <div className='grid grid-cols-3 max-md:grid-cols-2 gap-x-[30px] max-lg:gap-y-9 max-md:gap-x-6'>
+      <div className='grid grid-cols-3 max-md:grid-cols-2 gap-[30px] max-lg:gap-y-9 max-md:gap-x-6'>
         {data.items?.length > 0 &&
           data.items.slice(0, 6).map((item) => (
             <div
               key={item._id}
-              className='w-[230px] h-[478px] max-lg:h-fit max-lg:w-[160px] flex flex-col gap-5'
+              className='w-[230px] h-[478px] max-lg:h-fit max-lg:w-[160px] flex flex-col gap-4'
             >
               <div className='relative group h-[325px] max-lg:h-[260px] rounded-md bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'>
                 <div className='group-hover:scale-110 h-full w-full transition-all duration-500'>
@@ -91,12 +91,22 @@ function MovieRowItem(props: MovieRowItemProps) {
                   <p className='bg-label-color text-xs w-fit font-medium rounded-sm py-1 px-2'>
                     {item.quality} {item.lang}
                   </p>
-                  {category === 'phim-bo' && (
+                  {paramCategory === 'phim-bo' && (
                     <p className='bg-label-color w-fit text-xs font-medium rounded-sm py-1 px-2'>
                       {item.episode_current}
                     </p>
                   )}
                 </div>
+              </div>
+              <div className='flex items-center flex-wrap gap-1'>
+                {item.category.map((cate) => (
+                  <div
+                    key={cate.id}
+                    className='w-fit text-[10px] font-medium rounded-xl bg-gray-700 bg-opacity-50 px-2 py-1'
+                  >
+                    {cate.name}
+                  </div>
+                ))}
               </div>
               <Link href={`/phim/${item.slug}`}>
                 {item.name} ({item.year})

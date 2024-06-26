@@ -83,7 +83,7 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
         <div className='flex flex-col gap-2'>
           <h3 className='text-3xl font-semibold text-primary-color'>{detail.name}</h3>
           <span className='opacity-70 font-medium text-lg'>
-            {detail.origin_name} {detail.year && `(${detail.year})`}
+            {detail.origin_name} ({detail.year})
           </span>
         </div>
         <p className='line-clamp-4'>{detail.content}</p>

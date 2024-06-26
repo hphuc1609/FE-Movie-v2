@@ -72,12 +72,16 @@
   }
   body {
     @apply bg-background text-foreground;
+    outline: none;
   }
 }
 
 @layer utilities {
   .text-primary-color {
     @apply text-yellow-400;
+  }
+  .bg-primary-color {
+    @apply bg-yellow-500;
   }
   .bg-label-color {
     @apply bg-red-600;
