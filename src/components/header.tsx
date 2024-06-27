@@ -104,14 +104,12 @@ HeaderMenubar.displayName = 'HeaderMenubar'
 
 const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
   const pathname = usePathname()
-  const isActive = pathname === data.href
-  const checkUrl =
-    data.href &&
-    (data.href === '/'
+  const isActiveLink = pathname.endsWith(data.href ?? '')
+  const checkUrl = data.href
+    ? data.href === '/'
       ? '/'
-      : data.href.startsWith('/')
-        ? `/danh-sach${data.href}`
-        : `/danh-sach/${data.href}`)
+      : `/danh-sach${data.href.startsWith('/') ? data.href : `/${data.href}`}`
+    : undefined
 
   return (
     <Menubar className='bg-transparent border-none p-0'>
@@ -120,7 +118,7 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
           {data.href ? (
             <Link
               href={`${checkUrl}`}
-              className={cn('opacity-80 hover:opacity-100', isActive && 'opacity-100')}
+              className={cn('opacity-80 hover:opacity-100', isActiveLink && 'opacity-100')}
             >
               {data.name}
             </Link>

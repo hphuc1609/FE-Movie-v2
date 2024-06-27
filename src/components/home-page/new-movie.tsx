@@ -9,7 +9,8 @@ interface NewUpdateMovieProps {
 
 export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
   return (
-    <div className='max-md:hidden flex flex-col gap-5 flex-1'>
+    <div className='max-lg:hidden flex flex-col gap-5 flex-1'>
+      {/* Heading */}
       <div className='flex items-center justify-between'>
         <h2 className='text-lg font-semibold uppercase text-primary-color'>
           Phim mới
@@ -20,7 +21,7 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
           <MoveRight size={20} />
         </div>
       </div>
-
+      {/* List */}
       <div
         className='rounded-sm bg-black bg-opacity-30 overflow-auto p-5 flex flex-col gap-3 
         scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent'

@@ -15,7 +15,7 @@ export interface MovieCategoryItem {
   APP_DOMAIN_CDN_IMAGE: string
 }
 
-interface SeoOnPage {
+export interface SeoOnPage {
   og_type: string
   titleHead: string
   descriptionHead: string
@@ -23,7 +23,7 @@ interface SeoOnPage {
   og_url: string
 }
 
-interface BreadCrumb {
+export interface BreadCrumb {
   name: string
   slug?: string
   isCurrent: boolean
@@ -50,7 +50,7 @@ export interface MovieItem {
   country: MovieCountry[]
 }
 
-interface Modified {
+export interface Modified {
   time: string
 }
 

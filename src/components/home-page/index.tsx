@@ -38,7 +38,7 @@ export default function MovieHomePage() {
     <>
       <Banner dataBanner={data} />
       <div className='p-20 max-lg:px-[25px] flex gap-9'>
-        <div className='flex flex-col max-lg:gap-10 gap-20'>
+        <div className='max-w-[800px] flex flex-col gap-20'>
           <CategoryMovie paramCategory='phim-le' />
           <CategoryMovie paramCategory='phim-bo' />
           <CategoryMovie paramCategory='hoat-hinh' />

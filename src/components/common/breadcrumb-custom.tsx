@@ -1,5 +1,3 @@
-'use client'
-
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,15 +6,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
+import { BreadCrumb } from '@/models/list-movie'
 
 interface BreadcrumbCustomProps {
-  breadCrumb?: any[]
-  movieName?: string
+  breadCrumb: any
 }
 
 export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
-  const { breadCrumb, movieName } = props
-
+  const { breadCrumb } = props
   return (
     <Breadcrumb>
       <BreadcrumbList className='text-secondary'>
@@ -29,8 +26,8 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
-        {breadCrumb ? (
-          breadCrumb.map((item) => (
+        {typeof breadCrumb !== 'string' ? (
+          breadCrumb?.map((item: BreadCrumb) => (
             <BreadcrumbItem key={item.position}>
               {!item.isCurrent ? (
                 <BreadcrumbLink
@@ -42,14 +39,14 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
               ) : (
                 <>
                   <BreadcrumbSeparator />
-                  <BreadcrumbPage className='text-primary-color'>{item.name}</BreadcrumbPage>
+                  <BreadcrumbPage className='opacity-70 text-secondary'>{item.name}</BreadcrumbPage>
                 </>
               )}
             </BreadcrumbItem>
           ))
         ) : (
           <BreadcrumbItem>
-            <BreadcrumbPage className='opacity-70 text-secondary'>{movieName}</BreadcrumbPage>
+            <BreadcrumbPage className='opacity-70 text-secondary'>{breadCrumb}</BreadcrumbPage>
           </BreadcrumbItem>
         )}
       </BreadcrumbList>

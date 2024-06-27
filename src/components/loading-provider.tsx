@@ -11,6 +11,7 @@ export default function LoadingProvider({ children }: { children: React.ReactNod
 
   const show = () => {
     setLoading(true)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   const hidden = () => {
     setLoading(false)

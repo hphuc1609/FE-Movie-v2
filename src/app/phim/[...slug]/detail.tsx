@@ -4,25 +4,25 @@
 import movieApi from '@/api-client/movie'
 import isSuccessResponse from '@/helpers/check-response'
 import { DetailResponse } from '@/models/detail'
-import { useParams, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import BreadcrumbCustom from '../common/breadcrumb-custom'
 // import Reviewbox from '../common/review-box'
+import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
+import MovieDetailCard from '@/components/detail-page/movie-info'
+import MoviePlayer from '@/components/detail-page/movie-player'
+import { useLoading } from '@/components/loading-provider'
 import { removeCookie } from 'typescript-cookie'
-import { useLoading } from '../loading-provider'
-import MovieDetailCard from './movie-card'
-import MoviePlayer from './movie-player'
 
 export default function Detail() {
-  const { path } = useParams()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
   const loader = useLoading()
   const [detail, setDetail] = useState({} as DetailResponse['movie'])
   const [dataEpisode, setDataEpisode] = useState<DetailResponse['episodes']>([])
   const [isWatch, setIsWatch] = useState(false)
 
-  const nameMovieFromUrl = path[0] || ''
-  const episodeParam = searchParams.get('episode') || ''
+  const nameMovieFromUrl = pathname.split('/').pop() as string
+  const episodeParam = searchParams.get('episode') as string
 
   const getDetail = async (movieName: string) => {
     loader.show()
@@ -67,7 +67,7 @@ export default function Detail() {
 
   return detail && dataEpisode.length > 0 ? (
     <div className='px-20 py-[35px] flex flex-col gap-9'>
-      <BreadcrumbCustom movieName={detail.name} />
+      <BreadcrumbCustom breadCrumb={detail.name} />
       {!isWatch ? (
         <MovieDetailCard
           detail={detail}
