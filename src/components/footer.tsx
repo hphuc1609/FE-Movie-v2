@@ -8,7 +8,7 @@ import { ChevronUp } from 'lucide-react'
 export default function Footer() {
   return (
     <footer className='relative bg-[#181818] dark:bg-gray-900'>
-      <div className='mx-auto max-w-screen-xl px-[25px] py-8 lg:px-20'>
+      <div className='mx-auto max-w-screen-xl px-[25px] py-8 lg:px-10'>
         <div className='flex items-center justify-between max-md:flex-col max-md:items-baseline'>
           <Link
             href='/'

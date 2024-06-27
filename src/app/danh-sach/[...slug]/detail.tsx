@@ -8,15 +8,18 @@ import { useLoading } from '@/components/loading-provider'
 import isSuccessResponse from '@/helpers/check-response'
 import { MovieCategoryItem } from '@/models/list-movie'
 import { NewMovieResponse } from '@/models/new-movie'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Detail() {
   const pathname = usePathname()
-  const categoryPathname = pathname.split('/').pop() as string
+  const searchParams = useSearchParams()
   const loader = useLoading()
-  const [dataMovie, setDataMovie] = useState({} as MovieCategoryItem)
+  const [dataMovieCate, setDataMovieCate] = useState({} as MovieCategoryItem)
   const [dataNewMovie, setDataNewMovie] = useState({} as NewMovieResponse)
+  const [dataSearch, setDataSearch] = useState({} as MovieCategoryItem)
+  const categoryPathname = pathname.split('/').pop() as string
+  const keywordFromParam = searchParams.get('keyword') as string
 
   const breadCrumbCustom = [
     {
@@ -42,7 +45,7 @@ export default function Detail() {
     try {
       const newData = await movieApi.getListCate({ category })
       if (isSuccessResponse(newData)) {
-        setDataMovie(newData.data)
+        setDataMovieCate(newData.data)
       } else {
         console.error('Lỗi tải danh sách phim: ', newData.message)
       }
@@ -69,6 +72,22 @@ export default function Detail() {
     }
   }
 
+  const getMoviesSearch = async (keyword: string) => {
+    loader.show()
+    try {
+      const newData = await movieApi.getMoviesSearch({ keyword })
+      if (isSuccessResponse(newData)) {
+        setDataSearch(newData.data)
+      } else {
+        console.error('Lỗi tải danh sách tìm kiếm: ', newData.message)
+      }
+    } catch (error) {
+      console.error('Lỗi tải danh sách tìm kiếm: ', error)
+    } finally {
+      loader.hidden()
+    }
+  }
+
   // Get data by category
   useEffect(() => {
     if (!categoryPathname) {
@@ -81,14 +100,35 @@ export default function Detail() {
     getMoviesByCate(categoryPathname)
   }, [categoryPathname])
 
-  const dataTable = dataMovie.items ? dataMovie : dataNewMovie
+  useEffect(() => {
+    if (!keywordFromParam) {
+      return
+    }
+    getMoviesSearch(keywordFromParam)
+  }, [keywordFromParam])
+
+  const isNotEmpty = (obj: any) => Object.keys(obj).length > 0
+  const dataTable = () => {
+    if (isNotEmpty(dataNewMovie)) return dataNewMovie
+    if (isNotEmpty(dataMovieCate)) return dataMovieCate
+    if (isNotEmpty(dataSearch)) return dataSearch
+    return {}
+  }
+
+  const dataBreadCrumb = () => {
+    if (isNotEmpty(dataNewMovie)) return breadCrumbCustom
+    if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb
+    if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb
+    return []
+  }
 
   return (
     <div className='px-20 py-[35px] max-lg:px-[25px] flex flex-col gap-9'>
-      <BreadcrumbCustom breadCrumb={dataMovie.breadCrumb || breadCrumbCustom} />
+      <BreadcrumbCustom breadCrumb={dataBreadCrumb()} />
       <TablePagination
         category={categoryPathname}
-        data={dataTable}
+        data={dataTable()}
+        keyword={keywordFromParam}
       />
     </div>
   )

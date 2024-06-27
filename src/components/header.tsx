@@ -1,12 +1,12 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import movieApi from '@/api-client/movie'
 import menuLinks, { MenuItem } from '@/constants/menu-link'
 import useScrollPosition from '@/custom-hooks/useScrollPosition'
 import { cn } from '@/lib/utils'
-import { ChevronDown, Search, User, X } from 'lucide-react'
-import { usePathname } from 'next/navigation'
+import { ChevronDown, Search, User } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import DialogCustom from './common/dialog'
 import { Input } from './ui/input'
@@ -19,7 +19,6 @@ import {
   MenubarTrigger,
 } from './ui/menubar'
 import { Separator } from './ui/separator'
-import Link from 'next/link'
 
 export default function Header() {
   const pathname = usePathname()
@@ -39,20 +38,14 @@ export default function Header() {
 
 const HeaderMenubar = React.memo(() => {
   const [openDialogSearch, setOpenDialogSearch] = useState(false)
+  const router = useRouter()
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter' || !event.currentTarget.value) {
       return
     }
-    try {
-      setOpenDialogSearch(false)
-      const dataMovieFromSearch = await movieApi.getMoviesSearch({
-        keyword: event.currentTarget.value,
-      })
-      console.log('🚀 ~ handleInputKeyDown ~ dataMovieFromSearch:', dataMovieFromSearch)
-    } catch (error) {
-      console.error('Lỗi tìm kiếm phim: ', error)
-    }
+    setOpenDialogSearch(false)
+    router.push(`/danh-sach/search?keyword=${event.currentTarget.value}`)
   }
 
   return (
@@ -84,7 +77,7 @@ const HeaderMenubar = React.memo(() => {
               placeholder='Nhập tên phim, chương trình,...'
               autoFocus
               onKeyDown={(e) => handleInputKeyDown(e)}
-              className='bg-transparent p-0 border-transparent rounded-none !border-b-[#ccc] focus-visible:ring-0 focus-visible:ring-offset-0'
+              className='text-white text-lg bg-transparent p-0 border-transparent rounded-none !border-b-[#ccc] focus-visible:ring-0 focus-visible:ring-offset-0'
             />
           }
         />
@@ -92,10 +85,13 @@ const HeaderMenubar = React.memo(() => {
           className='h-4'
           orientation='vertical'
         />
-        <User
-          fill='white'
-          size={20}
-        />
+        <div className='flex items-center gap-2'>
+          <User
+            fill='white'
+            size={20}
+          />
+          <p className='text-sm'>Guest</p>
+        </div>
       </div>
     </>
   )

@@ -30,15 +30,17 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
           breadCrumb?.map((item: BreadCrumb) => (
             <BreadcrumbItem key={item.position}>
               {!item.isCurrent ? (
-                <Link
-                  href={item.slug || ''}
-                  className='hover:text-primary-color capitalize'
-                >
-                  {item.name}
-                </Link>
+                <>
+                  <Link
+                    href={item.slug || ''}
+                    className='hover:text-primary-color capitalize'
+                  >
+                    {item.name}
+                  </Link>
+                  <BreadcrumbSeparator />
+                </>
               ) : (
                 <>
-                  <BreadcrumbSeparator />
                   <BreadcrumbPage className='opacity-70 text-secondary'>{item.name}</BreadcrumbPage>
                 </>
               )}

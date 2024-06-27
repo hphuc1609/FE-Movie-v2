@@ -108,7 +108,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
           item.server_data.map((server) => (
             <div
               key={server.name}
-              className={`text-sm ${server.slug === episodeParam ? 'bg-label-color' : 'bg-gray-700 bg-opacity-30'} rounded-md min-w-[65px] px-2 py-2 cursor-pointer break-keep`}
+              className={`text-sm ${server.slug === episodeParam ? 'bg-label-color' : 'bg-gray-700 bg-opacity-30'} rounded-md max-w-[65px] px-2 py-2 cursor-pointer break-keep`}
               onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
             >
               {server.name}

@@ -19,7 +19,7 @@ export default function CardImage(props: CardImageProps) {
             key={item._id}
             className='h-fit flex flex-col gap-4'
           >
-            <div className='relative group h-[325px] max-xl:h-[260px] rounded-md bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'>
+            <div className='relative group h-[325px] max-xl:h-[300px] rounded-md bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'>
               <div className='group-hover:scale-110 h-full w-full transition-all duration-500'>
                 <Image
                   src={

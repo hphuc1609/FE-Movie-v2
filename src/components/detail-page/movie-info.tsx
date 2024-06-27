@@ -60,8 +60,8 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
   }
 
   return (
-    <div className='flex gap-[30px]'>
-      <div className='relative w-[300px] h-[440px] rounded-md overflow-hidden'>
+    <div className='flex max-md:flex-col gap-[30px]'>
+      <div className='relative w-[300px] h-[440px] max-md:m-auto rounded-md overflow-hidden'>
         <Image
           src={detail.poster_url || '/no-image.png'}
           width={300}
