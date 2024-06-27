@@ -71,7 +71,9 @@ export default function Banner({ dataBanner }: BannerProps) {
                   } grid gap-y-3`}
                   style={{ transitionDuration: '2000ms' }}
                 >
-                  <h1 className='text-6xl max-md:text-3xl font-bold line-clamp-2'>{item.name}</h1>
+                  <h1 className='text-6xl max-md:text-3xl font-bold line-clamp-2 leading-tight'>
+                    {item.name}
+                  </h1>
                   <CaptionBanner item={item} />
                 </div>
                 <Button

@@ -1,12 +1,12 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
 import { BreadCrumb } from '@/models/list-movie'
+import Link from 'next/link'
 
 interface BreadcrumbCustomProps {
   breadCrumb: any
@@ -18,24 +18,24 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
     <Breadcrumb>
       <BreadcrumbList className='text-secondary'>
         <BreadcrumbItem>
-          <BreadcrumbLink
+          <Link
             href='/'
-            className='hover:text-secondary'
+            className='hover:text-primary-color capitalize'
           >
             Trang chủ
-          </BreadcrumbLink>
+          </Link>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {typeof breadCrumb !== 'string' ? (
           breadCrumb?.map((item: BreadCrumb) => (
             <BreadcrumbItem key={item.position}>
               {!item.isCurrent ? (
-                <BreadcrumbLink
-                  href={item.slug}
-                  className='hover:text-primary-color'
+                <Link
+                  href={item.slug || ''}
+                  className='hover:text-primary-color capitalize'
                 >
                   {item.name}
-                </BreadcrumbLink>
+                </Link>
               ) : (
                 <>
                   <BreadcrumbSeparator />

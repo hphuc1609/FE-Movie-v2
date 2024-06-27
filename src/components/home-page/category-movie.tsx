@@ -8,6 +8,7 @@ import { MoveRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import CardImage from '../common/card-image'
 import { useLoading } from '../loading-provider'
+import Link from 'next/link'
 
 interface CategoryMovieProps {
   paramCategory: string
@@ -63,7 +64,12 @@ function MovieRowItem(props: MovieRowItemProps) {
           {data.titlePage}
         </h2>
         <div className='flex items-center gap-4 cursor-pointer'>
-          <p className='text-xs font-medium uppercase'>Tất cả</p>
+          <Link
+            href={`/danh-sach/${paramCategory}`}
+            className='text-xs font-medium uppercase'
+          >
+            Tất cả
+          </Link>
           <MoveRight size={20} />
         </div>
       </div>

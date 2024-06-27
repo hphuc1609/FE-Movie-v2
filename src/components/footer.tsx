@@ -26,7 +26,7 @@ export default function Footer() {
               color='white'
             />
           </Button>
-          <p className='mt-4 text-center text-sm lg:mt-0 lg:text-right'>
+          <div className='mt-4 text-sm lg:mt-0 lg:text-right'>
             <span className='opacity-50'>
               Copyright &copy; {new Date().getFullYear()}. All rights reserved by{' '}
             </span>
@@ -36,7 +36,7 @@ export default function Footer() {
             >
               hphuc1609
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </footer>

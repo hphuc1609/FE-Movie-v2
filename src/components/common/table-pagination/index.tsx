@@ -3,7 +3,7 @@ import CardImage from '../card-image'
 
 interface TablePaginationProps {
   category: string
-  data: MovieCategoryItem
+  data: any
 }
 
 export default function TablePagination(props: TablePaginationProps) {
@@ -15,7 +15,7 @@ export default function TablePagination(props: TablePaginationProps) {
         <CardImage
           data={data}
           paramCategory={category}
-          itemLength={data?.items?.length || 10}
+          itemLength={data?.items?.length}
         />
       </div>
     </div>

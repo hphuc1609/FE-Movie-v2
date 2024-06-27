@@ -12,14 +12,13 @@ export default function PlayButton({ onClick, className, PlayIconProps }: PlayBu
   return (
     <div
       className={cn(
-        'w-[72px] h-[72px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full bg-primary-color cursor-pointer',
-        className,
+        `w-[72px] h-[72px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center rounded-full bg-primary-color cursor-pointer ${className}`,
       )}
       onClick={onClick}
     >
       <Play
         size={30}
-        fill='white'
+        fill='currentColor'
         {...PlayIconProps}
       />
     </div>

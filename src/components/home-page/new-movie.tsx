@@ -17,7 +17,12 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
           <span className='ml-1 text-primary-foreground'>cập nhật</span>
         </h2>
         <div className='flex items-center gap-4 cursor-pointer'>
-          <p className='text-xs font-medium uppercase'>Tất cả</p>
+          <Link
+            href={`/danh-sach/phim-moi`}
+            className='text-xs font-medium uppercase'
+          >
+            Tất cả
+          </Link>
           <MoveRight size={20} />
         </div>
       </div>
