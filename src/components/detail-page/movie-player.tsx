@@ -2,10 +2,10 @@
 
 import { DetailResponse } from '@/models/detail'
 import Hls from 'hls.js'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import PlayButton from '../common/play-button'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { getCookie, setCookie } from 'typescript-cookie'
+import { Skeleton } from '../ui/skeleton'
 
 interface MoviePlayerProps {
   dataEpisode: DetailResponse['episodes']
@@ -89,13 +89,19 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   return (
     <div className='max-w-[790px] grid gap-y-4'>
       <div className='relative h-full flex flex-col gap-3 bg-black bg-opacity-80'>
-        <video
-          ref={videoRef}
-          controls
-          className='w-full h-[425px] object-cover'
-          poster={detail.thumb_url}
-        ></video>
-        {!isPlaying && <PlayButton onClick={handlePlayClick} />}
+        {urlVideo ? (
+          <>
+            <video
+              ref={videoRef}
+              controls
+              className='w-full h-[425px] object-cover'
+              poster={detail.thumb_url}
+            ></video>
+            {!isPlaying && <PlayButton onClick={handlePlayClick} />}
+          </>
+        ) : (
+          <Skeleton className='w-full h-[425px] bg-zinc-700' />
+        )}
       </div>
       <div className='flex items-center gap-2 flex-wrap'>
         {dataEpisode.map((item) =>
