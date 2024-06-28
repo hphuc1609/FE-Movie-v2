@@ -18,8 +18,10 @@ export default function Detail() {
   const [dataMovieCate, setDataMovieCate] = useState({} as MovieCategoryItem)
   const [dataNewMovie, setDataNewMovie] = useState({} as NewMovieResponse)
   const [dataSearch, setDataSearch] = useState({} as MovieCategoryItem)
-  const categoryPathname = pathname.split('/').pop() as string
-  const keywordFromParam = searchParams.get('keyword') as string
+
+  const category = pathname.split('/').pop() as string
+  const keyword = searchParams.get('keyword') as string
+  const currentPage = searchParams.get('page') as string
 
   const breadCrumbCustom = [
     {
@@ -40,10 +42,14 @@ export default function Detail() {
       : []),
   ]
 
-  const getMoviesByCate = async (category: string) => {
+  const getMoviesByCate = async (
+    category: string,
+    page?: string | number,
+    limit?: string | number,
+  ) => {
     loader.show()
     try {
-      const newData = await movieApi.getListCate({ category })
+      const newData = await movieApi.getList({ category, page, limit })
       if (isSuccessResponse(newData)) {
         setDataMovieCate(newData.data)
       } else {
@@ -72,10 +78,10 @@ export default function Detail() {
     }
   }
 
-  const getMoviesSearch = async (keyword: string) => {
+  const getMoviesSearch = async (keyword: string, limit?: string | number) => {
     loader.show()
     try {
-      const newData = await movieApi.getMoviesSearch({ keyword })
+      const newData = await movieApi.getMoviesSearch({ keyword, limit })
       if (isSuccessResponse(newData)) {
         setDataSearch(newData.data)
       } else {
@@ -90,22 +96,22 @@ export default function Detail() {
 
   // Get data by category
   useEffect(() => {
-    if (!categoryPathname) {
+    if (!category) {
       return
     }
-    if (categoryPathname === 'phim-moi') {
+    if (category === 'phim-moi') {
       getNewMovies()
       return
     }
-    getMoviesByCate(categoryPathname)
-  }, [categoryPathname])
+    getMoviesByCate(category, currentPage)
+  }, [category, currentPage])
 
   useEffect(() => {
-    if (!keywordFromParam) {
+    if (!keyword) {
       return
     }
-    getMoviesSearch(keywordFromParam)
-  }, [keywordFromParam])
+    getMoviesSearch(keyword)
+  }, [keyword])
 
   const isNotEmpty = (obj: any) => Object.keys(obj).length > 0
   const dataTable = () => {
@@ -126,9 +132,9 @@ export default function Detail() {
     <div className='px-20 py-[35px] max-lg:px-[25px] flex flex-col gap-9'>
       <BreadcrumbCustom breadCrumb={dataBreadCrumb()} />
       <TablePagination
-        category={categoryPathname}
-        data={dataTable()}
-        keyword={keywordFromParam}
+        category={category}
+        data={dataTable() as MovieCategoryItem}
+        keyword={keyword}
       />
     </div>
   )

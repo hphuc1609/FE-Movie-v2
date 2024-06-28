@@ -104,7 +104,7 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
   const checkUrl = data.href
     ? data.href === '/'
       ? '/'
-      : `/danh-sach${data.href.startsWith('/') ? data.href : `/${data.href}`}`
+      : `/danh-sach${data.href.startsWith('/') ? data.href : `/${data.href}`}?page=1`
     : undefined
 
   return (

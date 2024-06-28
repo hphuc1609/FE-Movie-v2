@@ -5,10 +5,11 @@ import movieApi from '@/api-client/movie'
 import isSuccessResponse from '@/helpers/check-response'
 import { MovieCategoryItem } from '@/models/list-movie'
 import { MoveRight } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import CardImage from '../common/card-image'
 import { useLoading } from '../loading-provider'
-import Link from 'next/link'
 
 interface CategoryMovieProps {
   paramCategory: string
@@ -22,7 +23,7 @@ export default function CategoryMovie(props: CategoryMovieProps) {
   const getMoviesByCate = async (category: string) => {
     loader.show()
     try {
-      const newData = await movieApi.getListCate({ category })
+      const newData = await movieApi.getList({ category })
       if (isSuccessResponse(newData)) {
         setDataMovie(newData.data)
       } else {
@@ -55,6 +56,7 @@ interface MovieRowItemProps {
 
 function MovieRowItem(props: MovieRowItemProps) {
   const { data, paramCategory } = props
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1023px)' })
 
   return (
     <div className='flex-1 flex flex-col gap-6'>
@@ -78,6 +80,7 @@ function MovieRowItem(props: MovieRowItemProps) {
         <CardImage
           data={data}
           paramCategory={paramCategory}
+          itemLength={isTabletOrMobile ? data.items?.length : 6}
         />
       </div>
     </div>

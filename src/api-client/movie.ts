@@ -9,6 +9,8 @@ interface GetNewMoviesParams {
 
 interface GetMoviesParams {
   category: string
+  page?: string | number
+  limit?: string | number
 }
 
 interface GetMovieSearchParams {
@@ -23,8 +25,12 @@ const movieApi = {
     return response.data
   },
 
-  getListCate: async ({ category }: GetMoviesParams): Promise<MovieCategoryResponse> => {
-    const url = `/v1/api/danh-sach/${category}`
+  getList: async ({ category, page, limit }: GetMoviesParams): Promise<MovieCategoryResponse> => {
+    const queryParams = new URLSearchParams()
+    if (page) queryParams.append('page', page.toString())
+    if (limit) queryParams.append('limit', limit.toString())
+
+    const url = `/v1/api/danh-sach/${category}?${queryParams.toString()}`
     const response = await axiosClient.get(url)
     return response.data
   },
@@ -39,7 +45,7 @@ const movieApi = {
     const queryParams = new URLSearchParams()
     if (limit) queryParams.append('limit', limit.toString())
 
-    const url = `/v1/api/tim-kiem?keyword=${keyword}${queryParams ? `&${queryParams}` : ''}`
+    const url = `/v1/api/tim-kiem?keyword=${keyword}&${queryParams.toString()}`
     const response = await axiosClient.get(url)
     return response.data
   },
