@@ -38,7 +38,7 @@ export default function TablePagination(props: TablePaginationProps) {
   return (
     <>
       {data.items?.length > 0 ? (
-        <div className='flex flex-col gap-20 pb-9'>
+        <div className='flex flex-col gap-10 pb-9'>
           <div className='grid grid-cols-5 gap-6 max-sm:grid-cols-2 max-md:grid-cols-3 max-xl:grid-cols-4 overflow-hidden'>
             <CardImage
               data={data}
@@ -46,12 +46,14 @@ export default function TablePagination(props: TablePaginationProps) {
               itemLength={pagination.totalItemsPerPage}
             />
           </div>
-          <PaginationCustom
-            pageToShow={pagesToShow}
-            category={category}
-            currentPage={currentPage}
-            pagination={pagination}
-          />
+          {pagesToShow?.length > 1 && (
+            <PaginationCustom
+              pageToShow={pagesToShow}
+              category={category}
+              currentPage={currentPage}
+              pagination={pagination}
+            />
+          )}
         </div>
       ) : (
         <>
