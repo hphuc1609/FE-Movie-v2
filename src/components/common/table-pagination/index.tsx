@@ -1,13 +1,13 @@
-import { MovieCategoryItem } from '@/models/list-movie'
+import { MovieCategoryParams } from '@/models/list-movie'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useMemo } from 'react'
 import CardImage from '../card-image'
 import PaginationCustom from './pagination'
-import { useMemo } from 'react'
 
 interface TablePaginationProps {
   category: string
-  data: MovieCategoryItem
+  data: any
   keyword?: string
 }
 
@@ -15,10 +15,13 @@ export default function TablePagination(props: TablePaginationProps) {
   const { category, data } = props
   const searchParams = useSearchParams()
   const currentPage = JSON.parse(searchParams.get('page') || '1')
-  const pagination = data.params?.pagination || {}
+  const pagination = (data.params?.pagination ||
+    data.pagination) as MovieCategoryParams['pagination']
 
   // Memoize the list of pages to prevent unnecessary re-renders
   const pagesToShow = useMemo(() => {
+    if (!pagination) return []
+
     const totalPages = pagination.totalPages
     let startPage = Math.max(1, currentPage - 1)
     let endPage = Math.min(totalPages, startPage + 2) // Show 3 pages in total
@@ -33,7 +36,7 @@ export default function TablePagination(props: TablePaginationProps) {
     }
 
     return pages
-  }, [currentPage, pagination.totalPages])
+  }, [currentPage, pagination])
 
   return (
     <>

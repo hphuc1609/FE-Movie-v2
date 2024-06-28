@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/api-client/movie'
+import movieApi from '@/components/api-client/movie'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/common/table-pagination'
 import { useLoading } from '@/components/loading-provider'
@@ -17,6 +17,7 @@ export default function Detail() {
   const loader = useLoading()
   const [dataMovieCate, setDataMovieCate] = useState({} as MovieCategoryItem)
   const [dataNewMovie, setDataNewMovie] = useState({} as NewMovieResponse)
+  console.log('🚀 ~ Detail ~ dataNewMovie:', dataNewMovie)
   const [dataSearch, setDataSearch] = useState({} as MovieCategoryItem)
 
   const category = pathname.split('/').pop() as string
@@ -100,7 +101,7 @@ export default function Detail() {
       return
     }
     if (category === 'phim-moi') {
-      getNewMovies()
+      getNewMovies(currentPage)
       return
     }
     getMoviesByCate(category, currentPage)

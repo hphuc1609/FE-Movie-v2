@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/api-client/movie'
+import movieApi from '@/components/api-client/movie'
 import isSuccessResponse from '@/helpers/check-response'
 import { MovieCategoryItem } from '@/models/list-movie'
-import { MoveRight } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -68,11 +67,10 @@ function MovieRowItem(props: MovieRowItemProps) {
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
             href={`/danh-sach/${paramCategory}`}
-            className='text-xs font-medium uppercase'
+            className='text-xs font-medium uppercase hover:text-primary-color'
           >
-            Tất cả
+            Xem thêm
           </Link>
-          <MoveRight size={20} />
         </div>
       </div>
       {/* Data Grid */}

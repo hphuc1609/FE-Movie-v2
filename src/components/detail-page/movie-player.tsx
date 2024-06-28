@@ -42,6 +42,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   const [urlVideo, setUrlVideo] = useState(initialVideo || '')
   const [isPlaying, setIsPlaying] = useState(false)
 
+  // Check param episode and set url
   useEffect(() => {
     const filteredDataEpisode = dataEpisode.map((episode) =>
       episode.server_data.find((item) => item.slug === episodeParam),
@@ -87,7 +88,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   }
 
   return (
-    <div className='max-w-[790px] grid gap-y-4'>
+    <div className='max-w-[790px] grid gap-y-4 pb-9'>
       <div className='relative h-full flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
@@ -97,7 +98,14 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
               className='w-full h-[425px] object-cover'
               poster={detail.thumb_url}
             ></video>
-            {!isPlaying && <PlayButton onClick={handlePlayClick} />}
+            {!isPlaying && (
+              <div
+                className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-5'
+                onClick={handlePlayClick}
+              >
+                <PlayButton />
+              </div>
+            )}
           </>
         ) : (
           <Skeleton className='w-full h-[425px] bg-zinc-700' />
@@ -108,7 +116,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
           item.server_data.map((server) => (
             <div
               key={server.name}
-              className={`text-sm ${server.slug === episodeParam ? 'bg-label-color' : 'bg-gray-700 bg-opacity-30'} rounded-md max-w-[65px] px-2 py-2 cursor-pointer break-keep`}
+              className={`text-sm ${server.slug === episodeParam ? 'bg-label-color' : 'bg-gray-700 bg-opacity-30'} rounded-md w-[70px] text-center px-2 py-2 cursor-pointer break-keep`}
               onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
             >
               {server.name}

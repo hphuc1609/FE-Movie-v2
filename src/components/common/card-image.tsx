@@ -44,7 +44,7 @@ export default function CardImage(props: CardImageProps) {
               <div className='absolute top-3 left-3 right-3 flex flex-col gap-1 w-fit items-baseline'>
                 {item.quality && (
                   <p className='bg-label-color text-xs w-fit font-medium py-1 px-2'>
-                    {item.quality}
+                    {item.quality} {item.lang}
                   </p>
                 )}
                 {paramCategory === 'phim-bo' && (

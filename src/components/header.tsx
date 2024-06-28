@@ -53,9 +53,9 @@ const HeaderMenubar = React.memo(() => {
       <div className='flex gap-14 h-full items-center'>
         <Link
           href='/'
-          className='text-3xl max-lg:text-2xl font-bold text-primary-color'
+          className='text-2xl font-bold'
         >
-          Phimsub
+          VPhim <span className='text-primary-color'>247</span>
         </Link>
         <div className='flex items-center gap-5 h-full max-md:hidden text-white'>
           {menuLinks.map((menuItem) => (

@@ -19,11 +19,10 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
             href={`/danh-sach/phim-moi`}
-            className='text-xs font-medium uppercase'
+            className='text-xs font-medium uppercase hover:text-primary-color'
           >
-            Tất cả
+            Xem thêm
           </Link>
-          <MoveRight size={20} />
         </div>
       </div>
       {/* List */}

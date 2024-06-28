@@ -14,7 +14,7 @@ export default function Footer() {
             href='/'
             className='text-lg font-normal text-primary-color'
           >
-            Phimsub
+            VPhim247
           </Link>
           <Button
             size={'icon'}

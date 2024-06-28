@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/api-client/movie'
+import movieApi from '@/components/api-client/movie'
 import isSuccessResponse from '@/helpers/check-response'
 import { NewMovieItem } from '@/models/new-movie'
 import { useEffect, useState } from 'react'
