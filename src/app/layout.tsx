@@ -11,7 +11,7 @@ import Footer from '@/components/footer'
 const inter = Inter({ subsets: ['vietnamese'] })
 
 export const metadata: Metadata = {
-  title: 'VPhim247 - Xem phim online miễn phí chất lượng cao',
+  title: 'VPhim247 - Khám phá phim hay, phim mới vietsub, thuyết minh chất lượng cao',
   description:
     'VPhim247 cung cấp dịch vụ xem phim online miễn phí với chất lượng cao. Tận hưởng các bộ phim hấp dẫn với đa dạng thể loại.',
 }
@@ -26,11 +26,11 @@ export default function RootLayout({
       lang='vi'
       suppressHydrationWarning
     >
-      <body className={cn(inter.className, 'bg-[#141414] text-primary-foreground')}>
+      <body className={cn(inter.className, 'min-h-screen bg-[#141414] text-primary-foreground')}>
         <LoadingProvider>
           <Loader />
           <Header />
-          <main className='min-h-screen overflow-hidden'>{children}</main>
+          <main className='overflow-hidden'>{children}</main>
           <Footer />
         </LoadingProvider>
       </body>

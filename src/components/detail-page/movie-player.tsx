@@ -88,14 +88,14 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   }
 
   return (
-    <div className='max-w-[790px] grid gap-y-4 pb-9'>
-      <div className='relative h-full flex flex-col gap-3 bg-black bg-opacity-80'>
+    <div className='lg:w-9/12 m-auto h-fit flex flex-col gap-y-4'>
+      <div className='relative flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
             <video
               ref={videoRef}
               controls
-              className='w-full h-[425px] object-cover'
+              className='w-full h-[325px] md:h-[500px] object-cover'
               poster={detail.thumb_url}
             ></video>
             {!isPlaying && (

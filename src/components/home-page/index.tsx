@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/components/api-client/movie'
+import movieApi from '@/api-client/movie'
 import isSuccessResponse from '@/helpers/check-response'
 import { NewMovieItem } from '@/models/new-movie'
 import { useEffect, useState } from 'react'
@@ -37,8 +37,8 @@ export default function MovieHomePage() {
   return (
     <>
       <Banner dataBanner={data} />
-      <div className='p-20 max-lg:px-[25px] flex gap-9'>
-        <div className='max-w-[800px] max-lg:max-w-full max-xl:max-w-[600px] flex flex-col gap-20'>
+      <div className='p-20 max-xl:px-[25px] flex gap-9'>
+        <div className='xl:max-w-[800px] flex-auto flex flex-col gap-20'>
           <CategoryMovie paramCategory='phim-le' />
           <CategoryMovie paramCategory='phim-bo' />
           <CategoryMovie paramCategory='hoat-hinh' />

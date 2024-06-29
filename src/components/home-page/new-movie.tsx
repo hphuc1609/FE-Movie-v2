@@ -1,5 +1,5 @@
 import { NewMovieResponse } from '@/models/new-movie'
-import { CirclePlay, MoveRight } from 'lucide-react'
+import { CirclePlay } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -19,7 +19,7 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
             href={`/danh-sach/phim-moi`}
-            className='text-xs font-medium uppercase hover:text-primary-color'
+            className='text-xs font-medium uppercase hover:text-primary-color text-nowrap'
           >
             Xem thêm
           </Link>
@@ -27,8 +27,8 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
       </div>
       {/* List */}
       <div
-        className='rounded-sm bg-black bg-opacity-30 overflow-auto p-5 flex flex-col gap-3 
-        scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent'
+        className='max-h-[450px] rounded-sm bg-black bg-opacity-30 overflow-auto p-5 flex flex-col gap-3 
+        scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-transparent'
       >
         {dataNew.slice(0, 10).map((item) => (
           <div

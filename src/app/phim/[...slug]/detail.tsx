@@ -1,16 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/components/api-client/movie'
-import isSuccessResponse from '@/helpers/check-response'
-import { DetailResponse } from '@/models/detail'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
-// import Reviewbox from '../common/review-box'
+import movieApi from '@/api-client/movie'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
+import Reviewbox from '@/components/common/review-box'
 import MovieDetailCard from '@/components/detail-page/movie-info'
 import MoviePlayer from '@/components/detail-page/movie-player'
+import NewUpdateMovie from '@/components/home-page/new-movie'
 import { useLoading } from '@/components/loading-provider'
+import isSuccessResponse from '@/helpers/check-response'
+import { DetailResponse } from '@/models/detail'
+import { NewMovieItem } from '@/models/new-movie'
+import { usePathname, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { removeCookie } from 'typescript-cookie'
 
 export default function Detail() {
@@ -19,6 +21,7 @@ export default function Detail() {
   const loader = useLoading()
   const [detail, setDetail] = useState({} as DetailResponse['movie'])
   const [dataEpisode, setDataEpisode] = useState<DetailResponse['episodes']>([])
+  const [dataNewMovie, setDataNewMovie] = useState<NewMovieItem[]>([])
   const [isWatch, setIsWatch] = useState(false)
 
   const nameMovieFromUrl = pathname.split('/').pop() as string
@@ -41,6 +44,22 @@ export default function Detail() {
     }
   }
 
+  const getNewMovies = async (page?: string | number) => {
+    loader.show()
+    try {
+      const res = await movieApi.getNewMovies({ page })
+      if (isSuccessResponse(res)) {
+        setDataNewMovie(res.items)
+      } else {
+        console.error('Lỗi tải danh sách phim mới: ', res.msg)
+      }
+    } catch (error) {
+      console.error('Lỗi tải danh sách phim mới: ', error)
+    } finally {
+      loader.hidden()
+    }
+  }
+
   // Check param episode
   useEffect(() => {
     if (!episodeParam) {
@@ -50,6 +69,7 @@ export default function Detail() {
     }
   }, [episodeParam])
 
+  // Get detail movie
   useEffect(() => {
     if (!nameMovieFromUrl) {
       return
@@ -57,6 +77,12 @@ export default function Detail() {
     getDetail(nameMovieFromUrl)
   }, [nameMovieFromUrl])
 
+  // Get list new movies
+  useEffect(() => {
+    getNewMovies()
+  }, [])
+
+  // Handle check watch button click
   useEffect(() => {
     const getWatchLocal = sessionStorage.getItem('isWatch') === 'true'
     if (!getWatchLocal) {
@@ -81,7 +107,10 @@ export default function Detail() {
           dataEpisode={dataEpisode}
         />
       )}
-      {/* <Reviewbox /> */}
+      <div className='flex gap-9'>
+        <Reviewbox />
+        <NewUpdateMovie dataNew={dataNewMovie} />
+      </div>
     </div>
   ) : null
 }
