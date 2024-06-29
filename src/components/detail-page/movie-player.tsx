@@ -88,7 +88,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   }
 
   return (
-    <div className='lg:w-9/12 m-auto h-fit flex flex-col gap-y-4'>
+    <div className='lg:w-9/12 h-fit flex flex-col gap-y-4'>
       <div className='relative flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
@@ -112,14 +112,18 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
         )}
       </div>
       <div className='flex items-center gap-2 flex-wrap'>
-        {dataEpisode.map((item) =>
-          item.server_data.map((server) => (
+        {dataEpisode.map((item, index) =>
+          item.server_data.map((server, serverIndex) => (
             <div
               key={server.name}
-              className={`text-sm ${server.slug === episodeParam ? 'bg-label-color' : 'bg-gray-700 bg-opacity-30'} rounded-md w-[70px] text-center px-2 py-2 cursor-pointer break-keep`}
+              className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} rounded-md min-w-[60px] max-w-[100px] text-center px-2 py-2 cursor-pointer text-nowrap`}
               onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
             >
               {server.name}
+              {index === dataEpisode.length - 1 &&
+                serverIndex > 1 &&
+                serverIndex === item.server_data.length - 1 &&
+                ' END'}
             </div>
           )),
         )}

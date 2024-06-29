@@ -37,9 +37,19 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
   const actors = useMemo(() => {
     return detail.actor
       ?.filter((item) => item.toLowerCase() !== 'đang cập nhật')
-      .map((actor) => actor.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '').replace(/\s{2,}/g, ' ')) // Bỏ các dấu trong chuỗi và số
+      .map((actor) =>
+        actor
+          .replace(/&quot;/g, '')
+          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
+          .replace(/\s{2,}/g, ' '),
+      ) // Bỏ các dấu trong chuỗi và số
       .join(', ')
   }, [detail.actor])
+
+  const content = detail.content
+    .replace(/&quot;/g, '')
+    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
+    .replace(/\s{2,}/g, ' ')
 
   const details = [
     { label: 'Phụ đề', value: detail.lang },
@@ -99,16 +109,16 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
       </div>
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col'>
           <h3 className='text-3xl font-semibold text-primary-color'>{detail.name}</h3>
-          <span className='opacity-70 font-medium text-lg'>
+          <span className='opacity-70 font-medium'>
             {detail.origin_name} ({detail.year})
           </span>
         </div>
-        <p className='line-clamp-4'>{detail.content}</p>
+        <p className='line-clamp-4'>{content}</p>
         <div className='flex flex-col gap-2'>
           {detail.episode_total > '1' && (
-            <div className='capitalize flex gap-6'>
+            <div className='text-sm capitalize flex gap-6'>
               <span className='opacity-70 min-w-[130px]'>Số tập:</span>
               <span className='flex-1'>{detail.episode_total} tập</span>
             </div>
@@ -118,7 +128,7 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
               item.value && (
                 <div
                   key={item.label}
-                  className='capitalize flex gap-6'
+                  className='text-sm capitalize flex gap-6'
                 >
                   <span className='opacity-70 min-w-[130px]'>{item.label}:</span>
                   <span className='flex-1 line-clamp-2'>{item.value}</span>

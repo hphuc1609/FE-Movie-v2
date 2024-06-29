@@ -59,7 +59,7 @@ export default function CardImage(props: CardImageProps) {
                 {item.category.map((cate) => (
                   <div
                     key={cate.id}
-                    className='w-fit text-[10px] font-medium rounded-xl bg-gray-700 bg-opacity-50 px-2 py-1'
+                    className='w-fit text-[10px] font-medium rounded-xl bg-slate-100 bg-opacity-10 px-2 py-1'
                   >
                     {cate.name}
                   </div>

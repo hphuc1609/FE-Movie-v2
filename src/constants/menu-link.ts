@@ -15,6 +15,10 @@ const menuLinks: MenuItem[] = [
     href: '/',
   },
   {
+    name: 'Phim mới',
+    href: '/phim-moi',
+  },
+  {
     name: 'Phim lẻ',
     href: '/phim-le',
   },

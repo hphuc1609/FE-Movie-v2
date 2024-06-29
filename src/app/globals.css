@@ -83,6 +83,6 @@
     @apply bg-yellow-500;
   }
   .bg-label-color {
-    @apply bg-red-600;
+    @apply bg-red-700;
   }
 }

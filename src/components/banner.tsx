@@ -59,7 +59,7 @@ export default function Banner({ dataBanner }: BannerProps) {
                 quality={100}
                 className='w-full h-full object-cover object-top'
               />
-              <div className='absolute top-0 w-full h-full bg-black bg-opacity-50'></div>
+              <div className='absolute top-0 w-full h-full bg-black bg-opacity-20'></div>
               <div
                 className={`absolute top-1/3 left-20 max-lg:left-[25px] max-md:right-[25px] md:w-[540px] flex flex-col gap-4`}
               >

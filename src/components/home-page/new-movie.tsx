@@ -14,7 +14,7 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
       <div className='flex items-center justify-between'>
         <h2 className='text-lg font-semibold uppercase text-primary-color'>
           Phim mới
-          <span className='ml-1 text-primary-foreground'>cập nhật</span>
+          <span className='ml-1 text-primary-foreground'>nổi bật</span>
         </h2>
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
