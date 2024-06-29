@@ -1,18 +1,26 @@
-import { NewMovieResponse } from '@/models/new-movie'
+'use client'
+
+import { NewMovieItem } from '@/models/new-movie'
 import { CirclePlay } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useMediaQuery } from 'react-responsive'
 
 interface NewUpdateMovieProps {
-  dataNew: NewMovieResponse['items']
+  data: NewMovieItem[]
 }
 
-export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
+export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
+  const pathname = usePathname()
+  const isDetailPage = pathname.includes('phim')
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
+
   return (
-    <div className='max-lg:hidden flex flex-col gap-5 flex-1'>
+    <div className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-5 flex-1`}>
       {/* Heading */}
       <div className='flex items-center justify-between'>
-        <h2 className='text-lg font-semibold uppercase text-primary-color'>
+        <h2 className='text-lg font-semibold uppercase text-primary-color line-clamp-1'>
           Phim mới
           <span className='ml-1 text-primary-foreground'>nổi bật</span>
         </h2>
@@ -27,10 +35,10 @@ export default function NewUpdateMovie({ dataNew }: NewUpdateMovieProps) {
       </div>
       {/* List */}
       <div
-        className='max-h-[450px] rounded-sm bg-black bg-opacity-30 overflow-auto p-5 flex flex-col gap-3 
-        scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-transparent'
+        className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-5 flex flex-col gap-3 
+        scrollbar-thin scrollbar-thumb-zinc-950 scrollbar-track-transparent`}
       >
-        {dataNew.slice(0, 10).map((item) => (
+        {data.slice(0, 10).map((item) => (
           <div
             key={item._id}
             className='flex gap-5'

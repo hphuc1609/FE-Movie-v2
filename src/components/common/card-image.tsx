@@ -39,18 +39,19 @@ export default function CardImage(props: CardImageProps) {
                 className='absolute top-0 left-0 w-full h-full'
               >
                 <div className='w-full h-full bg-black opacity-0 transition-all duration-300 group-hover:opacity-50' />
-                <PlayButton className='w-14 h-14 opacity-0 group-hover:opacity-100 transition-all duration-300' />
+                <PlayButton
+                  PlayIconProps={{ size: 25 }}
+                  className='w-[50px] h-[50px] opacity-0 group-hover:opacity-100 transition-all duration-300'
+                />
               </Link>
-              <div className='absolute top-3 left-3 right-3 flex flex-col gap-1 w-fit items-baseline'>
+              <div className='text-[10px] font-semibold uppercase absolute top-3 left-3 right-3 flex flex-col gap-1 w-fit items-baseline'>
                 {item.quality && (
-                  <p className='bg-label-color text-xs w-fit font-medium py-1 px-2'>
+                  <p className='bg-label-color w-fit py-1 px-2 text-nowrap'>
                     {item.quality} {item.lang}
                   </p>
                 )}
                 {paramCategory === 'phim-bo' && (
-                  <p className='bg-label-color w-fit text-xs font-medium py-1 px-2'>
-                    {item.episode_current}
-                  </p>
+                  <p className='bg-label-color w-fit py-1 px-2'>{item.episode_current}</p>
                 )}
               </div>
             </div>
@@ -66,7 +67,10 @@ export default function CardImage(props: CardImageProps) {
                 ))}
               </div>
             )}
-            <Link href={`/phim/${item.slug}`}>
+            <Link
+              href={`/phim/${item.slug}`}
+              className='text-base'
+            >
               {item.name} ({item.year})
             </Link>
           </div>

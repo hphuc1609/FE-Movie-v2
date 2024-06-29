@@ -74,7 +74,7 @@ export default function Banner({ dataBanner }: BannerProps) {
                   <h1 className='text-6xl max-md:text-3xl font-bold line-clamp-2 leading-tight'>
                     {item.name}
                   </h1>
-                  <CaptionBanner item={item} />
+                  <SubtextBanner item={item} />
                 </div>
                 <Button
                   variant='outline'
@@ -98,36 +98,40 @@ export default function Banner({ dataBanner }: BannerProps) {
         )
       })}
       {/* Buttons */}
-      <div className='absolute z-50 bottom-0 right-20 -translate-y-1/2 flex items-center gap-3'>
-        <Button
-          ref={prevBtnRef}
-          size={'icon'}
-          variant={'outline'}
-          className='max-md:hidden w-10 h-10 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
-        >
-          <MoveLeft />
-        </Button>
-        <Button
-          ref={nextBtnRef}
-          size={'icon'}
-          variant={'outline'}
-          className='max-md:hidden w-10 h-10 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
-        >
-          <MoveRight />
-        </Button>
-      </div>
+      {filteredData.length > 1 && (
+        <div className='absolute z-50 bottom-0 right-20 -translate-y-1/2 flex items-center gap-3'>
+          <Button
+            ref={prevBtnRef}
+            size={'icon'}
+            variant={'outline'}
+            className='max-md:hidden w-10 h-10 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
+          >
+            <MoveLeft />
+          </Button>
+          <Button
+            ref={nextBtnRef}
+            size={'icon'}
+            variant={'outline'}
+            className='max-md:hidden w-10 h-10 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
+          >
+            <MoveRight />
+          </Button>
+        </div>
+      )}
     </Swiper>
   )
 }
 
-function CaptionBanner({ item }: { item: NewMovieItem }) {
+function SubtextBanner({ item }: { item: NewMovieItem }) {
   return (
-    <div className='flex items-center gap-5'>
-      <div className='bg-white w-12 h-[22px] px-3 flex items-center justify-center text-primary text-sm'>
-        Phim
-      </div>
-      <div className='w-7 h-[22px] px-3 flex items-center justify-center text-sm font-medium border'>
-        HD
+    <div className='flex max-md:flex-col max-md:items-baseline items-center gap-5'>
+      <div className='flex items-center gap-3'>
+        <div className='bg-white w-12 h-[22px] px-3 flex items-center justify-center text-primary text-sm'>
+          Phim
+        </div>
+        <div className='w-7 h-[22px] px-3 flex items-center justify-center text-sm font-medium border'>
+          HD
+        </div>
       </div>
       <div className='text-gray-50 text-lg font-medium flex items-center gap-3'>
         <p className='line-clamp-1'>{item.origin_name}</p>

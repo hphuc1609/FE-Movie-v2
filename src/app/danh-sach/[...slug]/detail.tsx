@@ -131,6 +131,7 @@ export default function Detail() {
   return (
     <div className='px-20 py-[35px] max-lg:px-[25px] flex flex-col gap-9'>
       <BreadcrumbCustom breadCrumb={dataBreadCrumb()} />
+      <h1 className='text-3xl font-bold text-primary-color'>{dataBreadCrumb()[0]?.name}</h1>
       <TablePagination
         category={category}
         data={dataTable() as MovieCategoryItem}

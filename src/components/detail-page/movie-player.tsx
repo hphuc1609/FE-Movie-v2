@@ -1,29 +1,42 @@
 'use client'
 
 import { DetailResponse } from '@/models/detail'
+import { NewMovieItem } from '@/models/new-movie'
 import Hls from 'hls.js'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import PlayButton from '../common/play-button'
+import Reviewbox from '../common/review-box'
+import NewUpdateMovie from '../home-page/new-movie'
 import { Skeleton } from '../ui/skeleton'
 
 interface MoviePlayerProps {
   dataEpisode: DetailResponse['episodes']
   detail: DetailResponse['movie']
+  dataNewMovie: NewMovieItem[]
 }
 
 export default function MoviePlayer(props: MoviePlayerProps) {
-  const { dataEpisode, detail } = props
+  const { dataEpisode, detail, dataNewMovie } = props
+  const mobile = useMediaQuery({ query: '(max-width: 640px)' })
+
   return (
-    <div className='flex flex-col gap-3'>
-      <div>
-        <h3 className='text-xl font-semibold uppercase'>{detail.name}</h3>
-        <p className='opacity-70 font-medium'>{detail.origin_name}</p>
+    <div className='flex gap-[30px]'>
+      <div className='flex flex-col gap-3'>
+        <div>
+          <h3 className='text-xl font-semibold uppercase text-primary-color'>{detail.name}</h3>
+          <p className='opacity-70 text-base font-medium'>{detail.origin_name}</p>
+        </div>
+        <div className='flex flex-col gap-5'>
+          <VideoCustom
+            dataEpisode={dataEpisode}
+            detail={detail}
+          />
+          <Reviewbox />
+        </div>
       </div>
-      <VideoCustom
-        dataEpisode={dataEpisode}
-        detail={detail}
-      />
+      {!mobile && <NewUpdateMovie data={dataNewMovie} />}
     </div>
   )
 }
@@ -88,7 +101,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   }
 
   return (
-    <div className='lg:w-9/12 h-fit flex flex-col gap-y-4'>
+    <div className='lg:w-[839px] max-lg:flex-auto h-fit flex flex-col gap-y-4'>
       <div className='relative flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
@@ -108,7 +121,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
             )}
           </>
         ) : (
-          <Skeleton className='w-full h-[425px] bg-zinc-700' />
+          <Skeleton className='flex-auto h-[425px] bg-zinc-700' />
         )}
       </div>
       <div className='flex items-center gap-2 flex-wrap'>
@@ -116,7 +129,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
           item.server_data.map((server, serverIndex) => (
             <div
               key={server.name}
-              className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} rounded-md min-w-[60px] max-w-[100px] text-center px-2 py-2 cursor-pointer text-nowrap`}
+              className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[65px] max-w-[200px] text-center px-2 py-2 cursor-pointer text-nowrap`}
               onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
             >
               {server.name}

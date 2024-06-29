@@ -13,6 +13,7 @@ import { DetailResponse } from '@/models/detail'
 import { NewMovieItem } from '@/models/new-movie'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { removeCookie } from 'typescript-cookie'
 
 export default function Detail() {
@@ -26,6 +27,7 @@ export default function Detail() {
 
   const nameMovieFromUrl = pathname.split('/').pop() as string
   const episodeParam = searchParams.get('episode') as string
+  const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
 
   const getDetail = async (movieName: string) => {
     loader.show()
@@ -103,13 +105,14 @@ export default function Detail() {
         />
       ) : (
         <MoviePlayer
+          dataNewMovie={dataNewMovie}
           detail={detail}
           dataEpisode={dataEpisode}
         />
       )}
-      <div className='flex gap-9'>
-        <Reviewbox />
-        <NewUpdateMovie dataNew={dataNewMovie} />
+      <div className='flex max-md:flex-col gap-[30px]'>
+        {!isWatch && <Reviewbox />}
+        {isWatch && isMobile && <NewUpdateMovie data={dataNewMovie} />}
       </div>
     </div>
   ) : null

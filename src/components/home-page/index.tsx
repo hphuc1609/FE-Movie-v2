@@ -38,13 +38,13 @@ export default function MovieHomePage() {
     <>
       <Banner dataBanner={data} />
       <div className='p-20 max-xl:px-[25px] flex gap-9'>
-        <div className='xl:max-w-[800px] flex-auto flex flex-col gap-20'>
+        <div className='xl:max-w-[780px] flex-auto flex flex-col gap-20'>
           <CategoryMovie paramCategory='phim-le' />
           <CategoryMovie paramCategory='phim-bo' />
           <CategoryMovie paramCategory='hoat-hinh' />
           <CategoryMovie paramCategory='tv-shows' />
         </div>
-        <NewUpdateMovie dataNew={data} />
+        <NewUpdateMovie data={data} />
       </div>
     </>
   )

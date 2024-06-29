@@ -57,7 +57,7 @@ const HeaderMenubar = React.memo(() => {
         >
           VPhim <span className='text-primary-color'>247</span>
         </Link>
-        <div className='flex items-center gap-5 h-full max-md:hidden text-white'>
+        <div className='flex items-center gap-5 h-full max-lg:hidden text-white'>
           {menuLinks.map((menuItem) => (
             <TextMenubar
               key={menuItem.name}

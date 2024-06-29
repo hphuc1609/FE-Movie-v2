@@ -60,7 +60,7 @@ export default function TablePagination(props: TablePaginationProps) {
         </div>
       ) : (
         <>
-          <p className='text-center text-3xl'>
+          <p className='text-center text-2xl font-medium'>
             <span className='text-primary-color'>Không tìm thấy kết quả tìm kiếm: </span>
             {props.keyword}
           </p>

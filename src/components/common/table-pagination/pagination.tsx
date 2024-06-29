@@ -25,7 +25,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
   const isLastPage = currentPage === pagination.totalPages
 
   return (
-    <Pagination>
+    <Pagination className='text-base'>
       <PaginationContent className='flex gap-1'>
         {/* Render 'Trang Đầu' link */}
         {!isFirstPage && (

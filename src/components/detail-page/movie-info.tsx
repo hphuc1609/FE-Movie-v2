@@ -110,12 +110,12 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>
         <div className='flex flex-col'>
-          <h3 className='text-3xl font-semibold text-primary-color'>{detail.name}</h3>
-          <span className='opacity-70 font-medium'>
+          <h3 className='text-2xl font-semibold text-primary-color'>{detail.name}</h3>
+          <span className='opacity-70 font-medium text-base'>
             {detail.origin_name} ({detail.year})
           </span>
         </div>
-        <p className='line-clamp-4'>{content}</p>
+        <p className='md:max-h-[150px] overflow-auto text-sm'>{content}</p>
         <div className='flex flex-col gap-2'>
           {detail.episode_total > '1' && (
             <div className='text-sm capitalize flex gap-6'>
