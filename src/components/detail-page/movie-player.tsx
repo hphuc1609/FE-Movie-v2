@@ -23,7 +23,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   return (
     <div className='flex gap-[30px]'>
-      <div className='flex flex-col gap-3'>
+      <div className='flex flex-1 flex-col gap-3'>
         <div>
           <h3 className='text-xl font-semibold uppercase text-primary-color'>{detail.name}</h3>
           <p className='opacity-70 text-base font-medium'>{detail.origin_name}</p>
