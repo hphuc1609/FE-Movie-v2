@@ -61,7 +61,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
       episode.server_data.find((item) => item.slug === episodeParam),
     )
     if (filteredDataEpisode) {
-      setUrlVideo(filteredDataEpisode[0]?.link_m3u8 || '')
+      setUrlVideo(filteredDataEpisode[0]?.link_m3u8 as string)
     }
   }, [dataEpisode, episodeParam])
 
@@ -125,20 +125,20 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
         )}
       </div>
       <div className='flex items-center gap-2 flex-wrap'>
-        {dataEpisode.map((item, index) =>
-          item.server_data.map((server, serverIndex) => (
-            <div
-              key={server.name}
-              className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[65px] max-w-[200px] text-center px-2 py-2 cursor-pointer text-nowrap`}
-              onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
-            >
-              {server.name}
-              {index === dataEpisode.length - 1 &&
-                serverIndex > 1 &&
-                serverIndex === item.server_data.length - 1 &&
-                ' END'}
-            </div>
-          )),
+        {dataEpisode.map((item) =>
+          item.server_data.map((server, serverIndex) => {
+            const isLastEpisode = serverIndex === Number(detail.episode_total) - 1
+            return (
+              <div
+                key={server.name}
+                className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[65px] max-w-[200px] text-center px-2 py-2 cursor-pointer text-nowrap`}
+                onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
+              >
+                {server.name}
+                {isLastEpisode && ' END'}
+              </div>
+            )
+          }),
         )}
       </div>
     </div>

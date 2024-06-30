@@ -122,16 +122,16 @@ export default function Detail() {
   }
 
   const dataBreadCrumb = () => {
-    if (isNotEmpty(dataNewMovie)) return breadCrumbCustom
-    if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb
-    if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb
+    if (isNotEmpty(dataNewMovie)) return breadCrumbCustom[0]?.name
+    if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb[0]?.name
+    if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb[0]?.name.replace(/ - Trang 1/g, '')
     return []
   }
 
   return (
     <>
       <BreadcrumbCustom breadCrumb={dataBreadCrumb()} />
-      <h1 className='text-3xl font-bold text-primary-color'>{dataBreadCrumb()[0]?.name}</h1>
+      <h2 className='text-3xl font-bold text-primary-color'>{dataBreadCrumb()}</h2>
       <TablePagination
         category={category}
         data={dataTable() as MovieCategoryItem}

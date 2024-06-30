@@ -50,7 +50,7 @@ export default function CardImage(props: CardImageProps) {
                     {item.quality} {item.lang}
                   </p>
                 )}
-                {paramCategory === 'phim-bo' && (
+                {paramCategory === 'phim-bo' && item.episode_current && (
                   <p className='bg-label-color w-fit py-1 px-2'>{item.episode_current}</p>
                 )}
               </div>
