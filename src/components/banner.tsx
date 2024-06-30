@@ -44,7 +44,7 @@ export default function Banner({ dataBanner }: BannerProps) {
       speed={1500}
       autoplay={{ delay: 5000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, Navigation]}
-      className='relative w-full h-[650px] text-white'
+      className='relative max-w-screen-2xl h-[650px] text-white'
     >
       {filteredData.map((item, index) => {
         return (

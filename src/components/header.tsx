@@ -26,13 +26,15 @@ export default function Header() {
   const scrollPosition = useScrollPosition()
 
   return (
-    <div
-      className={`w-full h-16 flex items-center justify-between px-20 max-lg:px-[25px] ${
+    <header
+      className={`w-full h-16 flex items-center justify-between ${
         isHomePathname ? 'fixed' : 'sticky'
       } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-black bg-opacity-30'}`}
     >
-      <HeaderMenubar />
-    </div>
+      <div className='mx-auto max-w-screen-xl w-full px-[25px] py-8 lg:px-10'>
+        <HeaderMenubar />
+      </div>
+    </header>
   )
 }
 
@@ -49,7 +51,7 @@ const HeaderMenubar = React.memo(() => {
   }
 
   return (
-    <>
+    <div className='flex justify-between items-center'>
       <div className='flex gap-14 h-full items-center'>
         <Link
           href='/'
@@ -93,7 +95,7 @@ const HeaderMenubar = React.memo(() => {
           <p className='text-sm'>Guest</p>
         </div>
       </div>
-    </>
+    </div>
   )
 })
 HeaderMenubar.displayName = 'HeaderMenubar'
@@ -110,17 +112,20 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
   return (
     <Menubar className='bg-transparent border-none p-0'>
       <MenubarMenu>
-        <MenubarTrigger className='p-0 !bg-transparent text-base font-semibold !text-current'>
+        <MenubarTrigger className='p-0 !bg-transparent text-sm uppercase font-semibold !text-current'>
           {data.href ? (
             <Link
               href={`${checkUrl}`}
-              className={cn('opacity-80 hover:opacity-100', isActiveLink && 'opacity-100')}
+              className={cn(
+                'opacity-80 hover:opacity-100 text-nowrap',
+                isActiveLink && 'opacity-100',
+              )}
             >
               {data.name}
             </Link>
           ) : (
             <div className='cursor-pointer flex items-center'>
-              <span>{data.name}</span>
+              <span className='text-nowrap'>{data.name}</span>
               <MenubarShortcut>
                 <ChevronDown
                   strokeWidth={2}

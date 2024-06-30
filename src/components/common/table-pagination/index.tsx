@@ -42,7 +42,7 @@ export default function TablePagination(props: TablePaginationProps) {
     <>
       {data.items?.length > 0 ? (
         <div className='flex flex-col gap-10 pb-9'>
-          <div className='grid grid-cols-5 gap-6 max-sm:grid-cols-2 max-md:grid-cols-3 max-xl:grid-cols-4 overflow-hidden'>
+          <div className='grid grid-cols-5 gap-5 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 overflow-hidden'>
             <CardImage
               data={data}
               paramCategory={category}

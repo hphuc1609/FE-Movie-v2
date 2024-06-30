@@ -74,11 +74,11 @@ function MovieRowItem(props: MovieRowItemProps) {
         </div>
       </div>
       {/* Data Grid */}
-      <div className='grid grid-cols-3 max-md:grid-cols-2 max-lg:grid-cols-4 gap-[30px] max-lg:gap-x-4 max-md:gap-x-6'>
+      <div className='grid grid-cols-4 max-md:grid-cols-2 gap-[20px] max-lg:gap-x-4 max-md:gap-x-6'>
         <CardImage
           data={data}
           paramCategory={paramCategory}
-          itemLength={isTabletOrMobile ? data.items?.length : 6}
+          itemLength={isTabletOrMobile ? data.items?.length : 8}
         />
       </div>
     </div>

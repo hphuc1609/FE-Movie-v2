@@ -17,9 +17,9 @@ export default function CardImage(props: CardImageProps) {
         data.items.slice(0, itemLength).map((item) => (
           <div
             key={item._id}
-            className='h-fit flex flex-col gap-4'
+            className='h-fit flex flex-col gap-4 overflow-hidden'
           >
-            <div className='relative group h-[325px] max-xl:h-[300px] rounded-md bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'>
+            <div className='relative group h-[320px] min-w-[180px] max-xl:min-w-fit max-md:h-[259px] max-xl:h-[285px] rounded-md bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'>
               <div className='group-hover:scale-110 h-full w-full transition-all duration-500'>
                 <Image
                   src={

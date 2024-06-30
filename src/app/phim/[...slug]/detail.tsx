@@ -94,7 +94,7 @@ export default function Detail() {
   }, [isWatch])
 
   return detail && dataEpisode.length > 0 ? (
-    <div className='px-20 py-[35px] max-lg:px-[25px] flex flex-col gap-9'>
+    <>
       <BreadcrumbCustom breadCrumb={detail.name} />
       {!isWatch ? (
         <MovieDetailCard
@@ -114,6 +114,6 @@ export default function Detail() {
         {!isWatch && <Reviewbox />}
         {isWatch && isMobile && <NewUpdateMovie data={dataNewMovie} />}
       </div>
-    </div>
+    </>
   ) : null
 }

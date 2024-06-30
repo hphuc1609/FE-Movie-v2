@@ -17,10 +17,10 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
 
   return (
-    <div className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-5 flex-1`}>
+    <div className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-5 flex-auto`}>
       {/* Heading */}
       <div className='flex items-center justify-between'>
-        <h2 className='text-lg font-semibold uppercase text-primary-color line-clamp-1'>
+        <h2 className='text-lg font-medium uppercase text-primary-color line-clamp-1'>
           Phim mới
           <span className='ml-1 text-primary-foreground'>nổi bật</span>
         </h2>
@@ -35,7 +35,7 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
       </div>
       {/* List */}
       <div
-        className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-5 flex flex-col gap-3 
+        className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3 
         scrollbar-thin scrollbar-thumb-zinc-950 scrollbar-track-transparent`}
       >
         {data.slice(0, 10).map((item) => (
@@ -69,12 +69,12 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
               href={`/phim/${item.slug}`}
               className='flex-1'
             >
-              <div className='flex flex-col gap-2 group'>
+              <div className='flex flex-col gap-1 group'>
                 <span className='text-sm group-hover:text-primary-color line-clamp-2 font-medium'>
                   {item.name}
                 </span>
-                <span className='text-xs opacity-60 line-clamp-1'>{item.origin_name}</span>
-                <span className='text-xs opacity-60'>{item.year}</span>
+                <span className='text-xs opacity-30 line-clamp-1'>{item.origin_name}</span>
+                <span className='text-xs opacity-30'>{item.year}</span>
               </div>
             </Link>
           </div>

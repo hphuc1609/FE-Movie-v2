@@ -23,7 +23,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   return (
     <div className='flex gap-[30px]'>
-      <div className='flex flex-1 flex-col gap-3'>
+      <div className='w-[839px] flex flex-col gap-3'>
         <div>
           <h3 className='text-xl font-semibold uppercase text-primary-color'>{detail.name}</h3>
           <p className='opacity-70 text-base font-medium'>{detail.origin_name}</p>
@@ -101,14 +101,14 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
   }
 
   return (
-    <div className='lg:w-[839px] max-lg:flex-auto h-fit flex flex-col gap-y-4'>
+    <div className='h-fit flex flex-col gap-y-4'>
       <div className='relative flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
             <video
               ref={videoRef}
               controls
-              className='w-full h-[325px] md:h-[500px] object-cover'
+              className='w-full h-[325px] lg:h-[500px]'
               poster={detail.thumb_url}
             ></video>
             {!isPlaying && (
