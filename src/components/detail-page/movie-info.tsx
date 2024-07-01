@@ -32,7 +32,16 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
   )
   const directors = useMemo(
     () =>
-      detail.director?.filter((director) => director.toLowerCase() !== 'đang cập nhật').join(', '),
+      detail.director
+        ?.filter(
+          (director) =>
+            director
+              .replace(/&quot;/g, '')
+              .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
+              .replace(/\s{2,}/g, ' ')
+              .toLowerCase() !== 'đang cập nhật',
+        )
+        .join(', '),
     [detail.director],
   )
   const actors = useMemo(() => {
