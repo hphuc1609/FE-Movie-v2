@@ -59,7 +59,7 @@ export default function Banner({ dataBanner }: BannerProps) {
                 quality={100}
                 className='w-full h-full object-cover object-top'
               />
-              <div className='absolute top-0 w-full h-full bg-black bg-opacity-20'></div>
+              <div className='absolute top-0 w-full h-full bg-black bg-opacity-25'></div>
               <div
                 className={`absolute top-1/3 left-20 max-lg:left-[25px] max-md:right-[25px] md:w-[540px] flex flex-col gap-4`}
               >
@@ -71,7 +71,7 @@ export default function Banner({ dataBanner }: BannerProps) {
                   } grid gap-y-3`}
                   style={{ transitionDuration: '2000ms' }}
                 >
-                  <h1 className='text-6xl max-md:text-3xl font-bold line-clamp-2 leading-tight'>
+                  <h1 className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
                     {item.name}
                   </h1>
                   <SubtextBanner item={item} />
@@ -124,17 +124,17 @@ export default function Banner({ dataBanner }: BannerProps) {
 
 function SubtextBanner({ item }: { item: NewMovieItem }) {
   return (
-    <div className='flex max-md:flex-col max-md:items-baseline items-center gap-5'>
+    <div className='flex max-md:flex-col text-sm max-md:items-baseline items-center gap-5'>
       <div className='flex items-center gap-3'>
-        <div className='bg-white w-12 h-[22px] px-3 flex items-center justify-center text-primary text-sm'>
+        <div className='bg-white w-12 h-[25px] px-3 flex items-center justify-center text-primary'>
           Phim
         </div>
-        <div className='w-7 h-[22px] px-3 flex items-center justify-center text-sm font-medium border'>
+        <div className='w-7 h-[25px] px-3 flex items-center justify-center font-medium border'>
           HD
         </div>
       </div>
-      <div className='text-gray-50 text-lg font-medium flex items-center gap-3'>
-        <p className='line-clamp-1'>{item.origin_name}</p>
+      <div className='text-gray-50 font-medium flex items-center gap-3'>
+        <p className='line-clamp-1 max-w-[200px]'>{item.origin_name}</p>
         <div className='flex-1 flex items-center gap-3'>
           <CalendarDays
             size={20}

@@ -20,6 +20,7 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
   const { detail, dataEpisode, isWatch, setIsWatch } = props
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const router = useRouter()
+  const [errorImage, setErrorImage] = useState(false)
 
   const categories = useMemo(
     () => detail.category?.map((item) => item.name).join(', '),
@@ -73,11 +74,12 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
     <div className='flex max-md:flex-col gap-[30px]'>
       <div className='relative w-[300px] h-[440px] max-md:m-auto rounded-md overflow-hidden'>
         <Image
-          src={detail.poster_url || '/no-image.png'}
+          src={errorImage ? detail.thumb_url : detail.poster_url}
           width={300}
           height={440}
           alt={detail.name || ''}
           priority
+          onError={() => setErrorImage(true)}
           className='w-full h-full object-cover'
         />
         {!isWatch && (

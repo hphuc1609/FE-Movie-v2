@@ -1,4 +1,5 @@
 import { MovieCategoryParams } from '@/models/list-movie'
+import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
@@ -40,38 +41,36 @@ export default function TablePagination(props: TablePaginationProps) {
 
   return (
     <>
-      {data.items?.length > 0 ? (
-        <div className='flex flex-col gap-10 pb-9'>
-          <div className='grid grid-cols-5 gap-5 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 overflow-hidden'>
-            <CardImage
-              data={data}
-              paramCategory={category}
-              itemLength={pagination.totalItemsPerPage}
-            />
-          </div>
-          {pagesToShow?.length > 1 && (
-            <PaginationCustom
-              pageToShow={pagesToShow}
-              category={category}
-              currentPage={currentPage}
-              pagination={pagination}
-            />
-          )}
+      <div className='flex flex-col gap-10 pb-9'>
+        <div className='grid grid-cols-6 gap-5 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 overflow-hidden'>
+          <CardImage
+            data={data}
+            paramCategory={category}
+            itemLength={pagination?.totalItemsPerPage}
+          />
         </div>
-      ) : (
-        <>
-          <p className='text-center text-2xl font-medium'>
-            <span className='text-primary-color'>Không tìm thấy kết quả tìm kiếm: </span>
-            {props.keyword}
-          </p>
-          <Link
-            href={'/'}
-            className='text-center text-lg underline text-primary-color'
-          >
-            Quay lại trang chủ
-          </Link>
-        </>
-      )}
+        {pagesToShow?.length > 1 ? (
+          <PaginationCustom
+            pageToShow={pagesToShow}
+            category={category}
+            currentPage={currentPage}
+            pagination={pagination}
+          />
+        ) : (
+          <div className='flex flex-col gap-1 items-center'>
+            <p className='text-center text-2xl font-medium'>
+              <span className='text-primary-color'>Không tìm thấy kết quả tìm kiếm: </span>
+              {props.keyword}
+            </p>
+            <Link
+              href={'/'}
+              className='text-center text-base flex gap-1 items-center text-primary-color'
+            >
+              <ArrowLeft size={18} /> Quay lại trang chủ
+            </Link>
+          </div>
+        )}
+      </div>
     </>
   )
 }

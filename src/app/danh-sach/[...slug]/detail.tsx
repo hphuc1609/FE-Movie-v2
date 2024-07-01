@@ -103,7 +103,7 @@ export default function Detail() {
       getNewMovies(currentPage)
       return
     }
-    getMoviesByCate(category, currentPage)
+    getMoviesByCate(category, currentPage, 20)
   }, [category, currentPage])
 
   useEffect(() => {
@@ -125,18 +125,22 @@ export default function Detail() {
     if (isNotEmpty(dataNewMovie)) return breadCrumbCustom[0]?.name
     if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb[0]?.name
     if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb[0]?.name.replace(/ - Trang 1/g, '')
-    return []
+    return ''
   }
 
   return (
     <>
       <BreadcrumbCustom breadCrumb={dataBreadCrumb()} />
-      <h2 className='text-3xl font-bold text-primary-color'>{dataBreadCrumb()}</h2>
-      <TablePagination
-        category={category}
-        data={dataTable() as MovieCategoryItem}
-        keyword={keyword}
-      />
+      <div className='flex flex-col gap-4'>
+        {!dataBreadCrumb().includes('Tìm') && (
+          <h2 className='text-2xl font-bold text-primary-color'>{dataBreadCrumb()}</h2>
+        )}
+        <TablePagination
+          category={category}
+          data={dataTable() as MovieCategoryItem}
+          keyword={keyword}
+        />
+      </div>
     </>
   )
 }

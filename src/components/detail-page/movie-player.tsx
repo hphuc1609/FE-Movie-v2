@@ -124,14 +124,15 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
           <Skeleton className='flex-auto h-[425px] bg-zinc-700' />
         )}
       </div>
-      <div className='flex items-center gap-2 flex-wrap'>
+      <div className='flex items-center justify-start gap-1 flex-wrap max-h-[300px] overflow-auto bg-black bg-opacity-20 p-3 scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent'>
         {dataEpisode.map((item) =>
           item.server_data.map((server, serverIndex) => {
-            const isLastEpisode = serverIndex === Number(detail.episode_total) - 1
+            const isLastEpisode =
+              serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
             return (
               <div
                 key={server.name}
-                className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[65px] max-w-[200px] text-center px-2 py-2 cursor-pointer text-nowrap`}
+                className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[65px] max-w-[200px] text-center px-2 py-1 cursor-pointer text-nowrap`}
                 onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
               >
                 {server.name}

@@ -29,7 +29,7 @@ export default function Header() {
     <header
       className={`w-full h-16 flex items-center justify-between ${
         isHomePathname ? 'fixed' : 'sticky'
-      } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-black bg-opacity-30'}`}
+      } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-black bg-opacity-70'}`}
     >
       <div className='mx-auto max-w-screen-xl w-full px-[25px] py-8 lg:px-10'>
         <HeaderMenubar />
@@ -51,15 +51,15 @@ const HeaderMenubar = React.memo(() => {
   }
 
   return (
-    <div className='flex justify-between items-center'>
-      <div className='flex gap-14 h-full items-center'>
+    <div className='flex justify-between items-center gap-8'>
+      <div className='flex gap-8 h-full items-center'>
         <Link
           href='/'
-          className='text-2xl font-bold'
+          className='text-2xl font-bold text-nowrap'
         >
           VPhim <span className='text-primary-color'>247</span>
         </Link>
-        <div className='flex items-center gap-5 h-full max-lg:hidden text-white'>
+        <div className='flex items-center gap-5 h-full max-w-screen-lg max-lg:hidden text-white'>
           {menuLinks.map((menuItem) => (
             <TextMenubar
               key={menuItem.name}
@@ -116,16 +116,13 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
           {data.href ? (
             <Link
               href={`${checkUrl}`}
-              className={cn(
-                'opacity-80 hover:opacity-100 text-nowrap',
-                isActiveLink && 'opacity-100',
-              )}
+              className={cn('opacity-80 hover:opacity-100', isActiveLink && 'opacity-100')}
             >
               {data.name}
             </Link>
           ) : (
             <div className='cursor-pointer flex items-center'>
-              <span className='text-nowrap'>{data.name}</span>
+              <span>{data.name}</span>
               <MenubarShortcut>
                 <ChevronDown
                   strokeWidth={2}
