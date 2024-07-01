@@ -38,7 +38,7 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
         {data.slice(0, 10).map((item) => (
           <div
             key={item._id}
-            className='h-[90px] overflow-hidden'
+            className='h-[90px] max-md:min-h-[90px] overflow-hidden'
           >
             <Link
               href={`/phim/${item.slug}`}
