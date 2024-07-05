@@ -1,39 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client'
-
-import movieApi from '@/api-client/movie'
-import isSuccessResponse from '@/helpers/check-response'
 import { NewMovieItem } from '@/models/new-movie'
-import { useEffect, useState } from 'react'
 import Banner from '../banner'
-import { useLoading } from '../loading-provider'
 import CategoryMovie from './category-movie'
 import NewUpdateMovie from './new-movie'
 
-export default function MovieHomePage() {
-  const [data, setData] = useState<NewMovieItem[]>([])
-  const loader = useLoading()
-
-  const getNewMovies = async (page?: string | number) => {
-    loader.show()
-    try {
-      const res = await movieApi.getNewMovies({ page })
-      if (isSuccessResponse(res)) {
-        setData(res.items)
-      } else {
-        console.error('Lỗi tải danh sách phim mới: ', res.msg)
-      }
-    } catch (error) {
-      console.error('Lỗi tải danh sách phim mới: ', error)
-    } finally {
-      loader.hidden()
-    }
-  }
-
-  useEffect(() => {
-    getNewMovies()
-  }, [])
-
+export default function MovieHomePage({ data }: { data: NewMovieItem[] }) {
   return (
     <>
       <Banner dataBanner={data} />

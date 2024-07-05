@@ -16,13 +16,17 @@ import { useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { removeCookie } from 'typescript-cookie'
 
-export default function Detail() {
+interface DetailProps {
+  dataNewMovie: NewMovieItem[]
+}
+
+export default function Detail(props: DetailProps) {
+  const { dataNewMovie } = props
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const loader = useLoading()
   const [detail, setDetail] = useState({} as DetailResponse['movie'])
   const [dataEpisode, setDataEpisode] = useState<DetailResponse['episodes']>([])
-  const [dataNewMovie, setDataNewMovie] = useState<NewMovieItem[]>([])
   const [isWatch, setIsWatch] = useState(false)
 
   const nameMovieFromUrl = pathname.split('/').pop() as string
@@ -46,22 +50,6 @@ export default function Detail() {
     }
   }
 
-  const getNewMovies = async (page?: string | number) => {
-    loader.show()
-    try {
-      const res = await movieApi.getNewMovies({ page })
-      if (isSuccessResponse(res)) {
-        setDataNewMovie(res.items)
-      } else {
-        console.error('Lỗi tải danh sách phim mới: ', res.msg)
-      }
-    } catch (error) {
-      console.error('Lỗi tải danh sách phim mới: ', error)
-    } finally {
-      loader.hidden()
-    }
-  }
-
   // Check param episode
   useEffect(() => {
     if (!episodeParam) {
@@ -78,11 +66,6 @@ export default function Detail() {
     }
     getDetail(nameMovieFromUrl)
   }, [nameMovieFromUrl])
-
-  // Get list new movies
-  useEffect(() => {
-    getNewMovies()
-  }, [])
 
   // Handle check watch button click
   useEffect(() => {

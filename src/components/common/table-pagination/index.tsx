@@ -17,7 +17,6 @@ export default function TablePagination(props: TablePaginationProps) {
   const searchParams = useSearchParams()
   const currentPage = JSON.parse(searchParams.get('page') || '1')
   const pagination = data.params?.pagination || (data.pagination as MovieCategoryResponse['data'])
-  console.log('🚀 ~ TablePagination ~ pagination:', pagination)
 
   // Memoize the list of pages to prevent unnecessary re-renders
   const pagesToShow = useMemo(() => {

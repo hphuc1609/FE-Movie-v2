@@ -3,6 +3,7 @@
 import { NewMovieItem } from '@/models/new-movie'
 import { CalendarDays, MoveLeft, MoveRight, Play } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -12,7 +13,6 @@ import { Button } from './ui/button'
 import 'swiper/css'
 import 'swiper/css/pagination'
 import '../css/banner.css'
-import { useRouter } from 'next/navigation'
 
 interface BannerProps {
   dataBanner: NewMovieItem[]
@@ -71,9 +71,9 @@ export default function Banner({ dataBanner }: BannerProps) {
                   } grid gap-y-3`}
                   style={{ transitionDuration: '2000ms' }}
                 >
-                  <h1 className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
+                  <p className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
                     {item.name}
-                  </h1>
+                  </p>
                   <SubtextBanner item={item} />
                 </div>
                 <Button

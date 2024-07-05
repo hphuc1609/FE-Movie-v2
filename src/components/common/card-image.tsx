@@ -1,6 +1,6 @@
 'use client'
 
-import { MovieCategoryItem } from '@/models/list-movie'
+import { MovieCategoryItem, MovieItem } from '@/models/list-movie'
 import Image from 'next/image'
 import Link from 'next/link'
 import PlayButton from './play-button'
@@ -14,8 +14,6 @@ interface CardImageProps {
 
 export default function CardImage(props: CardImageProps) {
   const { data, paramCategory, itemLength = 6 } = props
-  const [errorImage, setErrorImage] = useState(false)
-
   return (
     <>
       {data.items?.length > 0 &&
@@ -26,18 +24,9 @@ export default function CardImage(props: CardImageProps) {
           >
             <div className='relative group rounded-sm bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'>
               <div className='group-hover:scale-110 h-[275px] w-full transition-all duration-500'>
-                <Image
-                  src={
-                    data.APP_DOMAIN_CDN_IMAGE
-                      ? `${data.APP_DOMAIN_CDN_IMAGE}/${!errorImage ? item.poster_url : item.thumb_url}`
-                      : item.poster_url
-                  }
-                  alt={item.name}
-                  width={478}
-                  height={325}
-                  priority
-                  onError={() => setErrorImage(true)}
-                  className='w-full h-full object-cover'
+                <ImageComponent
+                  item={item}
+                  data={data}
                 />
               </div>
               <Link
@@ -73,12 +62,45 @@ export default function CardImage(props: CardImageProps) {
             )}
             <Link
               href={`/phim/${item.slug}`}
-              className='text-sm'
+              className='text-sm flex flex-col gap-1'
             >
-              {item.name} ({item.year})
+              <span>
+                {item.name} ({item.year})
+              </span>
+              <span className='opacity-50 line-clamp-1'>{item.origin_name}</span>
             </Link>
           </div>
         ))}
     </>
+  )
+}
+
+interface ImageComponentProps {
+  item: MovieItem
+  data: MovieCategoryItem
+}
+function ImageComponent({ item, data }: ImageComponentProps) {
+  const [errorImage, setErrorImage] = useState(false)
+
+  const imageUrl = errorImage
+    ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
+    : data.APP_DOMAIN_CDN_IMAGE
+      ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
+      : item.poster_url
+
+  const handleError = () => {
+    setErrorImage(true)
+  }
+
+  return (
+    <Image
+      src={imageUrl}
+      alt={item.name}
+      width={275}
+      height={275}
+      priority
+      onError={handleError}
+      className='w-full h-full object-cover'
+    />
   )
 }

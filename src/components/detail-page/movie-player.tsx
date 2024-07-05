@@ -25,8 +25,10 @@ export default function MoviePlayer(props: MoviePlayerProps) {
     <div className='flex gap-[30px]'>
       <div className='w-[839px] flex flex-col gap-3'>
         <div>
-          <h3 className='text-xl font-semibold uppercase text-primary-color'>{detail.name}</h3>
-          <p className='opacity-70 text-base font-medium'>{detail.origin_name}</p>
+          <h1 className='text-xl font-semibold uppercase text-primary-color line-clamp-1'>
+            {detail.name}
+          </h1>
+          <p className='opacity-70 text-base font-medium line-clamp-1'>{detail.origin_name}</p>
         </div>
         <div className='flex flex-col gap-5'>
           <VideoCustom
@@ -121,27 +123,32 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
             )}
           </>
         ) : (
-          <Skeleton className='flex-auto h-[425px] bg-zinc-700' />
+          <Skeleton className='flex-auto h-[425px] bg-zinc-800' />
         )}
       </div>
-      <div className='flex items-center justify-start gap-1 flex-wrap max-h-[300px] overflow-auto bg-black bg-opacity-20 p-3 scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent'>
-        {dataEpisode.map((item) =>
-          item.server_data.map((server, serverIndex) => {
-            const isLastEpisode =
-              serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
-            return (
-              <div
-                key={server.name}
-                className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-600 bg-opacity-20'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[65px] max-w-[200px] text-center px-2 py-1 cursor-pointer text-nowrap`}
-                onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
-              >
-                {server.name}
-                {isLastEpisode && ' END'}
-              </div>
-            )
-          }),
-        )}
-      </div>
+      {detail.episode_current?.toLowerCase() !== 'full' && (
+        <div className='max-h-[300px] flex flex-col gap-2 p-3 overflow-y-auto bg-black bg-opacity-20 scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent'>
+          <span className='text-base'>Chọn tập phim</span>
+          <div className='grid grid-cols-11 max-xl:grid-cols-9 max-lg:grid-cols-6 max-sm:grid-cols-5 gap-2'>
+            {dataEpisode.map((item) =>
+              item.server_data.map((server, serverIndex) => {
+                const isLastEpisode =
+                  serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
+                return (
+                  <div
+                    key={server.name}
+                    className={`text-sm ${server.slug === episodeParam ? 'bg-primary-color' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[60px] text-center px-1 py-1 cursor-pointer text-nowrap`}
+                    onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
+                  >
+                    {server.name.split(' ')[1]}
+                    {isLastEpisode && ' END'}
+                  </div>
+                )
+              }),
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

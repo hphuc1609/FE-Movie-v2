@@ -41,14 +41,18 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
                 </>
               ) : (
                 <>
-                  <BreadcrumbPage className='opacity-70 text-secondary'>{item.name}</BreadcrumbPage>
+                  <BreadcrumbPage className='opacity-70 text-secondary line-clamp-1'>
+                    {item.name}
+                  </BreadcrumbPage>
                 </>
               )}
             </BreadcrumbItem>
           ))
         ) : (
           <BreadcrumbItem>
-            <BreadcrumbPage className='opacity-70 text-secondary'>{breadCrumb}</BreadcrumbPage>
+            <BreadcrumbPage className='opacity-70 text-secondary line-clamp-1'>
+              {breadCrumb}
+            </BreadcrumbPage>
           </BreadcrumbItem>
         )}
       </BreadcrumbList>

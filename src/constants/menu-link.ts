@@ -10,10 +10,10 @@ export interface MenuItem {
 }
 
 const menuLinks: MenuItem[] = [
-  {
-    name: 'Trang chủ',
-    href: '/',
-  },
+  // {
+  //   name: 'Trang chủ',
+  //   href: '/',
+  // },
   {
     name: 'Phim mới',
     href: '/phim-moi',
