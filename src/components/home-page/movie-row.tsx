@@ -18,9 +18,7 @@ export default function MovieRow(props: MovieRowProps) {
     <div className='flex-1 flex flex-col gap-6'>
       {/* Heading */}
       <div className='flex items-center justify-between'>
-        <h2 className='text-3xl max-md:text-2xl font-semibold uppercase text-primary-color'>
-          {data.titlePage}
-        </h2>
+        <h2 className='text-2xl font-semibold uppercase text-primary-color'>{data.titlePage}</h2>
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
             href={`/danh-sach/${paramCategory}`}

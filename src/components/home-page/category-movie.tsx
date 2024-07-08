@@ -1,5 +1,7 @@
-import movieApi from '@/api-client/movie'
+import movieApi from '@/api-client/movies'
 import MovieRow from './movie-row'
+import Loader from '../loader'
+import { Suspense } from 'react'
 
 interface CategoryMovieProps {
   paramCategory: string
@@ -11,9 +13,11 @@ export default async function CategoryMovie(props: CategoryMovieProps) {
   const dataMovie = response.data
 
   return (
-    <MovieRow
-      data={dataMovie}
-      paramCategory={paramCategory}
-    />
+    <Suspense fallback={<Loader openLoading={true} />}>
+      <MovieRow
+        data={dataMovie}
+        paramCategory={paramCategory}
+      />
+    </Suspense>
   )
 }

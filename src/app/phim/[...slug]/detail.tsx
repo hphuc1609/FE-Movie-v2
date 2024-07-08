@@ -1,18 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/api-client/movie'
+import movieApi from '@/api-client/movies'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import Reviewbox from '@/components/common/review-box'
 import MovieDetailCard from '@/components/detail-page/movie-info'
 import MoviePlayer from '@/components/detail-page/movie-player'
 import NewUpdateMovie from '@/components/home-page/new-movie'
+import Loader from '@/components/loader'
 import { useLoading } from '@/components/loading-provider'
 import isSuccessResponse from '@/helpers/check-response'
 import { DetailResponse } from '@/models/detail'
 import { NewMovieItem } from '@/models/new-movie'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { removeCookie } from 'typescript-cookie'
 
@@ -76,27 +77,32 @@ export default function Detail(props: DetailProps) {
     setIsWatch(getWatchLocal)
   }, [isWatch])
 
-  return detail && dataEpisode.length > 0 ? (
+  return (
     <>
-      <BreadcrumbCustom breadCrumb={detail.name} />
-      {!isWatch ? (
-        <MovieDetailCard
-          detail={detail}
-          dataEpisode={dataEpisode}
-          isWatch={isWatch}
-          setIsWatch={setIsWatch}
-        />
-      ) : (
-        <MoviePlayer
-          dataNewMovie={dataNewMovie}
-          detail={detail}
-          dataEpisode={dataEpisode}
-        />
+      <Loader openLoading={loader.isLoading} />
+      {detail && dataEpisode.length > 0 && (
+        <Fragment>
+          <BreadcrumbCustom breadCrumb={detail.name} />
+          {!isWatch ? (
+            <MovieDetailCard
+              detail={detail}
+              dataEpisode={dataEpisode}
+              isWatch={isWatch}
+              setIsWatch={setIsWatch}
+            />
+          ) : (
+            <MoviePlayer
+              dataNewMovie={dataNewMovie}
+              detail={detail}
+              dataEpisode={dataEpisode}
+            />
+          )}
+          <div className='flex max-md:flex-col gap-[30px]'>
+            {!isWatch && <Reviewbox />}
+            {isWatch && isMobile && <NewUpdateMovie data={dataNewMovie} />}
+          </div>
+        </Fragment>
       )}
-      <div className='flex max-md:flex-col gap-[30px]'>
-        {!isWatch && <Reviewbox />}
-        {isWatch && isMobile && <NewUpdateMovie data={dataNewMovie} />}
-      </div>
     </>
-  ) : null
+  )
 }

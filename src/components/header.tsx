@@ -1,7 +1,7 @@
 /* eslint-disable react/no-children-prop */
 'use client'
 
-import menuLinks, { MenuItem } from '@/constants/menu-link'
+import menuLinks, { MenuItem } from '@/constants/menu'
 import useScrollPosition from '@/custom-hooks/useScrollPosition'
 import { cn } from '@/lib/utils'
 import { ChevronDown, Search, User } from 'lucide-react'
@@ -39,8 +39,9 @@ export default function Header() {
 }
 
 const HeaderMenubar = React.memo(() => {
-  const [openDialogSearch, setOpenDialogSearch] = useState(false)
   const router = useRouter()
+  const [openDialogSearch, setOpenDialogSearch] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter' || !event.currentTarget.value) {
@@ -48,6 +49,17 @@ const HeaderMenubar = React.memo(() => {
     }
     setOpenDialogSearch(false)
     router.push(`/danh-sach/search?keyword=${event.currentTarget.value}`)
+  }
+
+  const handleSearchClick = () => {
+    if (!searchValue) return
+    setOpenDialogSearch(false)
+    setSearchValue('')
+    router.push(`/danh-sach/search?keyword=${searchValue}`)
+  }
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value)
   }
 
   return (
@@ -59,7 +71,7 @@ const HeaderMenubar = React.memo(() => {
         >
           VPhim <span className='text-primary-color'>247</span>
         </Link>
-        <div className='flex items-center gap-5 h-full max-w-screen-lg max-lg:hidden text-white'>
+        <div className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
           {menuLinks.map((menuItem) => (
             <TextMenubar
               key={menuItem.name}
@@ -75,24 +87,31 @@ const HeaderMenubar = React.memo(() => {
           title={'Bạn tìm phim gì?'}
           children={<Search size={20} />}
           content={
-            <Input
-              placeholder='Nhập tên phim, chương trình,...'
-              autoFocus
-              onKeyDown={(e) => handleInputKeyDown(e)}
-              className='text-white text-lg bg-transparent p-0 border-transparent rounded-none !border-b-[#ccc] focus-visible:ring-0 focus-visible:ring-offset-0'
-            />
+            <div className='flex items-center'>
+              <Input
+                placeholder='Nhập tên phim, chương trình,...'
+                autoFocus
+                onKeyDown={(e) => handleInputKeyDown(e)}
+                onChange={(e) => handleInputChange(e)}
+                className='text-white text-lg bg-transparent p-0 pr-10 border-transparent rounded-none !border-b-[#ccc] focus-visible:ring-0 focus-visible:ring-offset-0'
+              />
+              <Search
+                size={20}
+                className='cursor-pointer -ml-8'
+                onClick={handleSearchClick}
+              />
+            </div>
           }
         />
         <Separator
           className='h-4'
           orientation='vertical'
         />
-        <div className='flex items-center gap-2'>
+        <div className='flex items-center gap-2 cursor-pointer'>
           <User
             fill='white'
             size={20}
           />
-          <p className='text-sm'>Guest</p>
         </div>
       </div>
     </div>
@@ -103,11 +122,10 @@ HeaderMenubar.displayName = 'HeaderMenubar'
 const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
   const pathname = usePathname()
   const isActiveLink = pathname.endsWith(data.href ?? '')
-  const checkUrl = data.href
-    ? data.href === '/'
-      ? '/'
-      : `/danh-sach${data.href.startsWith('/') ? data.href : `/${data.href}`}?page=1`
-    : undefined
+
+  const checkUrl = (link: string) => {
+    return link === '/' ? link : `/danh-sach${link.startsWith('/') ? link : `/${link}`}?page=1`
+  }
 
   return (
     <Menubar className='bg-transparent border-none p-0'>
@@ -115,33 +133,32 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
         <MenubarTrigger className='p-0 !bg-transparent text-sm uppercase font-semibold !text-current'>
           {data.href ? (
             <Link
-              href={`${checkUrl}`}
+              href={checkUrl(data.href)}
               className={cn('opacity-80 hover:opacity-100', isActiveLink && 'opacity-100')}
             >
               {data.name}
             </Link>
           ) : (
-            <div className='cursor-pointer flex items-center'>
-              <span>{data.name}</span>
-              <MenubarShortcut>
-                <ChevronDown
-                  strokeWidth={2}
-                  size={20}
-                  color='white'
-                  className='ml-1'
-                />
-              </MenubarShortcut>
+            <div className='cursor-pointer flex items-center opacity-80 hover:opacity-100'>
+              {data.name}
+              <ChevronDown
+                strokeWidth={2}
+                size={20}
+                color='white'
+                className='ml-1'
+              />
             </div>
           )}
         </MenubarTrigger>
         {data.subMenu && (
-          <MenubarContent className='min-w-fit'>
+          <MenubarContent className='min-w-fit grid grid-cols-4 gap-x-3 gap-y-1 bg-black bg-opacity-80 z-50 border-none text-white'>
             {data.subMenu?.map((item) => (
-              <MenubarItem key={item.name}>
-                <MenubarItem>
-                  <Link href={item.href}>{item.name}</Link>
-                </MenubarItem>
-              </MenubarItem>
+              <Link
+                key={item.name}
+                href={checkUrl(item.href)}
+              >
+                <MenubarItem className='cursor-pointer capitalize'>{item.name}</MenubarItem>
+              </Link>
             ))}
           </MenubarContent>
         )}

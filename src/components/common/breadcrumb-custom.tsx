@@ -42,7 +42,7 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
               ) : (
                 <>
                   <BreadcrumbPage className='opacity-70 text-secondary line-clamp-1'>
-                    {item.name}
+                    {item.name.replace(/ - Trang 1/g, '')}
                   </BreadcrumbPage>
                 </>
               )}

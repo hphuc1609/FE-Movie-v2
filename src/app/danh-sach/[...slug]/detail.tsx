@@ -1,15 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import movieApi from '@/api-client/movie'
+import movieApi from '@/api-client/movies'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/common/table-pagination'
+import Loader from '@/components/loader'
 import { useLoading } from '@/components/loading-provider'
+import menuLinks from '@/constants/menu'
 import isSuccessResponse from '@/helpers/check-response'
 import { MovieCategoryItem } from '@/models/list-movie'
 import { NewMovieResponse } from '@/models/new-movie'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function Detail() {
   const pathname = usePathname()
@@ -18,12 +20,14 @@ export default function Detail() {
   const [dataMovieCate, setDataMovieCate] = useState({} as MovieCategoryItem)
   const [dataNewMovie, setDataNewMovie] = useState({} as NewMovieResponse)
   const [dataSearch, setDataSearch] = useState({} as MovieCategoryItem)
+  const [allMovies, setAllMovies] = useState({} as MovieCategoryItem)
 
-  const category = pathname.split('/').pop() as string
-  const keyword = searchParams.get('keyword') as string
-  const currentPage = searchParams.get('page') as string
+  const category = useMemo(() => pathname.split('/').pop() as string, [pathname])
+  const keyword = useMemo(() => searchParams.get('keyword') as string, [searchParams])
+  const currentPage = useMemo(() => searchParams.get('page') as string, [searchParams])
+  const isNotEmpty = (obj: any) => Object.keys(obj).length > 0
 
-  const breadCrumbCustom = [
+  const breadCrumbPhimmoi = [
     {
       position: 1,
       name: 'Phim mới',
@@ -42,7 +46,15 @@ export default function Detail() {
       : []),
   ]
 
-  const getMoviesByCate = async (
+  // Data filter by category
+  const dataFilteredByCate = useMemo(() => {
+    const filterdData = allMovies.items?.filter((movie) =>
+      movie.category.some((cate) => cate.slug === category),
+    )
+    return { ...allMovies, items: filterdData }
+  }, [allMovies])
+
+  const fetchMoviesByCate = async (
     category: string,
     page?: string | number,
     limit?: string | number,
@@ -62,7 +74,24 @@ export default function Detail() {
     }
   }
 
-  const getNewMovies = async (page?: string | number) => {
+  const fetchAllMovies = async (page?: string | number, limit?: string | number) => {
+    loader.show()
+    try {
+      const phimLeData = await movieApi.getList({ category: 'phim-le', page, limit })
+      const phimBoData = await movieApi.getList({ category: 'phim-bo', page, limit })
+
+      if (isSuccessResponse(phimLeData) && isSuccessResponse(phimBoData)) {
+        const concatData = phimLeData.data.items.concat(phimBoData.data.items)
+        setAllMovies({ ...phimLeData.data, items: concatData })
+      }
+    } catch (error) {
+      console.error('Lỗi tải danh sách phim: ', error)
+    } finally {
+      loader.hidden()
+    }
+  }
+
+  const fetchNewMovies = async (page?: string | number) => {
     loader.show()
     try {
       const res = await movieApi.getNewMovies({ page })
@@ -78,7 +107,7 @@ export default function Detail() {
     }
   }
 
-  const getMoviesSearch = async (keyword: string, limit?: string | number) => {
+  const fetchMoviesSearch = async (keyword: string, limit?: string | number) => {
     loader.show()
     try {
       const newData = await movieApi.getMoviesSearch({ keyword, limit })
@@ -96,48 +125,69 @@ export default function Detail() {
 
   // Get data by category
   useEffect(() => {
-    if (!category) {
-      return
-    }
+    if (!category) return
+
     if (category === 'phim-moi') {
-      getNewMovies(currentPage)
+      fetchNewMovies(currentPage)
       return
     }
-    getMoviesByCate(category, currentPage, 20)
+    if (!['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows'].includes(category)) {
+      fetchAllMovies(currentPage, 50)
+      return
+    }
+    fetchMoviesByCate(category, currentPage, 20)
   }, [category, currentPage])
 
+  // Get data movie by search
   useEffect(() => {
     if (!keyword) {
       return
     }
-    getMoviesSearch(keyword)
+    fetchMoviesSearch(keyword)
   }, [keyword])
 
-  const isNotEmpty = (obj: any) => Object.keys(obj).length > 0
-  const dataTable = () => {
-    if (isNotEmpty(dataNewMovie)) return dataNewMovie
-    if (isNotEmpty(dataMovieCate)) return dataMovieCate
-    if (isNotEmpty(dataSearch)) return dataSearch
-    return {}
-  }
+  const dataTable: any = useCallback(() => {
+    if (Object.keys(dataNewMovie).length > 0) return dataNewMovie
+    if (Object.keys(dataMovieCate).length > 0) return dataMovieCate
+    if (Object.keys(dataSearch).length > 0) return dataSearch
+    return dataFilteredByCate
+  }, [dataNewMovie, dataMovieCate, dataSearch, dataFilteredByCate])
 
-  const dataBreadCrumb = () => {
-    if (isNotEmpty(dataNewMovie)) return breadCrumbCustom[0]?.name
+  const renderTitle = () => {
+    if (isNotEmpty(dataNewMovie)) return breadCrumbPhimmoi[0]?.name
     if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb[0]?.name
     if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb[0]?.name.replace(/ - Trang 1/g, '')
+
+    const menuItem = menuLinks
+      .find((item) => item.subMenu)
+      ?.subMenu?.find((item) => item.href.split('/').pop() === category)
+
+    if (menuItem) return `Phim ${menuItem?.name}`
     return ''
   }
 
+  const renderBreadCrumb = useCallback(() => {
+    if (Object.keys(dataNewMovie).length > 0) return breadCrumbPhimmoi
+    if (Object.keys(dataMovieCate).length > 0) return dataMovieCate.breadCrumb
+    if (Object.keys(dataSearch).length > 0) return dataSearch.breadCrumb
+
+    const menuItem = menuLinks
+      .find((item) => item.subMenu)
+      ?.subMenu?.find((item) => item.href.split('/').pop() === category)
+
+    if (menuItem) return `Phim ${menuItem?.name}`
+    return ''
+  }, [dataNewMovie, dataMovieCate, dataSearch, breadCrumbPhimmoi, category])
+
   return (
     <>
-      <BreadcrumbCustom breadCrumb={dataBreadCrumb()} />
+      <Loader openLoading={loader.isLoading} />
+      <BreadcrumbCustom breadCrumb={renderBreadCrumb()} />
       <div className='flex flex-col gap-4'>
-        {!dataBreadCrumb().includes('Tìm') && (
-          <h2 className='text-2xl font-bold text-primary-color'>{dataBreadCrumb()}</h2>
-        )}
+        <h2 className='text-2xl font-bold text-primary-color capitalize'>{renderTitle()}</h2>
         <TablePagination
           category={category}
-          data={dataTable() as MovieCategoryItem}
+          data={dataTable()}
           keyword={keyword}
         />
       </div>

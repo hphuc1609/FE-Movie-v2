@@ -1,6 +1,8 @@
-import movieApi from '@/api-client/movie'
+import movieApi from '@/api-client/movies'
 import MovieHomePage from '@/components/home-page'
+import Loader from '@/components/loader'
 import isSuccessResponse from '@/helpers/check-response'
+import { Suspense } from 'react'
 
 export default async function Home() {
   const response = await movieApi.getNewMovies({})
@@ -9,10 +11,14 @@ export default async function Home() {
   if (!isSuccessResponse(response) || !data) {
     return (
       <div className='min-h-screen flex items-center justify-center text-xl'>
-        <p>Đã xảy ra lỗi vui bạn tải lại trang hoặc quay lại sau.</p>
+        <p>Xảy ra lỗi vui lòng tải lại trang hoặc quay lại sau.</p>
       </div>
     )
   }
 
-  return <MovieHomePage data={data} />
+  return (
+    <Suspense fallback={<Loader openLoading={true} />}>
+      <MovieHomePage data={data} />
+    </Suspense>
+  )
 }

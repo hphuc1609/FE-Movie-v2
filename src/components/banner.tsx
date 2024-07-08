@@ -4,7 +4,7 @@ import { NewMovieItem } from '@/models/new-movie'
 import { CalendarDays, MoveLeft, MoveRight, Play } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Swiper as SwiperType } from 'swiper/types'
@@ -25,7 +25,11 @@ export default function Banner({ dataBanner }: BannerProps) {
   const router = useRouter()
 
   // Filter data by current year
-  const filteredData = dataBanner.filter((item) => item.year === new Date().getFullYear())
+  const currentYear = new Date().getFullYear()
+  const filteredData = useMemo(() => {
+    const currentYearData = dataBanner.filter((item) => item.year === currentYear)
+    return currentYearData.length > 0 ? currentYearData : dataBanner
+  }, [dataBanner, currentYear])
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex)
@@ -59,7 +63,7 @@ export default function Banner({ dataBanner }: BannerProps) {
                 quality={100}
                 className='w-full h-full object-cover object-top'
               />
-              <div className='absolute top-0 w-full h-full bg-black bg-opacity-25'></div>
+              <div className='absolute top-0 w-full h-full bg-black bg-opacity-30'></div>
               <div
                 className={`absolute top-1/3 left-20 max-lg:left-[25px] max-md:right-[25px] md:w-[540px] flex flex-col gap-4`}
               >
@@ -125,16 +129,16 @@ export default function Banner({ dataBanner }: BannerProps) {
 function SubtextBanner({ item }: { item: NewMovieItem }) {
   return (
     <div className='flex max-md:flex-col text-sm max-md:items-baseline items-center gap-5'>
-      <div className='flex items-center gap-3'>
-        <div className='bg-white w-12 h-[25px] px-3 flex items-center justify-center text-primary'>
-          Phim
-        </div>
-        <div className='w-7 h-[25px] px-3 flex items-center justify-center font-medium border'>
+      <div className='flex items-center gap-3 font-semibold'>
+        <div className='bg-white bg-opacity-80 w-12 h-[25px] px-2 flex items-center justify-center text-primary'>
           HD
+        </div>
+        <div className='bg-white bg-opacity-80 h-[25px] px-2 flex items-center justify-center text-primary'>
+          Vietsub
         </div>
       </div>
       <div className='text-gray-50 font-medium flex items-center gap-3'>
-        <p className='line-clamp-1 max-w-[200px]'>{item.origin_name}</p>
+        <p className='line-clamp-1 text-base max-w-[200px]'>{item.origin_name}</p>
         <div className='flex-1 flex items-center gap-3'>
           <CalendarDays
             size={20}

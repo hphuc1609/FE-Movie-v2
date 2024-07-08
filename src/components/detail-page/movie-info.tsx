@@ -30,29 +30,16 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
     () => detail.country?.map((item) => item.name).join(', '),
     [detail.country],
   )
-  const directors = useMemo(
-    () =>
-      detail.director
-        ?.filter(
-          (director) =>
-            director
-              .replace(/&quot;/g, '')
-              .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
-              .replace(/\s{2,}/g, ' ')
-              .toLowerCase() !== 'đang cập nhật',
-        )
-        .join(', '),
-    [detail.director],
-  )
   const actors = useMemo(() => {
     return detail.actor
-      ?.filter((item) => item.toLowerCase() !== 'đang cập nhật')
-      .map((actor) =>
-        actor
-          .replace(/&quot;/g, '')
-          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
-          .replace(/\s{2,}/g, ' '),
-      ) // Bỏ các dấu trong chuỗi và số
+      ?.filter(
+        (director) =>
+          director
+            .replace(/&quot;/g, '')
+            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
+            .replace(/\s{2,}/g, ' ')
+            .toLowerCase() !== 'đang cập nhật',
+      )
       .join(', ')
   }, [detail.actor])
 
@@ -66,7 +53,6 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
     { label: 'Thể loại', value: categories },
     { label: 'Quốc gia', value: country },
     { label: 'Diễn viên', value: actors },
-    { label: 'Đạo diễn', value: directors },
     { label: 'Thời lượng', value: detail.time },
     { label: 'Năm phát hành', value: detail.year },
   ]
@@ -122,11 +108,9 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
       <div className='flex flex-1 flex-col gap-6'>
         <div className='flex flex-col'>
           <h1 className='text-2xl font-semibold text-primary-color'>{detail.name}</h1>
-          <p className='opacity-70 font-medium text-base'>
-            {detail.origin_name} ({detail.year})
-          </p>
+          <p className='opacity-70 font-medium text-lg'>{detail.origin_name}</p>
         </div>
-        <p className='md:max-h-[150px] overflow-auto text-sm'>{content}</p>
+        <p className='md:max-h-[150px] overflow-auto text-base'>{content}</p>
         <div className='flex flex-col gap-2'>
           {detail.episode_total > '1' && (
             <div className='text-sm capitalize flex gap-6'>

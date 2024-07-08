@@ -13,6 +13,7 @@ export interface MovieCategoryItem {
   type_list: string
   APP_DOMAIN_FRONTEND: string
   APP_DOMAIN_CDN_IMAGE: string
+  pagination?: any
 }
 
 export interface SeoOnPage {

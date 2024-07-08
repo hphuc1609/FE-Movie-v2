@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "prettier:check": "prettier --check .",
-    "prettier:write": "prettier --write .",
-    "prettier:fix": "npm run prettier:check -- --write"
+    "prettier:fix": "prettier --write .",
+    "prettier:format": "prettier --write . && prettier --check ."
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",

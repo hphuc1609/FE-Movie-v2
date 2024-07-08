@@ -104,13 +104,13 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
 
   return (
     <div className='h-fit flex flex-col gap-y-4'>
-      <div className='relative flex flex-col gap-3 bg-black bg-opacity-80'>
+      <div className='relative h-[325px] lg:h-[500px] flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
             <video
               ref={videoRef}
               controls
-              className='w-full h-[325px] lg:h-[500px]'
+              className='w-full h-full'
               poster={detail.thumb_url}
             ></video>
             {!isPlaying && (
@@ -123,13 +123,13 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
             )}
           </>
         ) : (
-          <Skeleton className='flex-auto h-[425px] bg-zinc-800' />
+          <Skeleton className='h-full bg-zinc-500 bg-opacity-50 rounded-none' />
         )}
       </div>
       {detail.episode_current?.toLowerCase() !== 'full' && (
-        <div className='max-h-[300px] flex flex-col gap-2 p-3 overflow-y-auto bg-black bg-opacity-20 scrollbar-thin scrollbar-thumb-zinc-300 scrollbar-track-transparent'>
-          <span className='text-base'>Chọn tập phim</span>
-          <div className='grid grid-cols-11 max-xl:grid-cols-9 max-lg:grid-cols-6 max-sm:grid-cols-5 gap-2'>
+        <div className='max-h-[300px] flex flex-col gap-2 bg-black bg-opacity-20'>
+          <span className='text-lg sticky top-0 p-2'>Danh sách tập</span>
+          <div className='grid grid-cols-11 max-xl:grid-cols-9 max-lg:grid-cols-6 px-2 pb-3 max-sm:grid-cols-5 gap-2 overflow-auto'>
             {dataEpisode.map((item) =>
               item.server_data.map((server, serverIndex) => {
                 const isLastEpisode =
@@ -137,7 +137,7 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
                 return (
                   <div
                     key={server.name}
-                    className={`text-sm ${server.slug === episodeParam ? 'bg-primary-color' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-[60px] text-center px-1 py-1 cursor-pointer text-nowrap`}
+                    className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
                     onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
                   >
                     {server.name.split(' ')[1]}

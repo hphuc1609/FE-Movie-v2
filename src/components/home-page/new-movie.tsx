@@ -16,10 +16,12 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
 
   return (
-    <div className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-3 max-w-[360px]`}>
+    <div
+      className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-3 max-w-[360px] max-xl:max-w-[289px]`}
+    >
       {/* Heading */}
       <div className='flex items-center justify-between'>
-        <h2 className='text-lg uppercase line-clamp-1'>Mới nhất</h2>
+        <h2 className='text-base uppercase line-clamp-1'>Phim mới cập nhật</h2>
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
             href={`/danh-sach/phim-moi`}
