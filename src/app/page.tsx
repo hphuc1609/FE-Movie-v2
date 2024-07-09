@@ -4,9 +4,12 @@ import isSuccessResponse from '@/helpers/check-response'
 
 export default async function Home() {
   const response = await movieApi.getNewMovies({})
-  const data = response.items
+  const dataNew = response.items
 
-  if (!isSuccessResponse(response)) {
+  const response2 = await movieApi.getList({ category: 'phim-le', limit: 64 })
+  const dataBanner = response2.data
+
+  if (!isSuccessResponse(response) || !isSuccessResponse(response2)) {
     return (
       <div className='min-h-screen flex items-center justify-center text-xl'>
         <p>Xảy ra lỗi vui lòng tải lại trang hoặc quay lại sau.</p>
@@ -14,5 +17,10 @@ export default async function Home() {
     )
   }
 
-  return <MovieHomePage data={data} />
+  return (
+    <MovieHomePage
+      dataNew={dataNew}
+      dataBanner={dataBanner}
+    />
+  )
 }
