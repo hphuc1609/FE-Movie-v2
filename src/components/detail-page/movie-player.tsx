@@ -27,14 +27,12 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   return (
     <div className='flex gap-[30px]'>
-      <div className='w-[839px] flex flex-col gap-3'>
-        <div>
-          <h1 className='text-xl font-semibold uppercase text-primary-color line-clamp-1'>
-            {detail.name}
-          </h1>
-          <p className='opacity-70 text-base font-medium line-clamp-1'>{detail.origin_name}</p>
-        </div>
-        <div className='flex flex-col gap-5'>
+      <div className='w-[839px] flex flex-col'>
+        <h1 className='text-xl font-semibold uppercase text-primary-color line-clamp-1'>
+          {detail.name}
+        </h1>
+        <h3 className='opacity-70 text-base font-medium line-clamp-1'>{detail.origin_name}</h3>
+        <div className='flex flex-col gap-5 mt-3'>
           <VideoPlayer
             dataEpisode={dataEpisode}
             detail={detail}
@@ -81,11 +79,13 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
     const filteredDataEpisode = dataEpisode.map((episode) =>
       episode.server_data.find((item) => item.slug === episodeParam),
     )
-    if (filteredDataEpisode) {
-      setUrlVideo(filteredDataEpisode[0]?.link_m3u8 as string)
-    }
+    const video =
+      serverIndex === 0 ? filteredDataEpisode[0]?.link_embed : filteredDataEpisode[0]?.link_m3u8
+    setUrlVideo(video as string)
+
+    // Fetch video data
     fetchDataVideo()
-  }, [dataEpisode, episodeParam])
+  }, [dataEpisode, serverIndex, episodeParam])
 
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying)
@@ -101,53 +101,72 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
     router.push(`/phim/${detail.slug}?episode=${episode}`)
   }
 
+  const renderPlayerUI = () => {
+    switch (serverIndex) {
+      case 0:
+        return (
+          <iframe
+            src={urlVideo}
+            className='w-full h-full'
+            allowFullScreen
+          ></iframe>
+        )
+      case 1:
+        return dataVideo ? (
+          <iframe
+            src={dataVideo}
+            className='w-full h-full'
+            allowFullScreen
+          ></iframe>
+        ) : (
+          <div className='w-full h-full text-lg flex items-center justify-center'>
+            Không có video vui lòng chọn server khác để xem phim
+          </div>
+        )
+      case 2:
+        return (
+          <ReactHlsPlayer
+            playerRef={videoRef}
+            src={urlVideo}
+            controls
+            className='w-full h-full'
+            poster={detail.thumb_url}
+          />
+        )
+      default:
+        return null
+    }
+  }
+
   return (
     <div className='h-fit flex flex-col gap-y-4'>
       <div className='relative h-[325px] lg:h-[500px] flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
-          <>
-            {!serverIndex ? (
-              <ReactHlsPlayer
-                playerRef={videoRef}
-                src={urlVideo}
-                controls
-                className='w-full h-full'
-              />
-            ) : (
-              <iframe
-                src={dataVideo}
-                className='w-full h-full'
-                allowFullScreen
-              ></iframe>
-            )}
-            {!isPlaying && !serverIndex && (
-              <div
-                className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-5'
-                onClick={handlePlayClick}
-              >
-                <PlayButton />
-              </div>
-            )}
-          </>
+          renderPlayerUI()
         ) : (
           <Skeleton className='h-full bg-zinc-500 bg-opacity-50 rounded-none' />
+        )}
+        {!isPlaying && serverIndex === 2 && (
+          <div
+            className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-5'
+            onClick={handlePlayClick}
+          >
+            <PlayButton />
+          </div>
         )}
       </div>
       <div className='max-h-[300px] flex flex-col gap-2 bg-black bg-opacity-20'>
         <div className='flex items-center gap-2 text-base p-2'>
           Server:
-          <Button
-            className={`text-white ${!serverIndex && 'bg-primary-color'} hover:bg-primary-color h-[30px] w-[30px]`}
-            onClick={() => setServerIndex(0)}
-          >
-            #1
-          </Button>
-          <Button
-            className={`text-white ${serverIndex && 'bg-primary-color'} hover:bg-primary-color h-[30px] w-[30px]`}
-            onClick={() => setServerIndex(1)}
-          >
-            #2
-          </Button>
+          {['#1', '#2', '#3'].map((_, index) => (
+            <Button
+              key={index}
+              className={`text-white ${serverIndex === index && 'bg-primary-color'} hover:bg-primary-color h-[30px] w-[30px]`}
+              onClick={() => setServerIndex(index)}
+            >
+              #{index + 1}
+            </Button>
+          ))}
         </div>
         <span className='text-lg sticky top-0 p-2'>Danh sách tập</span>
         <div className='grid grid-cols-11 max-xl:grid-cols-9 max-lg:grid-cols-6 px-2 pb-3 max-sm:grid-cols-5 gap-2 overflow-auto'>
@@ -158,7 +177,7 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
               return (
                 <div
                   key={server.name}
-                  className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
+                  className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit h-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
                   onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
                 >
                   {!['full', 'tập đặc biệt'].includes(server.name.toLowerCase())

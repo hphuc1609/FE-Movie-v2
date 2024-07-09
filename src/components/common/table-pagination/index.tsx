@@ -61,7 +61,7 @@ export default function TablePagination(props: TablePaginationProps) {
           />
         )}
       </div>
-      {keyword && (
+      {keyword && !data.items?.length && (
         <div className='flex flex-col gap-1'>
           <p className='text-2xl font-medium'>
             <span className='text-primary-color'>Không tìm thấy kết quả tìm kiếm: </span>
