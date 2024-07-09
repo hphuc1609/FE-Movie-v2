@@ -17,14 +17,14 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
 
   return (
     <div
-      className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-3 max-w-[360px] max-xl:max-w-[289px]`}
+      className={`${!isDetailPage && 'max-lg:hidden'} flex flex-col gap-3 max-w-[360px] max-sm:max-w-full max-xl:max-w-[289px]`}
     >
       {/* Heading */}
       <div className='flex items-center justify-between'>
         <h2 className='text-base uppercase line-clamp-1'>Phim mới cập nhật</h2>
         <div className='flex items-center gap-4 cursor-pointer'>
           <Link
-            href={`/danh-sach/phim-moi`}
+            href={`/danh-sach/phim-moi?page=1`}
             className='text-xs font-medium uppercase hover:text-primary-color text-nowrap'
           >
             Xem thêm

@@ -1,6 +1,5 @@
-interface CustomResponse {
+type CustomResponse = {
   status: string | boolean
-  data?: any
 }
 
 const isSuccessResponse = (response: CustomResponse) => {

@@ -28,7 +28,7 @@ export default function Banner({ dataBanner }: BannerProps) {
   const currentYear = new Date().getFullYear()
   const filteredData = useMemo(() => {
     const currentYearData = dataBanner.filter((item) => item.year === currentYear)
-    return currentYearData.length > 0 ? currentYearData : dataBanner
+    return currentYearData.length > 0 ? currentYearData : dataBanner.slice(0, 7)
   }, [dataBanner, currentYear])
 
   const handleSlideChange = (swiper: SwiperType) => {
@@ -53,50 +53,44 @@ export default function Banner({ dataBanner }: BannerProps) {
       {filteredData.map((item, index) => {
         return (
           <SwiperSlide key={item._id}>
-            <div className='relative w-full h-full'>
-              <Image
-                src={item.thumb_url}
-                alt={item.origin_name}
-                width={1920}
-                height={500}
-                priority
-                quality={100}
-                className='w-full h-full object-cover object-top'
-              />
-              <div className='absolute top-0 w-full h-full bg-black bg-opacity-30'></div>
+            <Image
+              src={item.thumb_url}
+              alt={item.origin_name}
+              width={1920}
+              height={500}
+              priority
+              quality={100}
+              className='w-full h-full object-cover object-top'
+            />
+            <div className='absolute top-0 w-full h-full bg-black bg-opacity-30' />
+            <div className='absolute top-1/3 left-20 max-lg:left-[25px] max-md:right-[25px] md:w-[540px] flex flex-col gap-4'>
               <div
-                className={`absolute top-1/3 left-20 max-lg:left-[25px] max-md:right-[25px] md:w-[540px] flex flex-col gap-4`}
+                className={`transition-all ${
+                  index !== activeSlide ? 'opacity-0 translate-y-1/2' : 'opacity-100 translate-y-0'
+                } grid gap-y-3`}
+                style={{ transitionDuration: '2000ms' }}
               >
-                <div
-                  className={`transition-all ${
-                    index !== activeSlide
-                      ? 'opacity-0 translate-y-1/2'
-                      : 'opacity-100 translate-y-0'
-                  } grid gap-y-3`}
-                  style={{ transitionDuration: '2000ms' }}
-                >
-                  <p className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
-                    {item.name}
-                  </p>
-                  <SubtextBanner item={item} />
-                </div>
-                <Button
-                  variant='outline'
-                  size='lg'
-                  className={`w-[170px] p-0 text-sm uppercase font-medium mt-8 hover:bg-[#242424] hover:bg-opacity-80 hover:text-secondary rounded-full bg-[#242424] border-2 border-yellow-400 transition-all ${
-                    index !== activeSlide ? 'invisible opacity-0' : 'visible opacity-100'
-                  }`}
-                  style={{ transitionDuration: '2000ms', transitionDelay: '1500ms' }}
-                  onClick={() => router.push(`/phim/${item.slug}`)}
-                >
-                  <Play
-                    size={15}
-                    fill='white'
-                    className='mr-3'
-                  />
-                  Xem ngay
-                </Button>
+                <p className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
+                  {item.name}
+                </p>
+                <SubtextBanner movieItem={item} />
               </div>
+              <Button
+                variant='outline'
+                size='lg'
+                className={`w-[170px] p-0 text-sm uppercase font-medium mt-8 hover:bg-[#242424] hover:bg-opacity-80 hover:text-secondary rounded-full bg-[#242424] border-2 border-yellow-400 transition-all ${
+                  index !== activeSlide ? 'invisible opacity-0' : 'visible opacity-100'
+                }`}
+                style={{ transitionDuration: '2000ms', transitionDelay: '1500ms' }}
+                onClick={() => router.push(`/phim/${item.slug}`)}
+              >
+                <Play
+                  size={15}
+                  fill='white'
+                  className='mr-3'
+                />
+                Xem ngay
+              </Button>
             </div>
           </SwiperSlide>
         )
@@ -126,26 +120,29 @@ export default function Banner({ dataBanner }: BannerProps) {
   )
 }
 
-function SubtextBanner({ item }: { item: NewMovieItem }) {
+function SubtextBanner({ movieItem }: { movieItem: NewMovieItem }) {
+  const { origin_name, year } = movieItem
+  const subTitles = ['HD', 'Vietsub']
+
   return (
     <div className='flex max-md:flex-col text-sm max-md:items-baseline items-center gap-5'>
-      <div className='flex items-center gap-3 font-semibold'>
-        <div className='bg-white bg-opacity-80 w-12 h-[25px] px-2 flex items-center justify-center text-primary'>
-          HD
-        </div>
-        <div className='bg-white bg-opacity-80 h-[25px] px-2 flex items-center justify-center text-primary'>
-          Vietsub
-        </div>
+      <div className='flex items-center gap-3'>
+        {subTitles.map((subtitle) => (
+          <div
+            key={subtitle}
+            className='bg-white bg-opacity-80 h-[25px] px-2 flex items-center justify-center text-primary font-semibold'
+          >
+            {subtitle}
+          </div>
+        ))}
       </div>
       <div className='text-gray-50 font-medium flex items-center gap-3'>
-        <p className='line-clamp-1 text-base max-w-[200px]'>{item.origin_name}</p>
-        <div className='flex-1 flex items-center gap-3'>
-          <CalendarDays
-            size={20}
-            className='text-primary-color'
-          />
-          {item.year}
-        </div>
+        <p className='line-clamp-1 text-base max-w-[200px]'>{origin_name}</p>
+        <CalendarDays
+          size={20}
+          className='text-primary-color'
+        />
+        {year}
       </div>
     </div>
   )

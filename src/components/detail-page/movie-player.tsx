@@ -1,14 +1,18 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
+import movieApi from '@/api-client/movies'
+import isSuccessResponse from '@/helpers/check-response'
 import { DetailResponse } from '@/models/detail'
 import { NewMovieItem } from '@/models/new-movie'
-import Hls from 'hls.js'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import ReactHlsPlayer from 'react-hls-player'
 import { useMediaQuery } from 'react-responsive'
 import PlayButton from '../common/play-button'
 import Reviewbox from '../common/review-box'
 import NewUpdateMovie from '../home-page/new-movie'
+import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
 
 interface MoviePlayerProps {
@@ -31,7 +35,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           <p className='opacity-70 text-base font-medium line-clamp-1'>{detail.origin_name}</p>
         </div>
         <div className='flex flex-col gap-5'>
-          <VideoCustom
+          <VideoPlayer
             dataEpisode={dataEpisode}
             detail={detail}
           />
@@ -43,19 +47,34 @@ export default function MoviePlayer(props: MoviePlayerProps) {
   )
 }
 
-interface VideoCustomProps {
+interface VideoPlayerProps {
   dataEpisode: DetailResponse['episodes']
   detail: DetailResponse['movie']
 }
-const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
+const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
-  const initialVideo = dataEpisode[0]?.server_data[0]?.link_m3u8
   const episodeParam = searchParams.get('episode')
 
-  const [urlVideo, setUrlVideo] = useState(initialVideo || '')
+  const [urlVideo, setUrlVideo] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
+  const [dataVideo, setDataVideo] = useState('')
+  const [serverIndex, setServerIndex] = useState(0)
+
+  const fetchDataVideo = useCallback(async () => {
+    try {
+      const slugName = detail.slug.replace(/-\d{4}$/, '')
+      const response = await movieApi.getMovieInfo({ slug: slugName })
+      if (!isSuccessResponse(response)) return
+
+      const { movie } = response
+      const urlVideo = movie.episodes[0].items[0].embed
+      setDataVideo(urlVideo)
+    } catch (error: any) {
+      console.error('Error fetching video data:', error.message)
+    }
+  }, [detail.slug])
 
   // Check param episode and set url
   useEffect(() => {
@@ -65,28 +84,8 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
     if (filteredDataEpisode) {
       setUrlVideo(filteredDataEpisode[0]?.link_m3u8 as string)
     }
+    fetchDataVideo()
   }, [dataEpisode, episodeParam])
-
-  useEffect(() => {
-    const videoSrc = urlVideo
-    if (Hls.isSupported()) {
-      if (!videoRef.current) {
-        console.error('Video element not found')
-        return
-      }
-      if (!videoSrc) {
-        console.error('Video source not found')
-        return
-      }
-
-      const hls = new Hls()
-      hls.loadSource(videoSrc)
-      hls.attachMedia(videoRef.current)
-    } else if (videoRef.current?.canPlayType('application/vnd.apple.mpegurl')) {
-      videoRef.current.src = videoSrc
-    }
-    setIsPlaying(false)
-  }, [urlVideo])
 
   const handlePlayClick = () => {
     setIsPlaying(!isPlaying)
@@ -107,13 +106,21 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
       <div className='relative h-[325px] lg:h-[500px] flex flex-col gap-3 bg-black bg-opacity-80'>
         {urlVideo ? (
           <>
-            <video
-              ref={videoRef}
-              controls
-              className='w-full h-full'
-              poster={detail.thumb_url}
-            ></video>
-            {!isPlaying && (
+            {!serverIndex ? (
+              <ReactHlsPlayer
+                playerRef={videoRef}
+                src={urlVideo}
+                controls
+                className='w-full h-full'
+              />
+            ) : (
+              <iframe
+                src={dataVideo}
+                className='w-full h-full'
+                allowFullScreen
+              ></iframe>
+            )}
+            {!isPlaying && !serverIndex && (
               <div
                 className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-5'
                 onClick={handlePlayClick}
@@ -126,29 +133,44 @@ const VideoCustom = ({ dataEpisode, detail }: VideoCustomProps) => {
           <Skeleton className='h-full bg-zinc-500 bg-opacity-50 rounded-none' />
         )}
       </div>
-      {detail.episode_current?.toLowerCase() !== 'full' && (
-        <div className='max-h-[300px] flex flex-col gap-2 bg-black bg-opacity-20'>
-          <span className='text-lg sticky top-0 p-2'>Danh sách tập</span>
-          <div className='grid grid-cols-11 max-xl:grid-cols-9 max-lg:grid-cols-6 px-2 pb-3 max-sm:grid-cols-5 gap-2 overflow-auto'>
-            {dataEpisode.map((item) =>
-              item.server_data.map((server, serverIndex) => {
-                const isLastEpisode =
-                  serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
-                return (
-                  <div
-                    key={server.name}
-                    className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
-                    onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
-                  >
-                    {server.name.split(' ')[1]}
-                    {isLastEpisode && ' END'}
-                  </div>
-                )
-              }),
-            )}
-          </div>
+      <div className='max-h-[300px] flex flex-col gap-2 bg-black bg-opacity-20'>
+        <div className='flex items-center gap-2 text-base p-2'>
+          Server:
+          <Button
+            className={`text-white ${!serverIndex && 'bg-primary-color'} hover:bg-primary-color h-[30px] w-[30px]`}
+            onClick={() => setServerIndex(0)}
+          >
+            #1
+          </Button>
+          <Button
+            className={`text-white ${serverIndex && 'bg-primary-color'} hover:bg-primary-color h-[30px] w-[30px]`}
+            onClick={() => setServerIndex(1)}
+          >
+            #2
+          </Button>
         </div>
-      )}
+        <span className='text-lg sticky top-0 p-2'>Danh sách tập</span>
+        <div className='grid grid-cols-11 max-xl:grid-cols-9 max-lg:grid-cols-6 px-2 pb-3 max-sm:grid-cols-5 gap-2 overflow-auto'>
+          {dataEpisode.map((item) =>
+            item.server_data.map((server, serverIndex) => {
+              const isLastEpisode =
+                serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
+              return (
+                <div
+                  key={server.name}
+                  className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
+                  onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
+                >
+                  {!['full', 'tập đặc biệt'].includes(server.name.toLowerCase())
+                    ? server.name.split(' ')[1]
+                    : server.name}
+                  {isLastEpisode && ' END'}
+                </div>
+              )
+            }),
+          )}
+        </div>
+      </div>
     </div>
   )
 }

@@ -28,9 +28,9 @@ export default function DialogCustom(props: DialogCustomProps) {
       onOpenChange={setOpen}
     >
       <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className='bg-inherit border-none max-w-[50%] max-md:max-w-[90%] outline-none'>
+      <DialogContent className='bg-inherit border-none max-w-[60%] max-md:max-w-[90%] outline-none'>
         <DialogHeader>
-          <DialogTitle className='text-xl font-bold'>{title}</DialogTitle>
+          <DialogTitle className='text-xl text-left font-bold'>{title}</DialogTitle>
           <DialogDescription>{content}</DialogDescription>
         </DialogHeader>
         {textConfirm && (

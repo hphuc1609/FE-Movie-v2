@@ -43,6 +43,7 @@ export interface Movie {
   director: string[]
   category: Category[]
   country: Country[]
+  episodes: Episode[]
 }
 
 export interface ServerData {
@@ -53,9 +54,17 @@ export interface ServerData {
   link_m3u8: string
 }
 
+export interface ItemData {
+  name: string
+  slug: string
+  embed: string
+  m3u8: string
+}
+
 export interface Episode {
   server_name: string
   server_data: ServerData[]
+  items: ItemData[]
 }
 
 export interface DetailResponse {
