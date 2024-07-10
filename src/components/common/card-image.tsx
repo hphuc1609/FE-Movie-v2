@@ -82,9 +82,9 @@ const ImageComponent = ({ item, data }: ImageComponentProps) => {
       ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
       : data.APP_DOMAIN_CDN_IMAGE
         ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
-        : errorImage
-          ? item.thumb_url
-          : item.poster_url
+        : !errorImage
+          ? item.poster_url
+          : item.thumb_url
 
   const handleError = () => {
     setErrorImage(true)
