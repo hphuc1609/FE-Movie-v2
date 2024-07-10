@@ -1,9 +1,7 @@
-/* eslint-disable @next/next/no-sync-scripts */
 import Footer from '@/components/footer'
 import Header from '@/components/header'
 import LoadingProvider from '@/components/loading-provider'
 import { cn } from '@/lib/utils'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -27,7 +25,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className={cn(inter.className, 'min-h-screen bg-[#141414] text-primary-foreground')}>
-        <SpeedInsights />
         <LoadingProvider>
           <Header />
           <main className='overflow-hidden'>{children}</main>

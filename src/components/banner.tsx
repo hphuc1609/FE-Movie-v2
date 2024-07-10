@@ -16,10 +16,10 @@ import 'swiper/css/pagination'
 import '../css/banner.css'
 
 interface BannerProps {
-  dataBanner: MovieCategoryResponse['data']
+  data: MovieCategoryResponse['data']
 }
 
-export default function Banner({ dataBanner }: BannerProps) {
+export default function Banner({ data }: BannerProps) {
   const nextBtnRef = useRef(null)
   const prevBtnRef = useRef(null)
   const [activeSlide, setActiveSlide] = useState(0)
@@ -28,9 +28,9 @@ export default function Banner({ dataBanner }: BannerProps) {
   // Filter data by current year
   const currentYear = new Date().getFullYear()
   const filteredData = useMemo(() => {
-    const currentYearData = dataBanner.items?.filter((item) => item.year === currentYear)
-    return currentYearData.length > 0 ? currentYearData : dataBanner.items?.slice(0, 7)
-  }, [dataBanner, currentYear])
+    const currentYearData = data.items?.filter((item) => item.year === currentYear)
+    return currentYearData.length > 0 ? currentYearData : data.items?.slice(0, 7)
+  }, [data, currentYear])
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex)
@@ -55,7 +55,7 @@ export default function Banner({ dataBanner }: BannerProps) {
         return (
           <SwiperSlide key={item._id}>
             <Image
-              src={`${dataBanner.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`}
+              src={`${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`}
               alt={item.origin_name}
               width={1530}
               height={500}
