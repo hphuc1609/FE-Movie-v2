@@ -32,7 +32,7 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
               {!item.isCurrent ? (
                 <>
                   <Link
-                    href={item.slug || ''}
+                    href={`${item.slug}?page=1` || ''}
                     className='hover:text-primary-color capitalize'
                   >
                     {item.name}
@@ -40,11 +40,9 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
                   <BreadcrumbSeparator />
                 </>
               ) : (
-                <>
-                  <BreadcrumbPage className='opacity-70 text-secondary line-clamp-1'>
-                    {item.name.replace(/ - Trang 1/g, '')}
-                  </BreadcrumbPage>
-                </>
+                <BreadcrumbPage className='opacity-70 text-secondary line-clamp-1'>
+                  {item.name.replace(/ - Trang 1/g, '')}
+                </BreadcrumbPage>
               )}
             </BreadcrumbItem>
           ))

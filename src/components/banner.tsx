@@ -59,8 +59,8 @@ export default function Banner({ dataBanner }: BannerProps) {
               alt={item.origin_name}
               width={1530}
               height={500}
-              priority
               quality={100}
+              loading='lazy'
               className='w-full h-full object-cover object-top'
             />
             <div className='absolute top-0 w-full h-full bg-black bg-opacity-30' />
