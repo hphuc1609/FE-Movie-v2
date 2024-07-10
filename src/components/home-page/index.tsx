@@ -1,12 +1,11 @@
-import { NewMovieItem } from '@/models/new-movie'
 import Banner from '../banner'
 import CategoryMovie from './category-movie'
 import NewUpdateMovie from './new-movie'
 
-export default function MovieHomePage({ data }: { data: NewMovieItem[] }) {
+export default function MovieHomePage({ dataNew, dataBanner }: { dataNew: any; dataBanner: any }) {
   return (
     <>
-      <Banner dataBanner={data} />
+      <Banner dataBanner={dataBanner} />
       <div className='max-w-screen-xl m-auto px-10 py-20 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-20'>
           <CategoryMovie paramCategory='phim-le' />
@@ -14,7 +13,7 @@ export default function MovieHomePage({ data }: { data: NewMovieItem[] }) {
           <CategoryMovie paramCategory='hoat-hinh' />
           <CategoryMovie paramCategory='tv-shows' />
         </div>
-        <NewUpdateMovie data={data} />
+        <NewUpdateMovie data={dataNew} />
       </div>
     </>
   )

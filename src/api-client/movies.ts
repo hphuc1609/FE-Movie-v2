@@ -2,6 +2,7 @@ import axiosClient from '@/lib/axios-client'
 import { DetailResponse } from '@/models/detail'
 import { MovieCategoryResponse } from '@/models/list-movie'
 import { NewMovieResponse } from '@/models/new-movie'
+import axios from 'axios'
 
 interface GetNewMoviesParams {
   page?: string | number
@@ -17,6 +18,8 @@ interface GetMovieSearchParams {
   keyword: string
   limit?: string | number
 }
+
+const domain = process.env.NEXT_PUBLIC_BACKEND_DOMAIN_2
 
 const movieApi = {
   getNewMovies: async ({ page }: GetNewMoviesParams): Promise<NewMovieResponse> => {
@@ -47,6 +50,12 @@ const movieApi = {
 
     const url = `/v1/api/tim-kiem?keyword=${keyword}&${queryParams.toString()}`
     const response = await axiosClient.get(url)
+    return response.data
+  },
+
+  getMovieInfo: async ({ slug }: { slug: string }): Promise<DetailResponse> => {
+    const url = `${domain}/api/film/${slug}`
+    const response = await axios.get(url)
     return response.data
   },
 }
