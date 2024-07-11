@@ -41,19 +41,19 @@ export default function Detail(props: DetailProps) {
 
   return (
     <>
-      <BreadcrumbCustom breadCrumb={dataByCategory.movie.name} />
+      <BreadcrumbCustom breadCrumb={dataByCategory?.movie.name} />
       {!isWatch ? (
         <MovieDetailCard
-          detail={dataByCategory.movie}
-          dataEpisode={dataByCategory.episodes}
+          detail={dataByCategory?.movie}
+          dataEpisode={dataByCategory?.episodes}
           isWatch={isWatch}
           setIsWatch={setIsWatch}
         />
       ) : (
         <MoviePlayer
           dataNewMovie={dataNewMovie}
-          detail={dataByCategory.movie}
-          dataEpisode={dataByCategory.episodes}
+          detail={dataByCategory?.movie}
+          dataEpisode={dataByCategory?.episodes}
         />
       )}
       <div className='flex max-md:flex-col gap-[30px]'>

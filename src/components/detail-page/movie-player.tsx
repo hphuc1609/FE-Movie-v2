@@ -21,6 +21,9 @@ interface MoviePlayerProps {
   dataNewMovie: NewMovieItem[]
 }
 
+const AD_URL = process.env.NEXT_PUBLIC_AD_URL
+const AD_INTERVAL = 3600000 // 1 hour in milliseconds
+
 export default function MoviePlayer(props: MoviePlayerProps) {
   const { dataEpisode, detail, dataNewMovie } = props
   const mobile = useMediaQuery({ query: '(max-width: 640px)' })
@@ -74,11 +77,12 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
     }
   }, [detail.slug])
 
-  // Check param episode and set url
+  // Check param episode
+  const filteredDataEpisode = dataEpisode.map((episode) =>
+    episode.server_data.find((item) => item.slug === episodeParam),
+  )
+
   useEffect(() => {
-    const filteredDataEpisode = dataEpisode.map((episode) =>
-      episode.server_data.find((item) => item.slug === episodeParam),
-    )
     const video = !serverIndex
       ? filteredDataEpisode[0]?.link_embed
       : filteredDataEpisode[0]?.link_m3u8
@@ -97,9 +101,16 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
     }
   }
 
-  const handleEpisodeClick = (url: string, episode: string) => {
-    setUrlVideo(url)
-    router.push(`/phim/${detail.slug}?episode=${episode}`)
+  const handleEpisodeClick = (episode: string) => {
+    const lastAdShown = localStorage.getItem('lastAdShown')
+    const now = Date.now()
+
+    // Check if the last ad was shown less than an hour ago
+    if (!lastAdShown || now - Number(lastAdShown) > AD_INTERVAL) {
+      localStorage.setItem('lastAdShown', now.toString())
+      window.open(AD_URL, '_blank', 'noopener,noreferrer')
+    }
+    router.push(`?episode=${episode}`)
   }
 
   const renderPlayerUI = () => {
@@ -116,6 +127,7 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
             src={urlVideo}
             className='w-full h-full'
             allowFullScreen
+            contextMenu='none'
           ></iframe>
         ) : (
           frameElement
@@ -187,7 +199,7 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
                 <div
                   key={server.name}
                   className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit h-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
-                  onClick={() => handleEpisodeClick(server.link_m3u8, server.slug)}
+                  onClick={() => handleEpisodeClick(server.slug)}
                 >
                   {!['full', 'tập đặc biệt'].includes(server.name.toLowerCase())
                     ? server.name.split(' ')[1]

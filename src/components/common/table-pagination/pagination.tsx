@@ -26,7 +26,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
         {!isFirstPage && (
           <Link
             className={`cursor-pointer h-9 px-3 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === 1 && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
-            href={`/danh-sach/${category}?page=1`}
+            href={`?page=1`}
           >
             <ChevronLeft size={18} />
             Đầu
@@ -38,7 +38,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
           {!isFirstPage && (
             <Link
               className={`cursor-pointer h-9 min-w-10 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === 1 && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
-              href={currentPage > 1 ? `/danh-sach/${category}?page=${currentPage - 1}` : ''}
+              href={currentPage > 1 ? `?page=${currentPage - 1}` : ''}
             >
               <ChevronLeft size={22} />
             </Link>
@@ -49,7 +49,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
           {pageToShow.map((page) => (
             <Link
               key={page}
-              href={`/danh-sach/${category}?page=${page}`}
+              href={`?page=${page}`}
               className={`bg-white bg-opacity-5 rounded-md h-9 min-w-10 flex items-center justify-center hover:text-primary-color ${currentPage === page && 'text-primary-color border border-yellow-400'}`}
             >
               {page}
@@ -61,7 +61,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
           {!isLastPage && (
             <Link
               className={`cursor-pointer h-9 min-w-10 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === pagination.totalPages && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
-              href={`/danh-sach/${category}?page=${currentPage + 1}`}
+              href={`?page=${currentPage + 1}`}
             >
               <ChevronRight size={22} />
             </Link>
@@ -72,7 +72,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
         {!isLastPage && (
           <Link
             className={`cursor-pointer h-9 px-3 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === pagination.totalPages && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
-            href={`/danh-sach/${category}?page=${pagination.totalPages}`}
+            href={`?page=${pagination.totalPages}`}
           >
             Cuối
             <ChevronRight size={18} />
