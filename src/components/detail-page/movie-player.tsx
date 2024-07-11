@@ -79,8 +79,9 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
     const filteredDataEpisode = dataEpisode.map((episode) =>
       episode.server_data.find((item) => item.slug === episodeParam),
     )
-    const video =
-      serverIndex === 0 ? filteredDataEpisode[0]?.link_embed : filteredDataEpisode[0]?.link_m3u8
+    const video = !serverIndex
+      ? filteredDataEpisode[0]?.link_embed
+      : filteredDataEpisode[0]?.link_m3u8
     setUrlVideo(video as string)
 
     // Fetch video data
@@ -102,14 +103,22 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
   }
 
   const renderPlayerUI = () => {
+    const frameElement = (
+      <div className='w-full h-full text-lg flex items-center justify-center'>
+        Không có video vui lòng chọn server khác
+      </div>
+    )
+
     switch (serverIndex) {
       case 0:
-        return (
+        return urlVideo ? (
           <iframe
             src={urlVideo}
             className='w-full h-full'
             allowFullScreen
           ></iframe>
+        ) : (
+          frameElement
         )
       case 1:
         return dataVideo ? (
@@ -119,12 +128,10 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
             allowFullScreen
           ></iframe>
         ) : (
-          <div className='w-full h-full text-lg flex items-center justify-center'>
-            Không có video vui lòng chọn server khác để xem phim
-          </div>
+          frameElement
         )
       case 2:
-        return (
+        return urlVideo ? (
           <ReactHlsPlayer
             playerRef={videoRef}
             src={urlVideo}
@@ -132,6 +139,8 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
             className='w-full h-full'
             poster={detail.thumb_url}
           />
+        ) : (
+          frameElement
         )
       default:
         return null

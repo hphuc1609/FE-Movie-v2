@@ -36,7 +36,7 @@ export default function NewUpdateMovie({ data }: NewUpdateMovieProps) {
         className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3 
         scrollbar-thin scrollbar-thumb-zinc-950 scrollbar-track-transparent`}
       >
-        {data.slice(0, 10).map((item) => (
+        {data?.slice(0, 10).map((item) => (
           <div
             key={item._id}
             className='h-[90px] max-md:min-h-[90px] overflow-hidden'

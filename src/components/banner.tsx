@@ -28,8 +28,8 @@ export default function Banner({ data }: BannerProps) {
   // Filter data by current year
   const currentYear = new Date().getFullYear()
   const filteredData = useMemo(() => {
-    const currentYearData = data.items?.filter((item) => item.year === currentYear)
-    return currentYearData.length > 0 ? currentYearData : data.items?.slice(0, 7)
+    const currentYearData = data?.items?.filter((item) => item.year === currentYear)
+    return currentYearData?.length > 0 ? currentYearData : data?.items?.slice(0, 7) || []
   }, [data, currentYear])
 
   const handleSlideChange = (swiper: SwiperType) => {

@@ -9,7 +9,7 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    unoptimized: true,
+    // unoptimized: process.env.NODE_ENV === 'production' ? true : false,
   },
 }
 

@@ -1,5 +1,6 @@
 import movieApi from '@/api-client/movies'
 import Banner from '@/components/banner'
+import ErrorMessage from '@/components/common/error-message'
 import CategoryMovie from '@/components/home-page/category-movie'
 import NewUpdateMovie from '@/components/home-page/new-movie'
 import Loader from '@/components/loader'
@@ -9,27 +10,27 @@ import { Suspense } from 'react'
 export default async function Home() {
   const response = await movieApi.getNewMovies({})
   const dataNew = response.items
-
-  const response2 = await movieApi.getList({ category: 'phim-le', limit: 64 })
+  const response2 = await movieApi.getList({ category: 'phim-le' })
   const dataBanner = response2.data
+  const categories = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
 
-  if (!isSuccessResponse(response) && !isSuccessResponse(response2)) {
-    return (
-      <div className='min-h-screen flex items-center justify-center text-xl'>
-        <p>Xảy ra lỗi vui lòng tải lại trang hoặc quay lại sau.</p>
-      </div>
-    )
+  const hasFailedResponse = !isSuccessResponse(response) || !isSuccessResponse(response2)
+  const hasNoData = !dataNew || !dataBanner
+
+  if (hasFailedResponse || hasNoData) {
+    return <ErrorMessage />
   }
-
   return (
-    <Suspense fallback={<Loader openLoading={true} />}>
+    <Suspense fallback={<Loader />}>
       <Banner data={dataBanner} />
       <div className='max-w-screen-xl m-auto px-10 py-20 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-20'>
-          <CategoryMovie paramCategory='phim-le' />
-          <CategoryMovie paramCategory='phim-bo' />
-          <CategoryMovie paramCategory='hoat-hinh' />
-          <CategoryMovie paramCategory='tv-shows' />
+          {categories.map((item) => (
+            <CategoryMovie
+              key={item}
+              paramCategory={item}
+            />
+          ))}
         </div>
         <NewUpdateMovie data={dataNew} />
       </div>

@@ -8,6 +8,7 @@ import DialogCustom from '../common/dialog'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import { useRouter } from 'next/navigation'
+import cleanString from '@/helpers/cleanString'
 
 interface MovieDetailCardProps {
   detail: DetailResponse['movie']
@@ -26,27 +27,19 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
     () => detail.category?.map((item) => item.name).join(', '),
     [detail.category],
   )
+
   const country = useMemo(
     () => detail.country?.map((item) => item.name).join(', '),
     [detail.country],
   )
+
   const actors = useMemo(() => {
     return detail.actor
-      ?.filter(
-        (director) =>
-          director
-            .replace(/&quot;/g, '')
-            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
-            .replace(/\s{2,}/g, ' ')
-            .toLowerCase() !== 'đang cập nhật',
-      )
+      ?.filter((director) => cleanString(director).toLowerCase() !== 'đang cập nhật')
       .join(', ')
   }, [detail.actor])
 
-  const content = detail.content
-    .replace(/&quot;/g, '')
-    .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()0-9]/g, '')
-    .replace(/\s{2,}/g, ' ')
+  const content = cleanString(detail.content)
 
   const details = [
     { label: 'Phụ đề', value: detail.lang },

@@ -11,7 +11,7 @@ import isSuccessResponse from '@/helpers/check-response'
 import { MovieCategoryItem } from '@/models/list-movie'
 import { NewMovieResponse } from '@/models/new-movie'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function Detail() {
   const pathname = usePathname()
@@ -181,16 +181,18 @@ export default function Detail() {
 
   return (
     <>
-      <Loader openLoading={loader.isLoading} />
-      <BreadcrumbCustom breadCrumb={renderBreadCrumb()} />
-      <div className='flex flex-col gap-4'>
-        <h2 className='text-2xl font-bold text-primary-color capitalize'>{renderTitle()}</h2>
-        <TablePagination
-          category={category}
-          data={dataTable()}
-          keyword={keyword}
-        />
-      </div>
+      {loader.isLoading && <Loader />}
+      <Suspense fallback={<Loader />}>
+        <BreadcrumbCustom breadCrumb={renderBreadCrumb()} />
+        <div className='flex flex-col gap-4'>
+          <h2 className='text-2xl font-bold text-primary-color capitalize'>{renderTitle()}</h2>
+          <TablePagination
+            category={category}
+            data={dataTable()}
+            keyword={keyword}
+          />
+        </div>
+      </Suspense>
     </>
   )
 }
