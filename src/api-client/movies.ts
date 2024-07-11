@@ -44,7 +44,10 @@ const movieApi = {
     return response.data
   },
 
-  getMoviesSearch: async ({ keyword, limit }: GetMovieSearchParams) => {
+  getMoviesSearch: async ({
+    keyword,
+    limit,
+  }: GetMovieSearchParams): Promise<MovieCategoryResponse> => {
     const queryParams = new URLSearchParams()
     if (limit) queryParams.append('limit', limit.toString())
 
