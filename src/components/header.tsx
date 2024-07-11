@@ -4,20 +4,14 @@
 import menuLinks, { MenuItem } from '@/constants/menu'
 import useScrollPosition from '@/custom-hooks/useScrollPosition'
 import { cn } from '@/lib/utils'
-import { ChevronDown, Search, User } from 'lucide-react'
+import { ChevronDown, Menu, Search, User } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import DialogCustom from './common/dialog'
+import Drawer from './drawer'
 import { Input } from './ui/input'
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarShortcut,
-  MenubarTrigger,
-} from './ui/menubar'
+import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from './ui/menubar'
 import { Separator } from './ui/separator'
 
 export default function Header() {
@@ -42,6 +36,7 @@ const HeaderMenubar = React.memo(() => {
   const router = useRouter()
   const [openDialogSearch, setOpenDialogSearch] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const [openMenu, setOpenMenu] = useState(false)
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Enter' || !event.currentTarget.value) {
@@ -62,59 +57,72 @@ const HeaderMenubar = React.memo(() => {
     setSearchValue(event.target.value)
   }
 
+  const handleCloseDrawer = useCallback(() => {
+    setOpenMenu(false)
+  }, [setOpenMenu])
+
   return (
-    <div className='flex justify-between items-center gap-8'>
-      <div className='flex gap-8 h-full items-center'>
-        <Link
-          href='/'
-          className='text-2xl font-bold text-nowrap'
-        >
-          VPhim <span className='text-primary-color'>247</span>
-        </Link>
-        <div className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
-          {menuLinks.map((menuItem) => (
-            <TextMenubar
-              key={menuItem.name}
-              data={menuItem}
-            />
-          ))}
+    <>
+      <div className='flex justify-between items-center gap-8'>
+        <div className='flex gap-8 h-full items-center'>
+          <Link
+            href='/'
+            className='text-2xl font-bold text-nowrap'
+          >
+            VPhim <span className='text-primary-color'>247</span>
+          </Link>
+          <div className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
+            {menuLinks.map((menuItem) => (
+              <TextMenubar
+                key={menuItem.name}
+                data={menuItem}
+              />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className='flex items-center gap-2'>
-        <DialogCustom
-          open={openDialogSearch}
-          setOpen={setOpenDialogSearch}
-          title={'Bạn tìm phim gì?'}
-          children={<Search size={20} />}
-          content={
-            <div className='flex items-center'>
-              <Input
-                placeholder='Nhập tên phim, chương trình,...'
-                autoFocus
-                onKeyDown={(e) => handleInputKeyDown(e)}
-                onChange={(e) => handleInputChange(e)}
-                className='text-white text-lg bg-transparent p-0 pr-10 border-transparent rounded-none !border-b-[#ccc] focus-visible:ring-0 focus-visible:ring-offset-0'
-              />
-              <Search
-                size={20}
-                className='cursor-pointer -ml-8'
-                onClick={handleSearchClick}
-              />
-            </div>
-          }
-        />
-        <Separator
-          className='h-4'
-          orientation='vertical'
-        />
-        <div className='flex items-center gap-2 cursor-pointer'>
+        <div className='flex items-center gap-2'>
+          <DialogCustom
+            open={openDialogSearch}
+            setOpen={setOpenDialogSearch}
+            title={'Bạn tìm phim gì?'}
+            children={<Search size={20} />}
+            content={
+              <div className='flex items-center'>
+                <Input
+                  placeholder='Nhập tên phim, chương trình,...'
+                  autoFocus
+                  onKeyDown={(e) => handleInputKeyDown(e)}
+                  onChange={(e) => handleInputChange(e)}
+                  className='text-white text-lg bg-transparent p-0 pr-10 border-transparent rounded-none !border-b-[#ccc] focus-visible:ring-0 focus-visible:ring-offset-0'
+                />
+                <Search
+                  size={20}
+                  className='cursor-pointer -ml-8'
+                  onClick={handleSearchClick}
+                />
+              </div>
+            }
+          />
+          <Separator
+            className='h-4'
+            orientation='vertical'
+          />
           <User
             fill='white'
             size={20}
           />
+          <Menu
+            className='md:hidden'
+            onClick={() => setOpenMenu(true)}
+          />
         </div>
       </div>
-    </div>
+      {/* Drawer side bar*/}
+      <Drawer
+        openMenu={openMenu}
+        onClose={handleCloseDrawer}
+      />
+    </>
   )
 })
 HeaderMenubar.displayName = 'HeaderMenubar'
@@ -126,7 +134,6 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
   const checkUrl = (link: string) => {
     return link === '/' ? link : `/danh-sach${link.startsWith('/') ? link : `/${link}`}?page=1`
   }
-
   return (
     <Menubar className='bg-transparent border-none p-0'>
       <MenubarMenu>
@@ -144,7 +151,6 @@ const TextMenubar = React.memo(({ data }: { data: MenuItem }) => {
               <ChevronDown
                 strokeWidth={2}
                 size={20}
-                color='white'
                 className='ml-1'
               />
             </div>

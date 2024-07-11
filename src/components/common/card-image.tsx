@@ -98,7 +98,7 @@ const ImageComponent = ({ item, data }: ImageComponentProps) => {
       height={275}
       loading='lazy'
       onError={handleError}
-      className='object-cover group-hover:scale-110 h-[270px] w-full transition-all duration-500'
+      className='object-cover group-hover:scale-110 h-[270px] max-[400px]:h-[220px] w-full transition-all duration-500'
     />
   )
 }
