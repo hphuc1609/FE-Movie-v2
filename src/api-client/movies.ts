@@ -25,23 +25,28 @@ const movieApi = {
   getNewMovies: async ({ page }: GetNewMoviesParams): Promise<NewMovieResponse> => {
     const url = `/danh-sach/phim-moi-cap-nhat${page ? `?page=${page}` : ''}`
     const response = await axiosClient.get(url)
-    return response.data
+    return response
   },
 
   getList: async ({ category, page, limit }: GetMoviesParams): Promise<MovieCategoryResponse> => {
     const queryParams = new URLSearchParams()
     if (page) queryParams.append('page', page.toString())
     if (limit) queryParams.append('limit', limit.toString())
+    if (category) {
+      const url = `/v1/api/danh-sach/${category}?${queryParams.toString()}`
+      const response = await axiosClient.get(url)
+      return response
+    }
 
-    const url = `/v1/api/danh-sach/${category}?${queryParams.toString()}`
-    const response = await axiosClient.get(url)
-    return response.data
+    throw new Error('Category is required!')
   },
 
   getDetail: async ({ name }: { name: string }): Promise<DetailResponse> => {
+    if (!name) throw new Error('Name of movie is required!')
+
     const url = `/phim/${name}`
     const response = await axiosClient.get(url)
-    return response.data
+    return response
   },
 
   getMoviesSearch: async ({
@@ -53,10 +58,12 @@ const movieApi = {
 
     const url = `/v1/api/tim-kiem?keyword=${keyword}&${queryParams.toString()}`
     const response = await axiosClient.get(url)
-    return response.data
+    return response
   },
 
   getMovieInfo: async ({ slug }: { slug: string }): Promise<DetailResponse> => {
+    if (!slug) throw new Error('Slug is required!')
+
     const url = `${domain}/api/film/${slug}`
     const response = await axios.get(url)
     return response.data
