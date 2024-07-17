@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import CardImage from '../card-image'
 import PaginationCustom from './pagination'
+import { useLoading } from '@/components/loading-provider'
 
 interface TablePaginationProps {
   category: string
@@ -15,6 +16,7 @@ interface TablePaginationProps {
 export default function TablePagination(props: TablePaginationProps) {
   const { category, data, keyword } = props
   const searchParams = useSearchParams()
+  const { isLoading } = useLoading()
   const currentPage = searchParams.get('page')
   const pagination = data.params?.pagination || data?.pagination
 
@@ -41,7 +43,7 @@ export default function TablePagination(props: TablePaginationProps) {
   return (
     <>
       <div className='flex flex-col gap-10 pb-9'>
-        {data.items?.length ? (
+        {data.items?.length > 0 ? (
           <div className='grid grid-cols-6 gap-5 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 overflow-hidden'>
             <CardImage
               data={data}
@@ -50,7 +52,9 @@ export default function TablePagination(props: TablePaginationProps) {
             />
           </div>
         ) : (
-          <p className='text-2xl font-medium'>Không có danh sách phim</p>
+          <p className='text-2xl font-medium'>
+            {!isLoading ? 'Không có danh sách phim' : 'Đang tải danh sách...'}
+          </p>
         )}
         {pagesToShow?.length > 1 && (
           <PaginationCustom
@@ -64,14 +68,14 @@ export default function TablePagination(props: TablePaginationProps) {
       {keyword && !data.items?.length && (
         <div className='flex flex-col gap-1'>
           <p className='text-2xl font-medium'>
-            <span className='text-primary-color'>Không tìm thấy kết quả tìm kiếm: </span>
+            <span className='text-primary-color'>Không tìm thấy phim: </span>
             {keyword}
           </p>
           <Link
             href={'/'}
-            className='text-base flex gap-1 items-center text-primary-color'
+            className='text-base flex gap-2 items-center text-primary-color'
           >
-            <ArrowLeft size={18} /> Quay lại trang chủ
+            <ArrowLeft size={16} /> Quay lại trang chủ
           </Link>
         </div>
       )}

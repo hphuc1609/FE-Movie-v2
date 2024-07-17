@@ -14,7 +14,7 @@ export default function Footer() {
             href='/'
             className='text-lg font-normal text-primary-color'
           >
-            VPhim 247
+            Mephim247
           </Link>
           <Button
             size={'icon'}
@@ -30,12 +30,7 @@ export default function Footer() {
             <span className='opacity-50'>
               Copyright &copy; {new Date().getFullYear()}. All rights reserved by{' '}
             </span>
-            <Link
-              href='https://github.com/hphuc1609'
-              className='hover:underline text-primary-foreground font-semibold'
-            >
-              hphuc1609
-            </Link>
+            <span className='text-primary-foreground font-semibold'>hphuc1609</span>
           </div>
         </div>
       </div>

@@ -6,12 +6,11 @@ import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/common/table-pagination'
 import Loader from '@/components/loader'
 import { useLoading } from '@/components/loading-provider'
-import menuLinks from '@/constants/menu'
 import isSuccessResponse from '@/helpers/check-response'
 import { MovieCategoryItem } from '@/models/list-movie'
 import { NewMovieResponse } from '@/models/new-movie'
 import { usePathname, useSearchParams } from 'next/navigation'
-import { Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export default function Detail() {
   const pathname = usePathname()
@@ -46,8 +45,8 @@ export default function Detail() {
       : []),
   ]
 
-  // Data filter by category
-  const dataFilteredByCate = useMemo(() => {
+  // Filterd data category
+  const filteredDataByCate = useMemo(() => {
     const filterdData = allMovies.items?.filter((movie) =>
       movie.category.some((cate) => cate.slug === category),
     )
@@ -61,20 +60,20 @@ export default function Detail() {
   ) => {
     loader.show()
     try {
-      const newData = await movieApi.getList({ category, page, limit })
-      if (isSuccessResponse(newData)) {
-        setDataMovieCate(newData.data)
+      const res = await movieApi.getList({ category, page, limit })
+      if (isSuccessResponse(res)) {
+        setDataMovieCate(res.data)
       } else {
-        console.error('Lỗi tải danh sách phim: ', newData.message)
+        console.error('Failed to fetch data from server: ', res.msg)
       }
-    } catch (error) {
-      console.error('Lỗi tải danh sách phim: ', error)
+    } catch (error: any) {
+      console.error('Lỗi tải danh sách phim: ', error.message)
     } finally {
       loader.hidden()
     }
   }
 
-  const fetchAllMovies = async (page?: string | number, limit?: string | number) => {
+  const fetchAllMovies = async (page: string, limit: number) => {
     loader.show()
     try {
       const phimLeData = await movieApi.getList({ category: 'phim-le', page, limit })
@@ -83,25 +82,27 @@ export default function Detail() {
       if (isSuccessResponse(phimLeData) && isSuccessResponse(phimBoData)) {
         const concatData = phimLeData.data.items.concat(phimBoData.data.items)
         setAllMovies({ ...phimLeData.data, items: concatData })
+      } else {
+        console.error('Failed to fetch data from server: ', phimLeData.msg, phimBoData.msg)
       }
-    } catch (error) {
-      console.error('Lỗi tải danh sách phim: ', error)
+    } catch (error: any) {
+      console.error('Lỗi tải danh sách phim: ', error.message)
     } finally {
       loader.hidden()
     }
   }
 
-  const fetchNewMovies = async (page?: string | number) => {
+  const fetchNewMovies = async (page: string) => {
     loader.show()
     try {
       const res = await movieApi.getNewMovies({ page })
       if (isSuccessResponse(res)) {
         setDataNewMovie(res)
       } else {
-        console.error('Lỗi tải danh sách phim mới: ', res.msg)
+        console.error('Failed to fetch data from server: ', res.msg)
       }
-    } catch (error) {
-      console.error('Lỗi tải danh sách phim mới: ', error)
+    } catch (error: any) {
+      console.error('Lỗi tải danh sách phim mới: ', error.message)
     } finally {
       loader.hidden()
     }
@@ -110,14 +111,14 @@ export default function Detail() {
   const fetchMoviesSearch = async (keyword: string, limit?: string | number) => {
     loader.show()
     try {
-      const newData = await movieApi.getMoviesSearch({ keyword, limit })
-      if (isSuccessResponse(newData)) {
-        setDataSearch(newData.data)
+      const res = await movieApi.getMoviesSearch({ keyword, limit })
+      if (isSuccessResponse(res)) {
+        setDataSearch(res.data)
       } else {
-        console.error('Lỗi tải danh sách tìm kiếm: ', newData.message)
+        console.error('Failed to fetch data from server: ', res.msg)
       }
-    } catch (error) {
-      console.error('Lỗi tải danh sách tìm kiếm: ', error)
+    } catch (error: any) {
+      console.error('Lỗi tải danh sách tìm kiếm: ', error.message)
     } finally {
       loader.hidden()
     }
@@ -126,13 +127,12 @@ export default function Detail() {
   // Get data by category
   useEffect(() => {
     if (!category) return
-
     if (category === 'phim-moi') {
       fetchNewMovies(currentPage)
       return
     }
     if (!['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows'].includes(category)) {
-      fetchAllMovies(currentPage, 50)
+      fetchAllMovies(currentPage, 64)
       return
     }
     fetchMoviesByCate(category, currentPage, 20)
@@ -146,53 +146,59 @@ export default function Detail() {
     fetchMoviesSearch(keyword)
   }, [keyword])
 
-  const dataTable: any = useCallback(() => {
-    if (Object.keys(dataNewMovie).length > 0) return dataNewMovie
-    if (Object.keys(dataMovieCate).length > 0) return dataMovieCate
-    if (Object.keys(dataSearch).length > 0) return dataSearch
-    return dataFilteredByCate
-  }, [dataNewMovie, dataMovieCate, dataSearch, dataFilteredByCate])
+  const dataTable: any = () => {
+    if (isNotEmpty(dataNewMovie)) return dataNewMovie
+    if (isNotEmpty(dataMovieCate)) return dataMovieCate
+    if (isNotEmpty(dataSearch)) return dataSearch
+    return filteredDataByCate
+  }
 
   const renderTitle = () => {
     if (isNotEmpty(dataNewMovie)) return breadCrumbPhimmoi[0]?.name
     if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb[0]?.name
-    if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb[0]?.name.replace(/ - Trang 1/g, '')
+    if (isNotEmpty(dataSearch))
+      return `Phim ${dataSearch.breadCrumb[0]?.name
+        .replace(/ - Trang 1/g, '')
+        .split(':')
+        .pop()}`
 
-    const menuItem = menuLinks
-      .find((item) => item.subMenu)
-      ?.subMenu?.find((item) => item.href.split('/').pop() === category)
-
-    if (menuItem) return `Phim ${menuItem?.name}`
-    return ''
+    // Render title from category
+    const categoryName = filteredDataByCate.items?.map((item) =>
+      item.category.find((item) => item.slug === category),
+    )[0]?.name
+    if (categoryName) return `Phim ${categoryName}`
   }
 
-  const renderBreadCrumb = useCallback(() => {
-    if (Object.keys(dataNewMovie).length > 0) return breadCrumbPhimmoi
-    if (Object.keys(dataMovieCate).length > 0) return dataMovieCate.breadCrumb
-    if (Object.keys(dataSearch).length > 0) return dataSearch.breadCrumb
+  const renderBreadCrumb = () => {
+    if (isNotEmpty(dataNewMovie)) return breadCrumbPhimmoi
+    if (isNotEmpty(dataMovieCate)) return dataMovieCate.breadCrumb
+    if (isNotEmpty(dataSearch)) return dataSearch.breadCrumb
 
-    const menuItem = menuLinks
-      .find((item) => item.subMenu)
-      ?.subMenu?.find((item) => item.href.split('/').pop() === category)
-
-    if (menuItem) return `Phim ${menuItem?.name}`
-    return ''
-  }, [dataNewMovie, dataMovieCate, dataSearch, breadCrumbPhimmoi, category])
+    const categoryName = filteredDataByCate.items?.map((item) =>
+      item.category.find((item) => item.slug === category),
+    )[0]?.name
+    if (categoryName) return `Phim ${categoryName}`
+    return '...'
+  }
 
   return (
     <>
       {loader.isLoading && <Loader />}
-      <Suspense fallback={<Loader />}>
+      <div className='max-w-screen-xl min-h-screen m-auto px-10 py-[35px] max-lg:px-[25px] flex flex-col gap-6'>
         <BreadcrumbCustom breadCrumb={renderBreadCrumb()} />
-        <div className='flex flex-col gap-4'>
-          <h2 className='text-2xl font-bold text-primary-color capitalize'>{renderTitle()}</h2>
+        <div className='flex flex-col gap-9'>
+          {dataTable().items?.length > 0 && (
+            <h2 className='text-3xl font-semibold text-primary-color capitalize'>
+              <span className='text-primary-foreground'>Danh sách</span> {renderTitle()}
+            </h2>
+          )}
           <TablePagination
             category={category}
             data={dataTable()}
             keyword={keyword}
           />
         </div>
-      </Suspense>
+      </div>
     </>
   )
 }

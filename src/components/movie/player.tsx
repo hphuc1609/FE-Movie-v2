@@ -4,28 +4,26 @@
 import movieApi from '@/api-client/movies'
 import isSuccessResponse from '@/helpers/check-response'
 import { DetailResponse } from '@/models/detail'
-import { NewMovieItem } from '@/models/new-movie'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReactHlsPlayer from 'react-hls-player'
 import { useMediaQuery } from 'react-responsive'
 import PlayButton from '../common/play-button'
 import Reviewbox from '../common/review-box'
-import NewUpdateMovie from '../home-page/new-movie'
 import { Button } from '../ui/button'
+import NewUpdateMovie from './new'
 import { Skeleton } from '../ui/skeleton'
 
 interface MoviePlayerProps {
   dataEpisode: DetailResponse['episodes']
   detail: DetailResponse['movie']
-  dataNewMovie: NewMovieItem[]
 }
 
 const AD_URL = process.env.NEXT_PUBLIC_AD_URL
 const AD_INTERVAL = 3600000 // 1 hour in milliseconds
 
 export default function MoviePlayer(props: MoviePlayerProps) {
-  const { dataEpisode, detail, dataNewMovie } = props
+  const { dataEpisode, detail } = props
   const mobile = useMediaQuery({ query: '(max-width: 640px)' })
 
   return (
@@ -43,7 +41,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           <Reviewbox />
         </div>
       </div>
-      {!mobile && <NewUpdateMovie data={dataNewMovie} />}
+      {!mobile && <NewUpdateMovie />}
     </div>
   )
 }
@@ -52,7 +50,8 @@ interface VideoPlayerProps {
   dataEpisode: DetailResponse['episodes']
   detail: DetailResponse['movie']
 }
-const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
+const VideoPlayer = (props: VideoPlayerProps) => {
+  const { dataEpisode, detail } = props
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -60,36 +59,57 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
 
   const [urlVideo, setUrlVideo] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
-  const [dataVideo, setDataVideo] = useState('')
-  const [serverIndex, setServerIndex] = useState(0)
+  const [serverIndex, setServerIndex] = useState('server 1')
+  const [dataServer2, setDataServer2] = useState<DetailResponse['episodes']>([])
+  console.log('🚀 ~ VideoPlayer ~ dataServer2:', dataServer2)
 
-  const fetchDataVideo = useCallback(async () => {
-    try {
-      const slugName = detail.slug.replace(/-\d{4}$/, '')
-      const response = await movieApi.getMovieInfo({ slug: slugName })
-      if (!isSuccessResponse(response)) return
-
-      const { movie } = response
-      const urlVideo = movie.episodes[0].items[0].embed
-      setDataVideo(urlVideo)
-    } catch (error: any) {
-      console.error('Error fetching video data:', error.message)
-    }
-  }, [detail.slug])
-
-  // Check param episode
-  const filteredDataEpisode = dataEpisode.map((episode) =>
-    episode.server_data.find((item) => item.slug === episodeParam),
-  )
+  const removeLeadingZero = (name: string) => {
+    return name.replace(/tap-0(\d+)/, 'tap-$1')
+  }
 
   useEffect(() => {
-    const video = !serverIndex
-      ? filteredDataEpisode[0]?.link_embed
-      : filteredDataEpisode[0]?.link_m3u8
-    setUrlVideo(video as string)
+    const fetchDataVideo = async () => {
+      try {
+        const slugName = detail.slug.replace(/-\d{4}$/, '')
+        const response = await movieApi.getMovieInfo({ slug: slugName })
+        if (!isSuccessResponse(response)) return
 
-    // Fetch video data
+        const { movie } = response || {}
+        setDataServer2(movie.episodes)
+      } catch (error: any) {
+        console.error('Error fetching video data:', error.message)
+      }
+    }
+
     fetchDataVideo()
+  }, [])
+
+  useEffect(() => {
+    const filteredData = dataEpisode.map((episode) =>
+      episode.server_data.find((item) => item.slug === episodeParam),
+    )
+
+    const episodeServer2 = dataServer2.map((episode) => {
+      const param =
+        episodeParam === 'full' ? `tap-${episodeParam}` : removeLeadingZero(`${episodeParam}`)
+      return episode.items.find((item) => item.slug === param)
+    })
+
+    let video: string | undefined
+    switch (serverIndex) {
+      case 'server 1':
+        video = filteredData[0]?.link_embed
+        break
+      case 'server 2':
+        video = episodeServer2[0]?.embed
+        break
+      case 'server 3':
+        video = filteredData[0]?.link_m3u8
+        break
+      default:
+        break
+    }
+    setUrlVideo(video as string)
   }, [dataEpisode, serverIndex, episodeParam])
 
   const handlePlayClick = () => {
@@ -121,7 +141,7 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
     )
 
     switch (serverIndex) {
-      case 0:
+      case 'server 1':
         return urlVideo ? (
           <iframe
             src={urlVideo}
@@ -132,17 +152,17 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
         ) : (
           frameElement
         )
-      case 1:
-        return dataVideo ? (
+      case 'server 2':
+        return urlVideo ? (
           <iframe
-            src={dataVideo}
+            src={urlVideo}
             className='w-full h-full'
             allowFullScreen
           ></iframe>
         ) : (
           frameElement
         )
-      case 2:
+      case 'server 3':
         return urlVideo ? (
           <ReactHlsPlayer
             playerRef={videoRef}
@@ -167,7 +187,7 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
         ) : (
           <Skeleton className='h-full bg-zinc-500 bg-opacity-50 rounded-none' />
         )}
-        {!isPlaying && serverIndex === 2 && (
+        {!isPlaying && serverIndex === 'server 3' && (
           <div
             className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-5'
             onClick={handlePlayClick}
@@ -176,16 +196,15 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
           </div>
         )}
       </div>
-      <div className='max-h-[300px] flex flex-col gap-2 bg-black bg-opacity-20'>
-        <div className='flex items-center gap-2 text-base p-2'>
-          Server:
-          {['#1', '#2', '#3'].map((_, index) => (
+      <div className='max-h-[300px] flex flex-col gap-2 p-2 bg-black bg-opacity-40'>
+        <div className='flex items-center gap-2 p-2'>
+          {['server 1', 'server 2', 'server 3'].map((server, index) => (
             <Button
               key={index}
-              className={`text-white ${serverIndex === index && 'bg-primary-color'} hover:bg-primary-color h-[30px] w-[30px]`}
-              onClick={() => setServerIndex(index)}
+              className={`text-white capitalize ${serverIndex === server ? 'bg-label-color' : 'bg-zinc-300 bg-opacity-5'} hover:bg-label-color h-[35px] min-w-[30px]`}
+              onClick={() => setServerIndex(server)}
             >
-              #{index + 1}
+              {server}
             </Button>
           ))}
         </div>
@@ -198,7 +217,7 @@ const VideoPlayer = ({ dataEpisode, detail }: VideoPlayerProps) => {
               return (
                 <div
                   key={server.name}
-                  className={`text-sm ${server.slug === episodeParam ? 'bg-zinc-100 bg-opacity-30' : 'bg-zinc-100 bg-opacity-5'} hover:bg-zinc-100 hover:bg-opacity-30 rounded-md min-w-fit h-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
+                  className={`text-sm ${server.slug === episodeParam ? 'bg-label-color' : 'bg-zinc-300 bg-opacity-5'} hover:bg-label-color rounded-md min-w-fit h-fit text-center px-2 py-1 cursor-pointer text-nowrap`}
                   onClick={() => handleEpisodeClick(server.slug)}
                 >
                   {!['full', 'tập đặc biệt'].includes(server.name.toLowerCase())

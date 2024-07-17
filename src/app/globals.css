@@ -80,10 +80,16 @@
   .text-primary-color {
     @apply text-yellow-400;
   }
+  .text-secondary-color {
+    @apply text-red-700;
+  }
   .bg-primary-color {
     @apply bg-yellow-500;
   }
   .bg-label-color {
-    @apply bg-red-700;
+    @apply bg-red-800;
+  }
+  .bg-skeleton {
+    @apply bg-gray-50 bg-opacity-5;
   }
 }

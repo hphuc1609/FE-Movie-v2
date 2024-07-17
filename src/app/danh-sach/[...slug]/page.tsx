@@ -1,9 +1,11 @@
+import { Suspense } from 'react'
 import Detail from './detail'
+import Loader from '@/components/loader'
 
-export default function SlugListPage() {
+export default async function SlugListPage() {
   return (
-    <div className='max-w-screen-xl min-h-screen m-auto px-10 py-[35px] max-lg:px-[25px] flex flex-col gap-9'>
+    <Suspense fallback={<Loader />}>
       <Detail />
-    </div>
+    </Suspense>
   )
 }

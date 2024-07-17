@@ -23,7 +23,7 @@ export default function Header() {
     <header
       className={`w-full h-16 flex items-center justify-between ${
         isHomePathname ? 'fixed' : 'sticky'
-      } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-black bg-opacity-70'}`}
+      } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-black bg-opacity-90'}`}
     >
       <div className='mx-auto max-w-screen-xl w-full px-[25px] py-8 lg:px-10'>
         <HeaderMenubar />
@@ -67,9 +67,9 @@ const HeaderMenubar = React.memo(() => {
         <div className='flex gap-8 h-full items-center'>
           <Link
             href='/'
-            className='text-2xl font-bold text-nowrap'
+            className='text-2xl text-nowrap font-mono font-bold'
           >
-            VPhim <span className='text-primary-color'>247</span>
+            Mephim<span className='text-primary-color'>247</span>
           </Link>
           <div className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
             {menuLinks.map((menuItem) => (
@@ -97,7 +97,7 @@ const HeaderMenubar = React.memo(() => {
                 />
                 <Search
                   size={20}
-                  className='cursor-pointer -ml-8'
+                  className='cursor-pointer -ml-8 hover:text-primary-color'
                   onClick={handleSearchClick}
                 />
               </div>
@@ -112,7 +112,7 @@ const HeaderMenubar = React.memo(() => {
             size={20}
           />
           <Menu
-            className='md:hidden'
+            className='md:hidden cursor-pointer'
             onClick={() => setOpenMenu(true)}
           />
         </div>

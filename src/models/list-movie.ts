@@ -1,6 +1,6 @@
 export interface MovieCategoryResponse {
   status: string
-  message: string
+  msg: string
   data: MovieCategoryItem
 }
 

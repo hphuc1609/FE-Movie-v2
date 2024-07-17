@@ -1,5 +1,6 @@
 'use client'
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
 
 const LoadingContext = React.createContext({ isLoading: false, show: () => {}, hidden: () => {} })
@@ -8,6 +9,7 @@ export const useLoading = () => React.useContext(LoadingContext)
 
 export default function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setLoading] = React.useState(false)
+  const queryClient = new QueryClient()
 
   const show = () => {
     setLoading(true)
@@ -19,7 +21,7 @@ export default function LoadingProvider({ children }: { children: React.ReactNod
 
   return (
     <LoadingContext.Provider value={{ isLoading, show, hidden }}>
-      {children}
+      <QueryClientProvider client={queryClient}>{children} </QueryClientProvider>
     </LoadingContext.Provider>
   )
 }

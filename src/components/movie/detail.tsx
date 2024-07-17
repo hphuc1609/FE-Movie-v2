@@ -10,14 +10,14 @@ import { Separator } from '../ui/separator'
 import { useRouter } from 'next/navigation'
 import cleanString from '@/helpers/cleanString'
 
-interface MovieDetailCardProps {
+interface MovieInfoProps {
   detail: DetailResponse['movie']
   dataEpisode: DetailResponse['episodes']
   isWatch?: boolean
   setIsWatch: (value: boolean) => void
 }
 
-export default function MovieDetailCard(props: MovieDetailCardProps) {
+export default function MovieInfo(props: MovieInfoProps) {
   const { detail, dataEpisode, isWatch, setIsWatch } = props
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const router = useRouter()
@@ -42,6 +42,9 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
   const content = cleanString(detail.content)
 
   const details = [
+    ...(detail.episode_current?.toLowerCase() !== 'full'
+      ? [{ label: 'Trạng thái', value: detail.episode_current }]
+      : []),
     { label: 'Phụ đề', value: detail.lang },
     { label: 'Thể loại', value: categories },
     { label: 'Quốc gia', value: country },
@@ -119,7 +122,11 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
                   className='text-sm capitalize flex gap-6'
                 >
                   <span className='opacity-70 min-w-[130px]'>{item.label}:</span>
-                  <span className='flex-1 line-clamp-2'>{item.value}</span>
+                  <span
+                    className={`flex-1 line-clamp-2 ${item.label.toLowerCase() === 'phụ đề' && 'text-red-600'}`}
+                  >
+                    {item.value}
+                  </span>
                 </div>
               ),
           )}
@@ -130,7 +137,7 @@ export default function MovieDetailCard(props: MovieDetailCardProps) {
       <DialogCustom
         open={openDialogTrailer}
         setOpen={setOpenDialogTrailer}
-        title={`Trailer: ${detail.name}`}
+        title={detail.name}
         content={
           <iframe
             className='w-full'

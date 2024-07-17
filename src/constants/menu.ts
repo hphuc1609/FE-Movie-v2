@@ -11,8 +11,8 @@ export interface MenuItem {
 
 const menuLinks: MenuItem[] = [
   {
-    name: 'Phim mới',
-    href: '/phim-moi',
+    name: 'Trang chủ',
+    href: '/',
   },
   {
     name: 'Phim lẻ',
