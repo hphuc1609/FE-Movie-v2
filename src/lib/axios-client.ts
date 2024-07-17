@@ -20,38 +20,41 @@ axiosInstance.interceptors.request.use(
     return config
   },
   (error) => {
-    return Promise.reject(error)
+    throw new Error(error)
   },
 )
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => response.data,
   (error) => {
     if (error.response) {
       const {
         status,
         data: { message },
       } = error.response
+      if (!message) {
+        throw new HttpError(status, 'Something went wrong!')
+      }
       throw new HttpError(status, message)
     }
-    throw error
+    throw new Error(error)
   },
 )
 
 const axiosClient = {
-  get: (endPoint: string, config?: AxiosRequestConfig) => {
+  get: (endPoint: string, config?: AxiosRequestConfig): Promise<any> => {
     const url = endPoint.startsWith('/') ? endPoint : `/${endPoint}`
     return axiosInstance.get(url, config)
   },
-  post: (endPoint: string, data?: any, config?: AxiosRequestConfig) => {
+  post: (endPoint: string, data?: any, config?: AxiosRequestConfig): Promise<any> => {
     const url = endPoint.startsWith('/') ? endPoint : `/${endPoint}`
     return axiosInstance.post(url, data, config)
   },
-  put: (endPoint: string, data?: any, config?: AxiosRequestConfig) => {
+  put: (endPoint: string, data?: any, config?: AxiosRequestConfig): Promise<any> => {
     const url = endPoint.startsWith('/') ? endPoint : `/${endPoint}`
     return axiosInstance.put(url, data, config)
   },
-  delete: (endPoint: string, config?: AxiosRequestConfig) => {
+  delete: (endPoint: string, config?: AxiosRequestConfig): Promise<any> => {
     const url = endPoint.startsWith('/') ? endPoint : `/${endPoint}`
     return axiosInstance.delete(url, config)
   },
