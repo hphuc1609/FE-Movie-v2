@@ -8,6 +8,7 @@ import './globals.css'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
+const keyGoogle = process.env.NEXT_PUBLIC_KEY_GOOGLE_ANALYTICS
 
 export const metadata: Metadata = {
   title: 'Mephim247 - Khám phá phim hay, phim mới vietsub, thuyết minh chất lượng cao',
@@ -62,7 +63,7 @@ export default function RootLayout({
       <head>
         <meta
           name='google-site-verification'
-          content='AtWuitSFXBT95JjPwef4fstOQaG_2hrje4SQZbIN7io'
+          content={keyGoogle}
         />
       </head>
       <body className={cn(inter.className, 'bg-[#141414] text-primary-foreground')}>
