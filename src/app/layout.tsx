@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     'Mephim247 cung cấp dịch vụ xem phim online miễn phí với chất lượng cao. Tận hưởng các bộ phim hấp dẫn với đa dạng thể loại.',
   keywords:
     'phim, xem phim online, phim vietsub, phim thuyết minh, phim hay, phim mới, phim chất lượng cao, phim miễn phí',
-  robots: 'noindex, nofollow',
   authors: [{ name: 'Mephim247' }],
   creator: 'PhucLuu',
   openGraph: {
@@ -60,6 +59,12 @@ export default function RootLayout({
       lang='vi'
       suppressHydrationWarning
     >
+      <head>
+        <meta
+          name='google-site-verification'
+          content='AtWuitSFXBT95JjPwef4fstOQaG_2hrje4SQZbIN7io'
+        />
+      </head>
       <body className={cn(inter.className, 'bg-[#141414] text-primary-foreground')}>
         <Header />
         <LoadingProvider>
