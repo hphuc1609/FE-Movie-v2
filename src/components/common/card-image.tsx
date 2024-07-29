@@ -5,6 +5,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import PlayButton from './play-button'
+import cleanString from '@/helpers/cleanString'
+import { useLoading } from '../loading-provider'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
@@ -12,8 +14,26 @@ interface CardImageProps {
   itemLength?: number
 }
 
+const AD_URL = process.env.NEXT_PUBLIC_AD_URL
+const AD_INTERVAL = 3600000 // 1 hour in milliseconds
+
 export default function CardImage(props: CardImageProps) {
   const { data, paramCategory, itemLength = 6 } = props
+  const loader = useLoading()
+
+  const handleCardClick = () => {
+    loader.show()
+
+    const lastAdShown = localStorage.getItem('lastAdShown')
+    const now = Date.now()
+
+    // Check if the last ad was shown less than an hour ago
+    if (!lastAdShown || now - Number(lastAdShown) > AD_INTERVAL) {
+      localStorage.setItem('lastAdShown', now.toString())
+      window.open(AD_URL, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   return (
     <>
       {data.items?.slice(0, itemLength).map((item, index) => (
@@ -24,6 +44,7 @@ export default function CardImage(props: CardImageProps) {
           <Link
             href={`/phim/${item.slug}`}
             className='relative group rounded-sm bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
+            onClick={handleCardClick}
           >
             <ImageComponent
               item={item}
@@ -35,14 +56,29 @@ export default function CardImage(props: CardImageProps) {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
-            <div className='text-[10px] font-semibold uppercase absolute top-0 p-1 w-full flex flex-col gap-1 items-baseline'>
-              <p className='bg-label-color w-fit py-1 px-2 text-nowrap'>
-                {item.quality ? `${item.quality} ${item.lang}` : 'HD Vietsub'}
-              </p>
-              {paramCategory === 'phim-bo' && item.episode_current && (
-                <p className='bg-label-color w-fit py-1 px-2'>{item.episode_current}</p>
+            <div className='text-[11px] font-semibold uppercase absolute top-0 w-full flex flex-col gap-1 items-baseline'>
+              {paramCategory === 'phim-bo' ? (
+                item.episode_current && (
+                  <p className='bg-label-color w-fit py-1 px-2'>{item.episode_current}</p>
+                )
+              ) : (
+                <p className='bg-label-color w-fit py-1 px-2 text-nowrap'>
+                  {item.quality ? `${item.quality} ${item.lang}` : 'HD Vietsub'}
+                </p>
               )}
             </div>
+          </Link>
+          {/* Subtitle */}
+          <Link
+            href={`/phim/${item.slug}`}
+            className='text-sm grid gap-1'
+          >
+            <p className='hover:text-primary-color font-semibold line-clamp-2'>
+              {item.name} ({item.year})
+            </p>
+            <span className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'>
+              {cleanString(item.origin_name)}
+            </span>
           </Link>
           {item.category && (
             <div className='flex items-center flex-wrap gap-1'>
@@ -57,17 +93,6 @@ export default function CardImage(props: CardImageProps) {
               ))}
             </div>
           )}
-          <Link
-            href={`/phim/${item.slug}`}
-            className='text-sm'
-          >
-            <p className='text-primary-color font-semibold line-clamp-2'>
-              {item.name} ({item.year})
-            </p>
-            <span className='opacity-80 line-clamp-2 hover:text-primary-color break-keep'>
-              {item.origin_name}
-            </span>
-          </Link>
         </div>
       ))}
     </>
@@ -79,7 +104,8 @@ interface ImageComponentProps {
   index: number
   data: MovieCategoryItem
 }
-const ImageComponent = React.memo(({ item, index, data }: ImageComponentProps) => {
+
+export const ImageComponent = React.memo(({ item, index, data }: ImageComponentProps) => {
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
   const imageUrl = (item: MovieItem, index: number) => {

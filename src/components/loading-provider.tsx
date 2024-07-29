@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
+import Loader from './loader'
 
 const LoadingContext = React.createContext({ isLoading: false, show: () => {}, hidden: () => {} })
 
@@ -13,7 +14,6 @@ export default function LoadingProvider({ children }: { children: React.ReactNod
 
   const show = () => {
     setLoading(true)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
   const hidden = () => {
     setLoading(false)
@@ -21,7 +21,10 @@ export default function LoadingProvider({ children }: { children: React.ReactNod
 
   return (
     <LoadingContext.Provider value={{ isLoading, show, hidden }}>
-      <QueryClientProvider client={queryClient}>{children} </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        {isLoading && <Loader />}
+        {children}
+      </QueryClientProvider>
     </LoadingContext.Provider>
   )
 }

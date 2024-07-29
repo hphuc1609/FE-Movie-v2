@@ -1,17 +1,11 @@
 import movieApi from '@/api-client/movies'
+import Banner from '@/components/banner'
 import ErrorMessage from '@/components/common/error-message'
 import Loader from '@/components/loader'
 import CategoryMovie from '@/components/movie/categories'
 import NewUpdateMovie from '@/components/movie/new'
-import { Skeleton } from '@/components/ui/skeleton'
 import isSuccessResponse from '@/helpers/check-response'
-import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
-
-const Banner = dynamic(() => import('@/components/banner'), {
-  ssr: false,
-  loading: () => <Skeleton className='max-w-screen-2xl h-[650px] bg-skeleton' />,
-})
 
 export default async function Home() {
   const categories = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
@@ -48,9 +42,7 @@ export default async function Home() {
             />
           ))}
         </div>
-        <div className='max-lg:hidden'>
-          <NewUpdateMovie />
-        </div>
+        <NewUpdateMovie />
       </div>
     </Suspense>
   )

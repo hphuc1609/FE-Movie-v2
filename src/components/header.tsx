@@ -2,7 +2,7 @@
 'use client'
 
 import menuLinks, { MenuItem } from '@/constants/menu'
-import useScrollPosition from '@/custom-hooks/useScrollPosition'
+import useScrollPosition from '@/hooks/use-scroll'
 import { cn } from '@/lib/utils'
 import { ChevronDown, Menu, Search, User } from 'lucide-react'
 import Link from 'next/link'
@@ -71,14 +71,14 @@ const HeaderMenubar = React.memo(() => {
           >
             Mephim<span className='text-primary-color'>247</span>
           </Link>
-          <div className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
+          <nav className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
             {menuLinks.map((menuItem) => (
               <TextMenubar
                 key={menuItem.name}
                 data={menuItem}
               />
             ))}
-          </div>
+          </nav>
         </div>
         <div className='flex items-center gap-2'>
           <DialogCustom

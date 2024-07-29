@@ -9,6 +9,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Autoplay, EffectFade, Pagination } from 'swiper/modules'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import { Swiper as SwiperType } from 'swiper/types'
+import { useLoading } from './loading-provider'
 import { Button } from './ui/button'
 
 import 'swiper/css'
@@ -27,6 +28,8 @@ export default function Banner(props: BannerProps) {
   const prevBtnRef = useRef<HTMLButtonElement>(null)
   const swiperRef = useRef<SwiperRef>(null)
   const router = useRouter()
+  const loader = useLoading()
+
   const [activeSlide, setActiveSlide] = useState(0)
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
@@ -46,14 +49,19 @@ export default function Banner(props: BannerProps) {
     setErrorImage((prev) => ({ ...prev, [index]: true }))
   }
 
-  const isHiddenButton = filteredData?.length < 0
-
   const imageUrl = (item: MovieItem, index: number) => {
     const hasError = errorImage[index]
     return !hasError && data.APP_DOMAIN_CDN_IMAGE
       ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
       : `${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
   }
+
+  const handleButtonClick = (slug: string) => {
+    router.push(`/phim/${slug}`)
+    loader.show()
+  }
+
+  const isHiddenButton = filteredData?.length < 0
 
   return (
     <Swiper
@@ -104,7 +112,7 @@ export default function Banner(props: BannerProps) {
                   index !== activeSlide ? 'invisible opacity-0' : 'visible opacity-100'
                 }`}
                 style={{ transitionDuration: '2000ms', transitionDelay: '3000ms' }}
-                onClick={() => router.push(`/phim/${item.slug}`)}
+                onClick={() => handleButtonClick(item.slug)}
               >
                 <Play
                   size={15}

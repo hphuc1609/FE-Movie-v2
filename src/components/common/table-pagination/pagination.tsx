@@ -1,3 +1,4 @@
+import { useLoading } from '@/components/loading-provider'
 import { Pagination, PaginationContent, PaginationEllipsis } from '@/components/ui/pagination'
 import { MoviePagination } from '@/models/list-movie'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -6,18 +7,13 @@ import Link from 'next/link'
 interface PaginationProps {
   pageToShow: MoviePagination['totalPages'][]
   pagination: MoviePagination
-  category: string
   currentPage: number
 }
 
-const PaginationCustom: React.FC<PaginationProps> = ({
-  pageToShow,
-  pagination,
-  category,
-  currentPage,
-}) => {
+const PaginationCustom: React.FC<PaginationProps> = ({ pageToShow, pagination, currentPage }) => {
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === pagination.totalPages
+  const loader = useLoading()
 
   return (
     <Pagination className='text-base'>
@@ -25,8 +21,9 @@ const PaginationCustom: React.FC<PaginationProps> = ({
         {/* Render 'Trang Đầu' link */}
         {!isFirstPage && (
           <Link
-            className={`cursor-pointer h-9 px-3 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === 1 && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
             href={`?page=1`}
+            className={`cursor-pointer h-9 px-3 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === 1 && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
+            onClick={() => loader.show()}
           >
             <ChevronLeft size={18} />
             Đầu
@@ -37,8 +34,9 @@ const PaginationCustom: React.FC<PaginationProps> = ({
         <div className='flex gap-1'>
           {!isFirstPage && (
             <Link
-              className={`cursor-pointer h-9 min-w-10 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === 1 && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
               href={currentPage > 1 ? `?page=${currentPage - 1}` : ''}
+              className={`cursor-pointer h-9 min-w-10 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === 1 && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
+              onClick={() => loader.show()}
             >
               <ChevronLeft size={22} />
             </Link>
@@ -51,6 +49,7 @@ const PaginationCustom: React.FC<PaginationProps> = ({
               key={page}
               href={`?page=${page}`}
               className={`bg-white bg-opacity-5 rounded-md h-9 min-w-10 flex items-center justify-center hover:text-primary-color ${currentPage === page && 'text-primary-color border border-yellow-400'}`}
+              onClick={() => loader.show()}
             >
               {page}
             </Link>
@@ -60,8 +59,9 @@ const PaginationCustom: React.FC<PaginationProps> = ({
           {/* Render 'Trang Sau' link */}
           {!isLastPage && (
             <Link
-              className={`cursor-pointer h-9 min-w-10 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === pagination.totalPages && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
               href={`?page=${currentPage + 1}`}
+              className={`cursor-pointer h-9 min-w-10 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === pagination.totalPages && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
+              onClick={() => loader.show()}
             >
               <ChevronRight size={22} />
             </Link>
@@ -71,8 +71,9 @@ const PaginationCustom: React.FC<PaginationProps> = ({
         {/* Render 'Trang Cuối' link */}
         {!isLastPage && (
           <Link
-            className={`cursor-pointer h-9 px-3 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === pagination.totalPages && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
             href={`?page=${pagination.totalPages}`}
+            className={`cursor-pointer h-9 px-3 flex items-center justify-center bg-white bg-opacity-5 rounded-md hover:text-primary-color ${currentPage === pagination.totalPages && 'opacity-50 hover:text-inherit cursor-not-allowed'}`}
+            onClick={() => loader.show()}
           >
             Cuối
             <ChevronRight size={18} />

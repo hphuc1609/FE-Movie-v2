@@ -1,28 +1,25 @@
 'use client'
 
+import cleanString from '@/helpers/cleanString'
 import { DetailResponse } from '@/models/detail'
 import { Video } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
 import DialogCustom from '../common/dialog'
 import { Button } from '../ui/button'
-import { Separator } from '../ui/separator'
-import { useRouter } from 'next/navigation'
-import cleanString from '@/helpers/cleanString'
+import { useMediaQuery } from 'react-responsive'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
-  dataEpisode: DetailResponse['episodes']
-  isWatch?: boolean
-  setIsWatch: (value: boolean) => void
 }
 
 export default function MovieInfo(props: MovieInfoProps) {
-  const { detail, dataEpisode, isWatch, setIsWatch } = props
+  const { detail } = props
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
-  const router = useRouter()
   const [errorImage, setErrorImage] = useState(false)
+  const mobile = useMediaQuery({ query: '(max-width: 640px)' })
 
+  // ----------------- Get Details -----------------------------
   const categories = useMemo(
     () => detail.category?.map((item) => item.name).join(', '),
     [detail.category],
@@ -35,7 +32,8 @@ export default function MovieInfo(props: MovieInfoProps) {
 
   const actors = useMemo(() => {
     return detail.actor
-      ?.filter((director) => cleanString(director).toLowerCase() !== 'đang cập nhật')
+      ?.map((actor) => cleanString(actor))
+      .filter((actor) => actor.trim() !== '')
       .join(', ')
   }, [detail.actor])
 
@@ -53,60 +51,41 @@ export default function MovieInfo(props: MovieInfoProps) {
     { label: 'Năm phát hành', value: detail.year },
   ]
 
-  const handleGoToWatch = () => {
-    setIsWatch(true)
-    sessionStorage.setItem('isWatch', 'true')
-
-    const episode = dataEpisode[0]?.server_data[0]?.slug
-    router.push(`/phim/${detail.slug}?episode=${episode}`)
-  }
-
+  // ----------------- Render UI -----------------------------
   return (
     <div className='flex max-md:flex-col gap-[30px]'>
-      <div className='relative w-[300px] h-[440px] max-md:m-auto rounded-md overflow-hidden'>
+      <div className='relative max-w-[300px] h-[440px] bg-gray-50 bg-opacity-10 rounded-md m-auto overflow-hidden'>
         <Image
           src={errorImage ? detail.thumb_url : detail.poster_url}
           width={300}
           height={440}
-          alt={detail.name || ''}
+          alt={detail.name}
           priority
           onError={() => setErrorImage(true)}
-          className='w-full h-full object-cover'
+          className='w-full h-full object-cover rounded-md'
         />
-        {!isWatch && (
-          <div className='absolute h-[56px] flex items-center justify-around gap-2 bottom-0 left-0 w-full bg-black bg-opacity-80'>
-            <Button
-              className='capitalize text-lg font-light hover:bg-transparent bg-transparent group hover:text-primary-color'
-              onClick={() => setOpenDialogTrailer(true)}
-            >
-              <Video
-                size={15}
-                strokeWidth={1}
-                className='mr-2 text-primary-foreground group-hover:text-primary-color'
-                fill='currentColor'
-              />
-              Trailer
-            </Button>
-            <Separator
-              orientation='vertical'
-              className='w-[1px] h-5 opacity-50'
+        <div className='absolute h-[56px] flex items-center justify-around gap-2 bottom-0 left-0 w-full bg-black bg-opacity-85'>
+          <Button
+            className='text-lg uppercase hover:bg-transparent bg-transparent group hover:text-primary-color'
+            onClick={() => setOpenDialogTrailer(true)}
+          >
+            <Video
+              size={24}
+              strokeWidth={1}
+              className='mr-2 text-primary-foreground group-hover:text-primary-color'
+              fill='currentColor'
             />
-            <Button
-              className='capitalize text-lg font-light hover:bg-transparent bg-transparent hover:text-primary-color'
-              onClick={handleGoToWatch}
-            >
-              Xem Phim
-            </Button>
-          </div>
-        )}
+            Trailer
+          </Button>
+        </div>
       </div>
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>
         <div className='flex flex-col'>
           <h1 className='text-2xl font-semibold text-primary-color'>{detail.name}</h1>
-          <p className='opacity-70 font-medium text-lg'>{detail.origin_name}</p>
+          <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
         </div>
-        <p className='md:max-h-[150px] overflow-auto text-base'>{content}</p>
+        <p className='md:max-h-[130px] overflow-auto text-base'>{content}</p>
         <div className='flex flex-col gap-2'>
           {detail.episode_total > '1' && (
             <div className='text-sm capitalize flex gap-6'>
@@ -141,7 +120,7 @@ export default function MovieInfo(props: MovieInfoProps) {
         content={
           <iframe
             className='w-full'
-            height='315'
+            height={mobile ? '315' : '450'}
             src={`https://www.youtube.com/embed/${detail.trailer_url?.split('v=')[1]}`}
             allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
             allowFullScreen

@@ -29,7 +29,7 @@ export default function Drawer(props: DrawerProps) {
   }
 
   return (
-    <div
+    <nav
       className={`fixed top-0 right-0 w-full h-full transition-all duration-300 ${openMenu ? 'visible' : 'invisible'}`}
     >
       <div
@@ -109,6 +109,6 @@ export default function Drawer(props: DrawerProps) {
           </Fragment>
         ))}
       </div>
-    </div>
+    </nav>
   )
 }

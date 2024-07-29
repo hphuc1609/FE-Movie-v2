@@ -1,3 +1,5 @@
+'use client'
+
 import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 interface FetchDataOptions<T>
@@ -8,7 +10,7 @@ interface FetchDataOptions<T>
 
 const useFetchData = <T>({ queryKey, queryFn, ...options }: FetchDataOptions<T>) => {
   return useQuery({
-    queryKey: [queryKey],
+    queryKey,
     queryFn,
     staleTime: Infinity,
     refetchOnWindowFocus: false,
