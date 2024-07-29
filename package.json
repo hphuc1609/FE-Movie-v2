@@ -2,6 +2,7 @@
   "name": "movie-stream",
   "version": "0.1.0",
   "private": true,
+  "author": "Phuc Luu",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

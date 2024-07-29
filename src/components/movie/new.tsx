@@ -10,10 +10,12 @@ import { useMediaQuery } from 'react-responsive'
 import { Skeleton } from '../ui/skeleton'
 import { useLoading } from '../loading-provider'
 import { NewMovieItem } from '@/models/new-movie'
+import { useState } from 'react'
 
 export default function NewUpdateMovie() {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
   const loader = useLoading()
+  const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
   // ------------------ Fetch Data ----------------------------
   const fetchNewMovies = async (): Promise<NewMovieItem[] | null> => {
@@ -32,6 +34,17 @@ export default function NewUpdateMovie() {
 
   const { isLoading, data } = useFetchData({ queryKey: ['listNewMovie'], queryFn: fetchNewMovies })
 
+  // ------------------ Image Url ----------------------------
+  const imageUrl = (item: NewMovieItem, index: number) => {
+    const hasError = errorImage[index]
+    return hasError ? item.thumb_url : item.poster_url
+  }
+
+  // ------------------ Event Handlers ----------------------------
+  const handleErrorImage = (index: number) => {
+    setErrorImage((prev) => ({ ...prev, [index]: true }))
+  }
+
   // ----------------- Render UI -------------------------
   return (
     <div className='flex flex-col gap-3 w-[360px] max-sm:w-full max-xl:w-[289px] max-lg:hidden'>
@@ -43,6 +56,7 @@ export default function NewUpdateMovie() {
           <Link
             href={`/danh-sach/phim-moi?page=1`}
             className='text-sm text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
+            onClick={() => loader.show()}
           >
             Xem thêm
             <ChevronRight size={16} />
@@ -56,7 +70,7 @@ export default function NewUpdateMovie() {
         {isLoading ? (
           <SkeletonList />
         ) : (
-          data?.slice(0, 10).map((item) => (
+          data?.slice(0, 10).map((item, index) => (
             <div
               key={item._id}
               className='h-[90px] max-md:min-h-[90px] overflow-hidden'
@@ -68,12 +82,13 @@ export default function NewUpdateMovie() {
               >
                 <div className='w-[80px] h-full bg-gray-50 bg-opacity-10'>
                   <Image
-                    src={`${item.poster_url}`}
+                    src={imageUrl(item, index)}
                     alt={item.name}
-                    width={478}
-                    height={190}
+                    width={80}
+                    height={90}
                     priority
-                    className='w-full h-full object-cover'
+                    onError={() => handleErrorImage(index)}
+                    className='object-cover h-full w-full'
                   />
                 </div>
                 <div className='relative flex flex-col gap-1 flex-1 py-2'>

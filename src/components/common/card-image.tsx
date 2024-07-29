@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import PlayButton from './play-button'
 import cleanString from '@/helpers/cleanString'
 import { useLoading } from '../loading-provider'
+import handleAdClick from '@/helpers/affilicate'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
@@ -14,24 +15,13 @@ interface CardImageProps {
   itemLength?: number
 }
 
-const AD_URL = process.env.NEXT_PUBLIC_AD_URL
-const AD_INTERVAL = 3600000 // 1 hour in milliseconds
-
 export default function CardImage(props: CardImageProps) {
   const { data, paramCategory, itemLength = 6 } = props
   const loader = useLoading()
 
   const handleCardClick = () => {
     loader.show()
-
-    const lastAdShown = localStorage.getItem('lastAdShown')
-    const now = Date.now()
-
-    // Check if the last ad was shown less than an hour ago
-    if (!lastAdShown || now - Number(lastAdShown) > AD_INTERVAL) {
-      localStorage.setItem('lastAdShown', now.toString())
-      window.open(AD_URL, '_blank', 'noopener,noreferrer')
-    }
+    handleAdClick()
   }
 
   return (
@@ -68,10 +58,11 @@ export default function CardImage(props: CardImageProps) {
               )}
             </div>
           </Link>
-          {/* Subtitle */}
+          {/* Movie name */}
           <Link
             href={`/phim/${item.slug}`}
             className='text-sm grid gap-1'
+            onClick={() => loader.show()}
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>
               {item.name} ({item.year})
@@ -80,13 +71,15 @@ export default function CardImage(props: CardImageProps) {
               {cleanString(item.origin_name)}
             </span>
           </Link>
+          {/* Categories */}
           {item.category && (
             <div className='flex items-center flex-wrap gap-1'>
               {item.category.map((cate) => (
                 <Link
-                  href={`/danh-sach/${cate.slug}?page=1`}
                   key={cate.id}
+                  href={`/danh-sach/${cate.slug}?page=1`}
                   className='text-[10px] font-medium rounded-xl bg-slate-100 bg-opacity-5 hover:text-primary-color px-2 py-1'
+                  onClick={() => loader.show()}
                 >
                   {cate.name}
                 </Link>

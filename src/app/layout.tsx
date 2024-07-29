@@ -35,19 +35,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@Mephim247',
-    title: 'Mephim247 - Khám phá phim hay, phim mới vietsub, thuyết minh chất lượng cao',
-    description:
-      'Mephim247 cung cấp dịch vụ xem phim online miễn phí với chất lượng cao. Tận hưởng các bộ phim hấp dẫn với đa dạng thể loại.',
-    images: [
-      {
-        url: `${myWebsite}/images/logo.png`,
-        alt: 'Mephim247 Logo',
-      },
-    ],
-  },
 }
 
 export default function RootLayout({

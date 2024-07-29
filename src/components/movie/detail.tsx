@@ -85,7 +85,7 @@ export default function MovieInfo(props: MovieInfoProps) {
           <h1 className='text-2xl font-semibold text-primary-color'>{detail.name}</h1>
           <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
         </div>
-        <p className='md:max-h-[130px] overflow-auto text-base'>{content}</p>
+        <p className='md:max-h-[130px] max-sm:max-h-[200px] overflow-auto text-base'>{content}</p>
         <div className='flex flex-col gap-2'>
           {detail.episode_total > '1' && (
             <div className='text-sm capitalize flex gap-6'>

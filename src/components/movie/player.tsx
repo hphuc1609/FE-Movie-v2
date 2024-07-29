@@ -2,24 +2,21 @@
 'use client'
 
 import movieApi from '@/api-client/movies'
+import handleAdClick from '@/helpers/affilicate'
 import useFetchData from '@/hooks/use-fetch'
 import { DetailResponse, Episode } from '@/models/detail'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import ReactHlsPlayer from 'react-hls-player'
 import PlayButton from '../common/play-button'
+import { useLoading } from '../loading-provider'
 import { Button } from '../ui/button'
 import { Skeleton } from '../ui/skeleton'
-import Loader from '../loader'
-import { useLoading } from '../loading-provider'
 
 interface MoviePlayerProps {
   dataEpisode: DetailResponse['episodes']
   detail: DetailResponse['movie']
 }
-
-const AD_URL = process.env.NEXT_PUBLIC_AD_URL
-const AD_INTERVAL = 3600000 // 1 hour in milliseconds
 
 export default function MoviePlayer(props: MoviePlayerProps) {
   const { dataEpisode, detail } = props
@@ -96,16 +93,8 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   const handleEpisodeClick = (episode: string) => {
     loader.show()
-
-    const lastAdShown = localStorage.getItem('lastAdShown')
-    const now = Date.now()
-
-    // Check if the last ad was shown less than an hour ago
-    if (!lastAdShown || now - Number(lastAdShown) > AD_INTERVAL) {
-      localStorage.setItem('lastAdShown', now.toString())
-      window.open(AD_URL, '_blank', 'noopener,noreferrer')
-    }
     router.push(`?episode=${episode}`)
+    handleAdClick()
   }
 
   // ------------------ Render UI -------------------------------
