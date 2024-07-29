@@ -139,7 +139,7 @@ export default function Detail() {
                 >
                   <Link
                     href={`/phim/${item.slug}`}
-                    className='relative group rounded-sm flex items-center justify-center overflow-hidden'
+                    className='relative group rounded-sm bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
                     onClick={() => loader.show()}
                   >
                     <ImageComponent
