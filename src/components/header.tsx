@@ -39,15 +39,18 @@ const HeaderMenubar = React.memo(() => {
   const [openMenu, setOpenMenu] = useState(false)
 
   const handleInputKeyDown = async (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter' || !event.currentTarget.value) {
+    const value = event.currentTarget.value.trim()
+    if (event.key !== 'Enter' || !value) {
       return
     }
+
     setOpenDialogSearch(false)
-    router.push(`/danh-sach/search?keyword=${event.currentTarget.value}`)
+    router.push(`/danh-sach/search?keyword=${value}`)
   }
 
   const handleSearchClick = () => {
     if (!searchValue) return
+
     setOpenDialogSearch(false)
     setSearchValue('')
     router.push(`/danh-sach/search?keyword=${searchValue}`)

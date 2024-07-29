@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     'Mephim247 cung cấp dịch vụ xem phim online miễn phí với chất lượng cao. Tận hưởng các bộ phim hấp dẫn với đa dạng thể loại.',
   keywords:
     'phim, xem phim online, phim vietsub, phim thuyết minh, phim hay, phim mới, phim chất lượng cao, phim miễn phí',
+  robots: 'noindex, nofollow',
+  authors: [{ name: 'Mephim247' }],
+  creator: 'PhucLuu',
   openGraph: {
     type: 'website',
     locale: 'vi_VN',

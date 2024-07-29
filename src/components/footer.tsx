@@ -30,7 +30,7 @@ export default function Footer() {
             <span className='opacity-50'>
               Copyright &copy; {new Date().getFullYear()}. All rights reserved by{' '}
             </span>
-            <span className='text-primary-foreground font-semibold'>hphuc1609</span>
+            <span className='text-primary-foreground font-semibold'>Phuc Luu</span>
           </div>
         </div>
       </div>
