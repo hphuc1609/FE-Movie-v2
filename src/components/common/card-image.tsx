@@ -107,7 +107,7 @@ export const ImageComponent = React.memo(({ item, index, data }: ImageComponentP
       ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
       : data.APP_DOMAIN_CDN_IMAGE
         ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
-        : !errorImage
+        : !hasError
           ? item.poster_url
           : item.thumb_url
   }

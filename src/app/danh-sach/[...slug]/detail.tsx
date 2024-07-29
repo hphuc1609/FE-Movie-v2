@@ -30,7 +30,7 @@ export default function Detail() {
     try {
       const res = await apiCall(params)
       if (!isSuccessResponse(res)) return null
-      return res.data
+      return res.data || res
     } catch (error: any) {
       console.error('Error fetching data: ', error.message)
       return null
