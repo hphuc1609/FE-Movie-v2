@@ -9,6 +9,7 @@
     "start": "next start",
     "start:prod": "npm run build && npm run start",
     "lint": "next lint",
+    "postbuild": "next-sitemap",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "prettier:format": "prettier --write . && prettier --check ."
@@ -28,6 +29,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.396.0",
     "next": "14.2.4",
+    "next-sitemap": "^4.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",

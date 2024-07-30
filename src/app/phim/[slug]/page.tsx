@@ -17,27 +17,40 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 
   // Default SEO Values
-  const defaultTitle = 'Xem phim trực tuyến - Full HD'
-  const defaultDescription = 'Xem phim trực tuyến chất lượng cao, cập nhật nhanh nhất.'
-  const defaultImage = `${myWebsite}/images/default-image.png`
+  const defaultSEO = {
+    title: 'Xem phim trực tuyến - Full HD',
+    description: 'Xem phim trực tuyến chất lượng cao, cập nhật nhanh nhất.',
+    image: `${myWebsite}/images/default-image.png`,
+  }
 
   // SEO On Page
   const metaTitle = seoOnPage.name
-    ? `Xem phim ${seoOnPage.name} (${seoOnPage.origin_name}) trực tuyến - Full HD`
-    : defaultTitle
-  const metaDescription = seoOnPage.content ?? defaultDescription
+    ? `Xem phim ${seoOnPage.name} | ${seoOnPage.origin_name} trực tuyến - Full HD`
+    : defaultSEO.title
+  const metaDescription = seoOnPage.content ?? defaultSEO.description
   const metaUrl = `${myWebsite}/phim/${seoOnPage.name ?? ''}`
-  const metaImage = seoOnPage.poster_url ?? defaultImage
+  const metaImage = seoOnPage.poster_url ?? defaultSEO.image
+  const metaKeywords = `xem phim ${seoOnPage.name}, ${seoOnPage.origin_name}, phim trực tuyến, phim HD, ${seoOnPage.category
+    .map((category) => category.name)
+    .join(', ')}`
 
   return {
     title: metaTitle,
     description: metaDescription,
+    keywords: metaKeywords,
     openGraph: {
       type: 'website',
       title: metaTitle,
       description: metaDescription,
       url: metaUrl,
-      images: metaImage,
+      images: [
+        {
+          url: metaImage,
+          width: 800,
+          height: 600,
+          alt: seoOnPage.name,
+        },
+      ],
     },
   }
 }

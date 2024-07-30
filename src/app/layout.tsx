@@ -11,13 +11,11 @@ const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 const keyGoogle = process.env.NEXT_PUBLIC_KEY_GOOGLE_ANALYTICS
 
 export const metadata: Metadata = {
-  title: 'Mephim247 - Khám phá phim hay, phim mới vietsub, thuyết minh chất lượng cao',
+  title: 'Mephim247 | Phim Hay | Phim Mới | Phim Bộ Vietsub Hay Nhất',
   description:
-    'Mephim247 cung cấp dịch vụ xem phim online miễn phí với chất lượng cao. Tận hưởng các bộ phim hấp dẫn với đa dạng thể loại.',
+    'Xem phim online miễn phí với chất lượng cao. Mephim247 cập nhật phim Vietsub, Thuyết minh chất lượng HD nhanh nhất. Tận hưởng các bộ phim hấp dẫn với đa dạng thể loại.',
   keywords:
-    'phim, xem phim online, phim vietsub, phim thuyết minh, phim hay, phim mới, phim chất lượng cao, phim miễn phí',
-  authors: [{ name: 'Mephim247' }],
-  creator: 'PhucLuu',
+    'phim bộ, phim lẻ, phim, xem phim, phim vietsub, phim thuyết minh, phim hay, phim mới, phim hd, Mephim247, mephim 247, phim 247, 247 phim, mê phim',
   openGraph: {
     type: 'website',
     locale: 'vi_VN',
@@ -35,6 +33,8 @@ export const metadata: Metadata = {
       },
     ],
   },
+  authors: [{ name: 'Mephim247' }],
+  creator: 'PhucLuu',
 }
 
 export default function RootLayout({
