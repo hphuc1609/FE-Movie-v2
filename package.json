@@ -5,7 +5,7 @@
   "author": "Phuc Luu",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next-sitemap",
     "start": "next start",
     "start:prod": "npm run build && npm run start",
     "lint": "next lint",

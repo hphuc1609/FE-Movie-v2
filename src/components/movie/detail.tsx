@@ -25,7 +25,7 @@ export default function MovieInfo(props: MovieInfoProps) {
     [detail.category],
   )
 
-  const country = useMemo(
+  const countries = useMemo(
     () => detail.country?.map((item) => item.name).join(', '),
     [detail.country],
   )
@@ -39,17 +39,20 @@ export default function MovieInfo(props: MovieInfoProps) {
 
   const content = cleanString(detail.content)
 
-  const details = [
-    ...(detail.episode_current?.toLowerCase() !== 'full'
-      ? [{ label: 'Trạng thái', value: detail.episode_current }]
-      : []),
-    { label: 'Phụ đề', value: detail.lang },
-    { label: 'Thể loại', value: categories },
-    { label: 'Quốc gia', value: country },
-    { label: 'Diễn viên', value: actors },
-    { label: 'Thời lượng', value: detail.time },
-    { label: 'Năm phát hành', value: detail.year },
-  ]
+  const details = useMemo(
+    () => [
+      ...(detail.episode_current?.toLowerCase() !== 'full'
+        ? [{ label: 'Trạng thái', value: detail.episode_current }]
+        : []),
+      { label: 'Phụ đề', value: detail.lang },
+      { label: 'Thể loại', value: categories },
+      { label: 'Quốc gia', value: countries },
+      { label: 'Diễn viên', value: actors },
+      { label: 'Thời lượng', value: detail.time },
+      { label: 'Năm phát hành', value: detail.year },
+    ],
+    [detail, categories, countries, actors],
+  )
 
   // ----------------- Render UI -----------------------------
   return (

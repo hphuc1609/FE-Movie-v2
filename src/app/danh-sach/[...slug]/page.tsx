@@ -3,6 +3,9 @@ import Detail from './detail'
 import movieApi from '@/api-client/movies'
 import { OpenGraphType } from 'next/dist/lib/metadata/types/opengraph-types'
 import isSuccessResponse from '@/helpers/check-response'
+import Head from 'next/head'
+
+const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 
 interface Params {
   params: { slug: string }
@@ -22,8 +25,6 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
   const seoOnPage = moviesByCate.data.seoOnPage || {}
   const ogType = (seoOnPage.og_type as OpenGraphType) || 'website'
   const ogURL = `${seoOnPage.og_url.startsWith('/') ? seoOnPage.og_url : `/${seoOnPage.og_url}`}`
-
-  const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 
   return {
     title: seoOnPage.titleHead,
@@ -45,5 +46,15 @@ export function generateViewport() {
 }
 
 export default function ListPage() {
-  return <Detail />
+  return (
+    <>
+      <Head>
+        <link
+          rel='canonical'
+          href={`${myWebsite}`}
+        />
+      </Head>
+      <Detail />
+    </>
+  )
 }

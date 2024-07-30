@@ -47,8 +47,8 @@ export default function NewUpdateMovie() {
 
   // ----------------- Render UI -------------------------
   return (
-    <div className='flex flex-col gap-3 w-[360px] max-sm:w-full max-xl:w-[289px] max-lg:hidden'>
-      <div className='flex items-center justify-between'>
+    <section className='flex flex-col gap-3 w-[360px] max-sm:w-full max-xl:w-[289px] max-lg:hidden'>
+      <header className='flex items-center justify-between'>
         <h2 className='text-xl uppercase font-semibold line-clamp-1 text-primary-color'>
           Phim đề cử
         </h2>
@@ -57,12 +57,13 @@ export default function NewUpdateMovie() {
             href={`/danh-sach/phim-moi?page=1`}
             className='text-sm text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
             onClick={() => loader.show()}
+            aria-label='Xem thêm phim mới cập nhật'
           >
             Xem thêm
             <ChevronRight size={16} />
           </Link>
         </div>
-      </div>
+      </header>
       {/* List */}
       <div
         className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3`}
@@ -71,37 +72,44 @@ export default function NewUpdateMovie() {
           <SkeletonList />
         ) : (
           data?.slice(0, 10).map((item, index) => (
-            <div
+            <article
               key={item._id}
               className='h-[90px] max-md:min-h-[90px] overflow-hidden'
+              aria-labelledby={`movie-${item._id}`}
             >
               <Link
                 href={`/phim/${item.slug}`}
                 className='w-full h-full flex gap-3 bg-black bg-opacity-0 hover:bg-opacity-50'
                 onClick={() => loader.show()}
+                aria-label={`Xem chi tiết phim ${item.name}`}
               >
-                <div className='w-[80px] h-full bg-gray-50 bg-opacity-10'>
+                <figure className='w-[80px] h-full bg-gray-50 bg-opacity-10'>
                   <Image
                     src={imageUrl(item, index)}
-                    alt={item.name}
+                    alt={`Poster của phim ${item.name}`}
                     width={80}
                     height={90}
                     priority
                     onError={() => handleErrorImage(index)}
                     className='object-cover h-full w-full'
                   />
-                </div>
+                </figure>
                 <div className='relative flex flex-col gap-1 flex-1 py-2'>
-                  <span className='text-[13px] line-clamp-1 font-semibold'>{item.name}</span>
-                  <span className='text-xs opacity-50 line-clamp-2'>{item.origin_name}</span>
-                  <span className='text-xs opacity-50'>{item.year}</span>
+                  <h3
+                    id={`movie-${item._id}`}
+                    className='text-[13px] line-clamp-1 font-semibold'
+                  >
+                    {item.name}
+                  </h3>
+                  <p className='text-xs opacity-50 line-clamp-2'>{item.origin_name}</p>
+                  <p className='text-xs opacity-50'>{item.year}</p>
                 </div>
               </Link>
-            </div>
+            </article>
           ))
         )}
       </div>
-    </div>
+    </section>
   )
 }
 

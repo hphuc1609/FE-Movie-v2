@@ -70,10 +70,10 @@ export default function Drawer(props: DrawerProps) {
                     )}
                     onClick={onClose}
                   >
-                    <h2 className='text-sm pr-3 pl-6 py-2'>{menuItem.name}</h2>
+                    <span className='text-sm pr-3 pl-6 py-2'>{menuItem.name}</span>
                   </Link>
                 ) : (
-                  <h2
+                  <p
                     onClick={() => setOpenSubMenu(true)}
                     className='text-sm pr-3 pl-6 py-2 flex items-center hover:text-primary-color cursor-pointer'
                   >
@@ -85,7 +85,7 @@ export default function Drawer(props: DrawerProps) {
                         className='ml-1'
                       />
                     )}
-                  </h2>
+                  </p>
                 )}
               </Fragment>
             )}
@@ -95,13 +95,10 @@ export default function Drawer(props: DrawerProps) {
                   <Link
                     key={item.name}
                     href={checkUrl(item.href)}
-                    onClick={onClose}
+                    className={`block text-sm pr-3 pl-6 py-2 ${isActiveLink === item.href.split('/').pop() ? 'text-primary-color' : 'text-gray-50'}`}
+                    onClick={handleClose}
                   >
-                    <h3
-                      className={`text-sm pr-3 pl-6 py-2 ${isActiveLink === item.href.split('/').pop() ? 'text-primary-color' : 'text-gray-50'}`}
-                    >
-                      {item.name}
-                    </h3>
+                    <span>{item.name}</span>
                   </Link>
                 ))}
               </div>

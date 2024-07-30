@@ -100,9 +100,9 @@ export default function Banner(props: BannerProps) {
                 } grid gap-y-3`}
                 style={{ transitionDuration: '2500ms', transitionDelay: '1000ms' }}
               >
-                <p className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
+                <h1 className='text-[42px] max-md:text-3xl font-bold line-clamp-2 leading-tight'>
                   {item.name}
-                </p>
+                </h1>
                 <SubtextBanner movieItem={item} />
               </div>
               <Button
@@ -156,7 +156,7 @@ const SubtextBanner = ({ movieItem }: { movieItem: NewMovieItem }) => {
   return (
     <div className='flex flex-col text-sm gap-5'>
       <div className='text-gray-50 font-medium flex items-center gap-3'>
-        <p className='line-clamp-1 text-lg'>{origin_name}</p>
+        <h3 className='line-clamp-1 text-lg'>{origin_name}</h3>
         <CalendarDays
           size={20}
           className='text-primary-color'

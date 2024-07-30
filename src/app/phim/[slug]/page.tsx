@@ -2,6 +2,9 @@ import movieApi from '@/api-client/movies'
 import isSuccessResponse from '@/helpers/check-response'
 import { Metadata } from 'next'
 import Detail from './detail'
+import Head from 'next/head'
+
+const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 
 interface Params {
   params: { slug: string }
@@ -14,18 +17,17 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!isSuccessResponse(res)) return {}
 
   const seoOnPage = res.movie || {}
-  const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 
   // Default SEO Values
   const defaultSEO = {
-    title: 'Xem phim trực tuyến - Full HD',
+    title: 'Xem phim trực tuyến full HD',
     description: 'Xem phim trực tuyến chất lượng cao, cập nhật nhanh nhất.',
     image: `${myWebsite}/images/default-image.png`,
   }
 
   // SEO On Page
   const metaTitle = seoOnPage.name
-    ? `Xem phim ${seoOnPage.name} | ${seoOnPage.origin_name} trực tuyến - Full HD`
+    ? `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} Full HD Vietsub`
     : defaultSEO.title
   const metaDescription = seoOnPage.content ?? defaultSEO.description
   const metaUrl = `${myWebsite}/phim/${seoOnPage.name ?? ''}`
@@ -56,5 +58,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export default function InfoPage() {
-  return <Detail />
+  return (
+    <>
+      <Head>
+        <link
+          rel='canonical'
+          href={`${myWebsite}`}
+        />
+      </Head>
+      <Detail />
+    </>
+  )
 }
