@@ -3,56 +3,48 @@ import isSuccessResponse from '@/helpers/check-response'
 import { Metadata } from 'next'
 import Detail from './detail'
 
-const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
-
 interface Params {
   params: { slug: string }
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const { slug } = params
+  try {
+    const { slug } = params || {}
+    const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
 
-  const res = await movieApi.getDetail({ name: slug })
-  if (!isSuccessResponse(res)) return {}
+    const res = await movieApi.getDetail({ name: slug })
 
-  const seoOnPage = res.movie || {}
+    if (!isSuccessResponse(res)) {
+      return {
+        title: 'Not Found',
+        description: 'The page you are looking for does not exist',
+      }
+    }
 
-  // Default SEO Values
-  const defaultSEO = {
-    title: 'Xem phim trực tuyến full HD',
-    description: 'Xem phim trực tuyến chất lượng cao, cập nhật nhanh nhất.',
-    image: `${myWebsite}/images/default-image.png`,
-  }
+    const seoOnPage = res.movie
 
-  // SEO On Page
-  const metaTitle = seoOnPage.name
-    ? `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} Full HD Vietsub`
-    : defaultSEO.title
-  const metaDescription = seoOnPage.content ?? defaultSEO.description
-  const metaUrl = `${myWebsite}/phim/${seoOnPage.name ?? ''}`
-  const metaImage = seoOnPage.poster_url ?? defaultSEO.image
-  const metaKeywords = `xem phim ${seoOnPage.name}, ${seoOnPage.origin_name}, phim trực tuyến, phim HD, ${seoOnPage.category
-    .map((category) => category.name)
-    .join(', ')}`
+    // SEO On Page
+    const metaTitle = `Phim ${seoOnPage?.name} (${seoOnPage?.origin_name})`
+    const metaDescription = `${seoOnPage?.content} - Xem ngay ${seoOnPage?.name} với chất lượng HD tại ${baseUrl}.`
+    const metaUrl = `${baseUrl}/phim/${seoOnPage?.name}`
+    const metaImage = seoOnPage?.poster_url
 
-  return {
-    title: metaTitle,
-    description: metaDescription,
-    keywords: metaKeywords,
-    openGraph: {
-      type: 'website',
+    return {
       title: metaTitle,
       description: metaDescription,
-      url: metaUrl,
-      images: [
-        {
-          url: metaImage,
-          width: 800,
-          height: 600,
-          alt: seoOnPage.name,
-        },
-      ],
-    },
+      openGraph: {
+        title: metaTitle,
+        description: metaDescription,
+        url: metaUrl,
+        images: metaImage ? [metaImage] : [''],
+      },
+    }
+  } catch (error: any) {
+    console.error(error)
+    return {
+      title: 'Not Found',
+      description: 'The page you are looking for does not exist',
+    }
   }
 }
 

@@ -17,7 +17,7 @@ export default function TablePagination(props: TablePaginationProps) {
   const { category, data, keyword } = props
   const searchParams = useSearchParams()
   const { isLoading } = useLoading()
-  const currentPage = searchParams.get('page')
+  const currentPage = searchParams.get('page') || 1
   const pagination = data.params?.pagination || data?.pagination
 
   // Memoize the list of pages to prevent unnecessary re-renders
@@ -40,29 +40,31 @@ export default function TablePagination(props: TablePaginationProps) {
   }, [currentPage, pagination])
 
   return (
-    <>
-      <div className='flex flex-col gap-10 pb-9'>
-        {data.items?.length > 0 ? (
-          <div className='grid grid-cols-6 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 max-xl:grid-cols-5 gap-5 gap-y-7 overflow-hidden'>
-            <CardImage
-              data={data}
-              paramCategory={category}
-              itemLength={pagination?.totalItemsPerPage}
-            />
-          </div>
-        ) : (
-          <p className='text-2xl font-medium'>
-            {!isLoading ? !keyword && 'Không có danh sách phim' : 'Đang tải danh sách...'}
-          </p>
-        )}
-        {!isLoading && pagesToShow?.length > 1 && (
-          <PaginationCustom
-            pageToShow={pagesToShow}
-            currentPage={Number(currentPage)}
-            pagination={pagination}
+    <section className='flex flex-col'>
+      {data.items?.length > 0 ? (
+        <div className='grid grid-cols-6 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 max-xl:grid-cols-5 gap-5 gap-y-7 overflow-hidden'>
+          <CardImage
+            data={data}
+            paramCategory={category}
+            itemLength={pagination?.totalItemsPerPage}
           />
-        )}
-      </div>
+        </div>
+      ) : (
+        <p className='text-2xl font-medium'>
+          {!isLoading ? !keyword && 'Không có danh sách phim' : 'Đang tải danh sách...'}
+        </p>
+      )}
+
+      {/* Pagination */}
+      {!isLoading && pagesToShow?.length > 1 && (
+        <PaginationCustom
+          pageToShow={pagesToShow}
+          currentPage={Number(currentPage)}
+          pagination={pagination}
+        />
+      )}
+
+      {/* Not found */}
       {keyword && !isLoading && data.items?.length === 0 && (
         <div className='flex flex-col items-center gap-2'>
           <p className='text-3xl font-medium'>
@@ -77,6 +79,6 @@ export default function TablePagination(props: TablePaginationProps) {
           </Link>
         </div>
       )}
-    </>
+    </section>
   )
 }

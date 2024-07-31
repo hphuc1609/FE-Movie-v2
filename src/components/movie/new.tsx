@@ -65,14 +65,14 @@ export default function NewUpdateMovie() {
         )}
       </header>
       {/* List */}
-      <div
+      <article
         className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3`}
       >
         {isLoading ? (
           <SkeletonList />
         ) : (
           data?.slice(0, 10).map((item, index) => (
-            <article
+            <div
               key={item._id}
               className='h-[90px] max-md:min-h-[90px] overflow-hidden'
               aria-labelledby={`movie-${item._id}`}
@@ -83,7 +83,7 @@ export default function NewUpdateMovie() {
                 onClick={() => loader.show()}
                 aria-label={`Xem chi tiết phim ${item.name}`}
               >
-                <figure className='w-[80px] h-full bg-gray-50 bg-opacity-10'>
+                <div className='w-[80px] h-full bg-gray-50 bg-opacity-10'>
                   <Image
                     src={imageUrl(item, index)}
                     alt={`Poster của phim ${item.name}`}
@@ -93,22 +93,22 @@ export default function NewUpdateMovie() {
                     onError={() => handleErrorImage(index)}
                     className='object-cover h-full w-full'
                   />
-                </figure>
+                </div>
                 <div className='relative flex flex-col gap-1 flex-1 py-2'>
-                  <h3
+                  <p
                     id={`movie-${item._id}`}
                     className='text-[13px] line-clamp-1 font-semibold'
                   >
                     {item.name}
-                  </h3>
+                  </p>
                   <p className='text-xs opacity-50 line-clamp-2'>{item.origin_name}</p>
                   <p className='text-xs opacity-50'>{item.year}</p>
                 </div>
               </Link>
-            </article>
+            </div>
           ))
         )}
-      </div>
+      </article>
     </section>
   )
 }

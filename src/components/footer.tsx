@@ -28,9 +28,14 @@ export default function Footer() {
           </Button>
           <div className='mt-4 text-sm lg:mt-0 lg:text-right'>
             <span className='opacity-50'>
-              Copyright &copy; {new Date().getFullYear()}. All rights reserved by{' '}
+              &copy; {new Date().getFullYear()}. All rights reserved by{' '}
             </span>
-            <span className='text-primary-foreground font-semibold'>Phuc Luu</span>
+            <Link
+              href='/'
+              className='text-primary-foreground font-semibold'
+            >
+              Mephim247
+            </Link>
           </div>
         </div>
       </div>

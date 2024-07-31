@@ -1,15 +1,13 @@
 import Banner from '@/components/banner'
-import Loader from '@/components/loader'
 import CategoryMovie from '@/components/movie/categories'
 import NewUpdateMovie from '@/components/movie/new'
-import { Suspense } from 'react'
 
 export default function Home() {
   const categories = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
-  const titles = ['Phim lẻ', 'Phim bộ', 'Phim hoạt hình', 'TV Shows']
+  const titles = ['Phim lẻ', 'Phim bộ', 'Phim hoạt hình', 'TV Shows']
 
   return (
-    <Suspense fallback={<Loader />}>
+    <>
       <Banner />
       <div className='max-w-screen-xl m-auto px-10 py-20 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-20'>
@@ -23,6 +21,6 @@ export default function Home() {
         </div>
         <NewUpdateMovie />
       </div>
-    </Suspense>
+    </>
   )
 }

@@ -194,7 +194,11 @@ export default function Detail() {
       <BreadcrumbCustom breadCrumb={renderBreadCrumb()} />
       <div className='flex flex-col gap-9'>
         {dataTable().items?.length > 0 && (
-          <h2 className='text-3xl font-semibold text-primary-color capitalize'>{renderTitle()}</h2>
+          <h1 className='text-3xl max-sm:text-xl font-medium capitalize'>
+            {keyword || categoryPaths.includes(categoryParam)
+              ? renderTitle()
+              : `Thể loại: ${renderTitle()}`}
+          </h1>
         )}
         <TablePagination
           keyword={keyword}

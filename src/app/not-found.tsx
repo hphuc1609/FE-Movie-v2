@@ -17,7 +17,7 @@ export default function NotFound() {
           width={180}
           height={180}
           loading='lazy'
-          className='max-lg:hidden absolute top-1/2 translate-y-[-50%] left-1/2 transform translate-x-[-50%] z-50'
+          className='max-lg:hidden absolute top-1/2 translate-y-[-50%] left-1/2 transform translate-x-[-50%] z-10'
         />
         <Image
           src={Image_2}
