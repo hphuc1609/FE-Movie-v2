@@ -1,9 +1,8 @@
-import { Metadata } from 'next'
-import Detail from './detail'
 import movieApi from '@/api-client/movies'
-import { OpenGraphType } from 'next/dist/lib/metadata/types/opengraph-types'
 import isSuccessResponse from '@/helpers/check-response'
-import Head from 'next/head'
+import { Metadata } from 'next'
+import { OpenGraphType } from 'next/dist/lib/metadata/types/opengraph-types'
+import Detail from './detail'
 
 const myWebsite = process.env.NEXT_PUBLIC_MY_WEBSITE
 
@@ -46,15 +45,5 @@ export function generateViewport() {
 }
 
 export default function ListPage() {
-  return (
-    <>
-      <Head>
-        <link
-          rel='canonical'
-          href={`${myWebsite}`}
-        />
-      </Head>
-      <Detail />
-    </>
-  )
+  return <Detail />
 }

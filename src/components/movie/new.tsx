@@ -52,7 +52,7 @@ export default function NewUpdateMovie() {
         <h2 className='text-xl uppercase font-semibold line-clamp-1 text-primary-color'>
           Phim đề cử
         </h2>
-        <div className='flex items-center gap-4 cursor-pointer'>
+        {!isLoading && (
           <Link
             href={`/danh-sach/phim-moi?page=1`}
             className='text-sm text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
@@ -62,7 +62,7 @@ export default function NewUpdateMovie() {
             Xem thêm
             <ChevronRight size={16} />
           </Link>
-        </div>
+        )}
       </header>
       {/* List */}
       <div

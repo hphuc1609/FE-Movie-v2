@@ -48,7 +48,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
     }
   }
 
-  const queryVideo = useFetchData({ queryKey: ['video'], queryFn: fetchVideo })
+  const { data: dataVideo } = useFetchData({ queryKey: ['video'], queryFn: fetchVideo })
 
   // ------------------ Effect Hooks ----------------------------
   // Handle render video url by server change
@@ -57,7 +57,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       episode.server_data.find((item) => item.slug === episodeParam),
     )
 
-    const episodeServer2 = (queryVideo.data as Episode[])?.map((episode) => {
+    const episodeServer2 = (dataVideo as Episode[])?.map((episode) => {
       const param =
         episodeParam === 'full' ? `tap-${episodeParam}` : removeLeadingZero(`${episodeParam}`)
       return episode.items.find((item) => item.slug === param)
@@ -107,6 +107,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
             className='w-full h-full'
             allowFullScreen
             contextMenu='none'
+            loading='lazy'
           ></iframe>
         ) : (
           <VideoNotAvailable />
@@ -117,6 +118,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
             src={urlVideo}
             className='w-full h-full'
             allowFullScreen
+            loading='lazy'
           ></iframe>
         ) : (
           <VideoNotAvailable />

@@ -3,6 +3,8 @@
 import { useLoading } from '@/components/loading-provider'
 import Image from 'next/image'
 import Link from 'next/link'
+import Image_1 from '@/assets/images/astronaut.png'
+import Image_2 from '@/assets/images/ellipse.png'
 
 export default function NotFound() {
   const loader = useLoading()
@@ -10,7 +12,7 @@ export default function NotFound() {
     <div className='flex max-lg:flex-col gap-8 items-center min-h-screen w-fit m-auto text-white'>
       <div className='relative'>
         <Image
-          src={'/images/astronaut.png'}
+          src={Image_1}
           alt='Astronaut'
           width={180}
           height={180}
@@ -18,7 +20,7 @@ export default function NotFound() {
           className='max-lg:hidden absolute top-1/2 translate-y-[-50%] left-1/2 transform translate-x-[-50%] z-50'
         />
         <Image
-          src={'/images/ellipse.png'}
+          src={Image_2}
           alt='Ellipse'
           width={500}
           height={500}

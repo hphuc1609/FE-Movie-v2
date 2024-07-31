@@ -1,6 +1,9 @@
 'use client'
 
-import { MovieCategoryResponse, MovieItem } from '@/models/list-movie'
+import movieApi from '@/api-client/movies'
+import isSuccessResponse from '@/helpers/check-response'
+import useFetchData from '@/hooks/use-fetch'
+import { MovieItem } from '@/models/list-movie'
 import { NewMovieItem } from '@/models/new-movie'
 import { CalendarDays, MoveLeft, MoveRight, Play } from 'lucide-react'
 import Image from 'next/image'
@@ -11,6 +14,7 @@ import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import { Swiper as SwiperType } from 'swiper/types'
 import { useLoading } from './loading-provider'
 import { Button } from './ui/button'
+import { Skeleton } from './ui/skeleton'
 
 import 'swiper/css'
 import 'swiper/css/effect-fade'
@@ -18,12 +22,7 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import '../css/banner.css'
 
-interface BannerProps {
-  data: MovieCategoryResponse['data']
-}
-
-export default function Banner(props: BannerProps) {
-  const { data } = props
+export default function Banner() {
   const nextBtnRef = useRef<HTMLButtonElement>(null)
   const prevBtnRef = useRef<HTMLButtonElement>(null)
   const swiperRef = useRef<SwiperRef>(null)
@@ -33,14 +32,40 @@ export default function Banner(props: BannerProps) {
   const [activeSlide, setActiveSlide] = useState(0)
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
+  // ------------------- Fetch Data -----------------------------
+  const fetchData = async () => {
+    try {
+      const dataPhimLe = await movieApi.getList({ category: 'phim-le' })
+      const dataPhimBo = await movieApi.getList({ category: 'phim-bo' })
+
+      if (!isSuccessResponse(dataPhimLe) || !isSuccessResponse(dataPhimBo)) return null
+      const dataBanner = {
+        domainImage: dataPhimLe.data.APP_DOMAIN_CDN_IMAGE || dataPhimBo.data.APP_DOMAIN_CDN_IMAGE,
+        items: [...dataPhimLe.data.items, ...dataPhimBo.data.items],
+      }
+
+      return dataBanner
+    } catch (error: any) {
+      console.error('Error fetching data banner: ', error.message)
+      return null
+    }
+  }
+
+  const { data: dataBanner, isLoading: isLoadingBanner } = useFetchData({
+    queryKey: ['dataBanner'],
+    queryFn: fetchData,
+  })
+
   // Filter data by current year
   const currentYear = new Date().getFullYear()
-
   const filteredData = useMemo(() => {
-    const currentYearData = data?.items.filter((item) => item.year === currentYear).slice(0, 7)
+    const currentYearData = dataBanner?.items
+      .filter((item) => item.year === currentYear)
+      .slice(0, 7)
     return currentYearData || []
-  }, [data, currentYear])
+  }, [dataBanner?.items, currentYear])
 
+  // ------------------- Event Handlers -----------------------------
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex)
   }
@@ -49,19 +74,21 @@ export default function Banner(props: BannerProps) {
     setErrorImage((prev) => ({ ...prev, [index]: true }))
   }
 
+  const handleButtonClick = (slug: string) => {
+    loader.show()
+    router.push(`/phim/${slug}`)
+  }
+
+  // ------------------ Image Url ----------------------------------
   const imageUrl = (item: MovieItem, index: number) => {
     const hasError = errorImage[index]
-    return !hasError && data.APP_DOMAIN_CDN_IMAGE
-      ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
-      : `${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
+    return !hasError && dataBanner?.domainImage
+      ? `${dataBanner.domainImage}/${item.thumb_url}`
+      : `${item.thumb_url}`
   }
 
-  const handleButtonClick = (slug: string) => {
-    router.push(`/phim/${slug}`)
-    loader.show()
-  }
-
-  const isHiddenButton = filteredData?.length < 0
+  // ------------------ Render UI ----------------------------------
+  if (isLoadingBanner) return <Skeleton className='w-full h-[650px] bg-black bg-opacity-30' />
 
   return (
     <Swiper
@@ -125,7 +152,7 @@ export default function Banner(props: BannerProps) {
           </SwiperSlide>
         )
       })}
-      {!isHiddenButton && (
+      {filteredData.length > 0 && (
         <div className='absolute z-50 bottom-3 right-20 flex items-center gap-3'>
           <Button
             ref={prevBtnRef}

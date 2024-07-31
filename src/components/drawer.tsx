@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 'use client'
 
 import menuLinks from '@/constants/menu'
@@ -5,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { ArrowLeft, ChevronRight, X } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { Button } from './ui/button'
 
 interface DrawerProps {
@@ -29,7 +30,7 @@ export default function Drawer(props: DrawerProps) {
   }
 
   return (
-    <nav
+    <div
       className={`fixed top-0 right-0 w-full h-full transition-all duration-300 ${openMenu ? 'visible' : 'invisible'}`}
     >
       <div
@@ -55,57 +56,57 @@ export default function Drawer(props: DrawerProps) {
           </Button>
         )}
         {/* ----------------- */}
-        {menuLinks.map((menuItem) => (
-          <Fragment key={menuItem.name}>
-            {!openSubMenu && (
-              <Fragment>
-                {menuItem.href ? (
-                  <Link
-                    href={checkUrl(menuItem.href)}
-                    className={cn(
-                      'hover:text-primary-color',
-                      isActiveLink === menuItem.href.split('/').pop()
-                        ? 'text-primary-color'
-                        : 'text-gray-50',
-                    )}
-                    onClick={onClose}
-                  >
-                    <span className='text-sm pr-3 pl-6 py-2'>{menuItem.name}</span>
-                  </Link>
-                ) : (
-                  <p
-                    onClick={() => setOpenSubMenu(true)}
-                    className='text-sm pr-3 pl-6 py-2 flex items-center hover:text-primary-color cursor-pointer'
-                  >
-                    {menuItem.name}
-                    {!menuItem.href && (
-                      <ChevronRight
-                        strokeWidth={2}
-                        size={16}
-                        className='ml-1'
-                      />
-                    )}
-                  </p>
-                )}
-              </Fragment>
-            )}
-            {openSubMenu && (
-              <div className='mt-8'>
-                {menuItem.subMenu?.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={checkUrl(item.href)}
-                    className={`block text-sm pr-3 pl-6 py-2 ${isActiveLink === item.href.split('/').pop() ? 'text-primary-color' : 'text-gray-50'}`}
-                    onClick={handleClose}
-                  >
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </Fragment>
-        ))}
+        {menuLinks.map((menuItem) =>
+          !openSubMenu ? (
+            <div
+              key={menuItem.name}
+              className='flex flex-col'
+            >
+              {menuItem.href ? (
+                <Link
+                  href={checkUrl(menuItem.href)}
+                  className={cn(
+                    'hover:text-primary-color text-sm pr-3 pl-6 py-2',
+                    isActiveLink === menuItem.href.split('/').pop()
+                      ? 'text-primary-color'
+                      : 'text-gray-50',
+                  )}
+                  onClick={onClose}
+                >
+                  {menuItem.name}
+                </Link>
+              ) : (
+                <p
+                  onClick={() => setOpenSubMenu(true)}
+                  className='text-sm pr-3 pl-6 py-2 flex items-center hover:text-primary-color cursor-pointer'
+                >
+                  {menuItem.name}
+                  {!menuItem.href && (
+                    <ChevronRight
+                      strokeWidth={2}
+                      size={16}
+                      className='ml-1'
+                    />
+                  )}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className='mt-8'>
+              {menuItem.subMenu?.map((item) => (
+                <Link
+                  key={item.name}
+                  href={checkUrl(item.href)}
+                  className={`block text-sm pr-3 pl-6 py-2 ${isActiveLink === item.href.split('/').pop() ? 'text-primary-color' : 'text-gray-50'}`}
+                  onClick={handleClose}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+          ),
+        )}
       </div>
-    </nav>
+    </div>
   )
 }

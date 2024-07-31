@@ -55,10 +55,6 @@ export default function RootLayout({
           name='google-site-verification'
           content={keyGoogle}
         />
-        <link
-          rel='canonical'
-          href={`${myWebsite}`}
-        />
       </Head>
       <body className={cn(inter.className, 'bg-[#141414] text-primary-foreground')}>
         <Header />

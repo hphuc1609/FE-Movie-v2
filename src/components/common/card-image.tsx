@@ -26,7 +26,7 @@ export default function CardImage(props: CardImageProps) {
 
   return (
     <>
-      {data.items?.slice(0, itemLength).map((item, index) => (
+      {data?.items?.slice(0, itemLength).map((item, index) => (
         <div
           key={item._id}
           className='h-fit flex flex-col gap-3 overflow-hidden'

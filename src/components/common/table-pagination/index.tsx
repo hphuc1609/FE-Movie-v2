@@ -52,10 +52,10 @@ export default function TablePagination(props: TablePaginationProps) {
           </div>
         ) : (
           <p className='text-2xl font-medium'>
-            {!isLoading ? 'Không có danh sách phim' : 'Đang tải danh sách...'}
+            {!isLoading ? !keyword && 'Không có danh sách phim' : 'Đang tải danh sách...'}
           </p>
         )}
-        {pagesToShow?.length > 1 && (
+        {!isLoading && pagesToShow?.length > 1 && (
           <PaginationCustom
             pageToShow={pagesToShow}
             currentPage={Number(currentPage)}
@@ -63,15 +63,15 @@ export default function TablePagination(props: TablePaginationProps) {
           />
         )}
       </div>
-      {keyword && !data.items?.length && (
-        <div className='flex flex-col gap-1'>
-          <p className='text-2xl font-medium'>
+      {keyword && !isLoading && data.items?.length === 0 && (
+        <div className='flex flex-col items-center gap-2'>
+          <p className='text-3xl font-medium'>
             <span className='text-primary-color'>Không tìm thấy phim: </span>
             {keyword}
           </p>
           <Link
             href={'/'}
-            className='text-base flex gap-2 items-center text-primary-color'
+            className='text-lg flex gap-2 items-center text-primary-color'
           >
             <ArrowLeft size={16} /> Quay lại trang chủ
           </Link>
