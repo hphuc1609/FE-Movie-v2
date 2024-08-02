@@ -9,10 +9,10 @@ import './globals.css'
 const inter = Inter({ subsets: ['vietnamese'] })
 
 const keyGoogle = process.env.NEXT_PUBLIC_KEY_GOOGLE_ANALYTICS
-const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE || 'https://mephim247.netlify.app'
+const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE 
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(`${baseUrl}`),
   keywords: [
     'phim moi',
     'phim le',
@@ -27,13 +27,21 @@ export const metadata: Metadata = {
     'phim thuyet minh',
   ],
   title: {
-    default: 'Mephim247 - Khám phá phim không, phim bộ vietsub, thuyết minh hay nhất',
+    default: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
     template: '%s | Mephim247',
   },
+  description:
+    'Xem trọn phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   openGraph: {
+    title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
     description:
-      'Xem trọn phim bộ miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
-    images: [''],
+      'Xem trọn phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
+    description:
+      'Xem trọn phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   },
 }
 

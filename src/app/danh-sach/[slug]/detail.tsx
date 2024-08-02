@@ -185,8 +185,14 @@ export default function Detail() {
   }
 
   // ------------------ Render UI ----------------------------
-  const isError = queryAllMovies.isError || queryMoviesByCate.isError || queryMoviesSearch.isError
+  const isError =
+    queryAllMovies.isError ||
+    queryMoviesByCate.isError ||
+    queryMoviesSearch.isError ||
+    queryNewMovies.isError
+
   const isData = allMovies || moviesByCate || moviesSearch || newMovies || filteredDataByCate
+
   if (isError || !isData) return <ErrorMessage />
 
   return (

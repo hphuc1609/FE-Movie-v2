@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
     // SEO On Page
     const metaTitle = `Phim ${seoOnPage?.name} (${seoOnPage?.origin_name})`
-    const metaDescription = `${seoOnPage?.content} - Xem ngay ${seoOnPage?.name} với chất lượng HD tại ${baseUrl}.`
+    const metaDescription = `${seoOnPage?.content} - Xem ngay ${seoOnPage?.name} với chất lượng HD tại Mephim247.`
     const metaUrl = `${baseUrl}/phim/${seoOnPage?.name}`
     const metaImage = seoOnPage?.poster_url
 
@@ -36,7 +36,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: metaTitle,
         description: metaDescription,
         url: metaUrl,
-        images: metaImage ? [metaImage] : [''],
+        images: [
+          { url: metaImage, width: 1200, height: 630, alt: seoOnPage?.name || 'Movie Poster' },
+        ],
       },
     }
   } catch (error: any) {
