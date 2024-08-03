@@ -162,7 +162,7 @@ export default function Detail() {
                       {item.name} ({item.year})
                     </p>
                     <span className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'>
-                      {cleanString(item.origin_name)}
+                      {item.origin_name}
                     </span>
                   </Link>
                 </SwiperSlide>
