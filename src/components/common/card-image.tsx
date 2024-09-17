@@ -1,32 +1,24 @@
 'use client'
 
-import { MovieCategoryItem, MovieCategoryResponse, MovieItem } from '@/models/list-movie'
-import Image from 'next/image'
+import { MovieCategoryItem, MovieCategoryResponse, MovieItem } from '@/models/interfaces/list-movie'
+import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import PlayButton from './play-button'
-import cleanString from '@/helpers/cleanString'
-import { useLoading } from '../loading-provider'
-import handleAdClick from '@/helpers/affilicate'
+import openRandomAdLink from '@/helpers/handle-ads'
+import { cn } from '@/lib/utils'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
-  paramCategory?: string
   itemLength?: number
 }
 
 export default function CardImage(props: CardImageProps) {
-  const { data, paramCategory, itemLength = 6 } = props
-  const loader = useLoading()
-
-  const handleCardClick = () => {
-    loader.show()
-    handleAdClick()
-  }
+  const { data, itemLength = 8 } = props
 
   return (
     <>
-      {data?.items?.slice(0, itemLength).map((item, index) => (
+      {data.items?.slice(0, itemLength).map((item, index) => (
         <div
           key={item._id}
           className='h-fit flex flex-col gap-3 overflow-hidden'
@@ -34,7 +26,7 @@ export default function CardImage(props: CardImageProps) {
           <Link
             href={`/phim/${item.slug}`}
             className='relative group rounded-sm bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
-            onClick={handleCardClick}
+            onClick={openRandomAdLink}
           >
             <ImageComponent
               item={item}
@@ -46,23 +38,14 @@ export default function CardImage(props: CardImageProps) {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
-            <div className='text-[11px] font-semibold uppercase absolute top-0 w-full flex flex-col gap-1 items-baseline'>
-              {paramCategory === 'phim-bo' ? (
-                item.episode_current && (
-                  <p className='bg-label-color w-fit py-1 px-2'>{item.episode_current}</p>
-                )
-              ) : (
-                <p className='bg-label-color w-fit py-1 px-2 text-nowrap'>
-                  {item.quality ? `${item.quality} ${item.lang}` : 'HD Vietsub'}
-                </p>
-              )}
-            </div>
+            <p className='absolute top-2 left-1 text-[12px] font-semibold bg-label-color opacity-85 px-2 py-[2px] rounded'>
+              {item.episode_current}
+            </p>
           </Link>
           {/* Movie name */}
           <Link
             href={`/phim/${item.slug}`}
             className='text-sm grid gap-1'
-            onClick={() => loader.show()}
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>
               {item.name} ({item.year})
@@ -79,7 +62,6 @@ export default function CardImage(props: CardImageProps) {
                   key={cate.id}
                   href={`/danh-sach/${cate.slug}?page=1`}
                   className='text-[10px] font-medium rounded-xl bg-slate-100 bg-opacity-5 hover:text-primary-color px-2 py-1'
-                  onClick={() => loader.show()}
                 >
                   {cate.name}
                 </Link>
@@ -93,23 +75,20 @@ export default function CardImage(props: CardImageProps) {
 }
 
 interface ImageComponentProps {
-  item: MovieItem
   index: number
+  item: MovieItem
   data: MovieCategoryItem
+  ImageProps?: Omit<ImageProps, 'src' | 'alt' | 'width' | 'height' | 'priority'>
 }
 
-export const ImageComponent = React.memo(({ item, index, data }: ImageComponentProps) => {
+export const ImageComponent = React.memo((props: ImageComponentProps) => {
+  const { index, item, data } = props
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
   const imageUrl = (item: MovieItem, index: number) => {
     const hasError = errorImage[index]
-    return hasError && data.APP_DOMAIN_CDN_IMAGE
-      ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
-      : data.APP_DOMAIN_CDN_IMAGE
-        ? `${data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
-        : !hasError
-          ? item.poster_url
-          : item.thumb_url
+    const posterUrl = hasError ? item.thumb_url : item.poster_url
+    return posterUrl ? `${data.APP_DOMAIN_CDN_IMAGE}/${posterUrl}` : ''
   }
 
   const handleErrorImage = (index: number) => {
@@ -118,13 +97,17 @@ export const ImageComponent = React.memo(({ item, index, data }: ImageComponentP
 
   return (
     <Image
+      {...props.ImageProps}
       src={imageUrl(item, index)}
       alt={item.name}
       width={275}
       height={275}
       priority
       onError={() => handleErrorImage(index)}
-      className='object-cover group-hover:scale-110 h-[270px] max-[400px]:h-[220px] w-full transition-all duration-500'
+      className={cn(
+        'object-cover group-hover:scale-110 h-[270px] max-[400px]:h-[180px] w-full transition-all duration-500',
+        `${props.ImageProps?.className}`,
+      )}
     />
   )
 })

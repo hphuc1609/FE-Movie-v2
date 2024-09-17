@@ -1,28 +1,30 @@
-import Footer from '@/components/footer'
-import Header from '@/components/header'
-import LoadingProvider from '@/components/loading-provider'
+import Footer from '@/components/layouts/footer'
+import Header from '@/components/layouts/header'
+import ContextProvider from '@/components/context-provider'
+import TanstackProvider from '@/components/tanstack-provider'
 import { cn } from '@/lib/utils'
 import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 
-const keyGoogle = process.env.NEXT_PUBLIC_KEY_GOOGLE_ANALYTICS
-const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE 
+const googleKey = process.env.NEXT_PUBLIC_KEY_GOOGLE_ANALYTICS
+const myUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`${baseUrl}`),
+  metadataBase: new URL(`${myUrl}`),
   keywords: [
     'phim moi',
     'phim le',
     'phim bo',
     'phim hay',
     'phim hoat hinh',
-    'me phim',
+    'mê phim',
+    'mephim',
     'mephim247',
     'Mephim247',
-    'phim 247',
     'phim vietsub',
     'phim thuyet minh',
   ],
@@ -31,17 +33,17 @@ export const metadata: Metadata = {
     template: '%s | Mephim247',
   },
   description:
-    'Xem trọn phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+    'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   openGraph: {
-    title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
+    title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh  hay nhất',
     description:
-      'Xem trọn phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
     description:
-      'Xem trọn phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   },
 }
 
@@ -58,15 +60,18 @@ export default function RootLayout({
       <head>
         <meta
           name='google-site-verification'
-          content={keyGoogle}
+          content={googleKey}
         />
       </head>
       <body className={cn(inter.className, 'bg-[#141414] text-primary-foreground')}>
-        <Header />
-        <LoadingProvider>
-          <main className='overflow-hidden min-h-screen'>{children}</main>
-        </LoadingProvider>
-        <Footer />
+        <TanstackProvider>
+          <ContextProvider>
+            <Header />
+            <main className='overflow-hidden min-h-screen'>{children}</main>
+            <Footer />
+          </ContextProvider>
+        </TanstackProvider>
+        <Toaster />
       </body>
     </html>
   )

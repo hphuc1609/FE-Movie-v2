@@ -2,7 +2,7 @@ import Banner from '@/components/banner'
 import CategoryMovie from '@/components/movie/categories'
 import NewUpdateMovie from '@/components/movie/new'
 
-export default function Home() {
+export default async function Home() {
   const categories = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
   const titles = ['Phim lẻ', 'Phim bộ', 'Phim hoạt hình', 'TV Shows']
 
@@ -14,7 +14,7 @@ export default function Home() {
           {categories.map((item) => (
             <CategoryMovie
               key={item}
-              paramCategory={item}
+              category={item}
               title={titles[categories.indexOf(item)]}
             />
           ))}

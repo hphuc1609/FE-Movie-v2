@@ -1,58 +1,45 @@
 'use client'
 
-import { MovieCategoryItem } from '@/models/list-movie'
+import { MovieCategoryItem } from '@/models/interfaces/list-movie'
+import { useMoviesByCate } from '@/services/query-data'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
+import { useMemo } from 'react'
 import CardImage from '../common/card-image'
-import { useLoading } from '../loading-provider'
-import movieApi from '@/api-client/movies'
-import isSuccessResponse from '@/helpers/check-response'
-import useFetchData from '@/hooks/use-fetch'
-import { Skeleton } from '../ui/skeleton'
+import SkeletonCard from '../common/skeleton-card'
 
 interface CategoryMovieProps {
-  paramCategory: string
+  category: string
   title?: string
 }
 
 export default function CategoryMovie(props: CategoryMovieProps) {
-  const { paramCategory, title } = props
-  const loader = useLoading()
-
-  // -------------------- Fetch data -----------------------------
-  const fetchDataByCate = async () => {
-    try {
-      const res = await movieApi.getList({ category: paramCategory })
-      if (!isSuccessResponse(res)) return null
-      return res.data
-    } catch (error: any) {
-      console.error('Error fetching data: ', error.message)
-      return null
-    }
-  }
-
-  const { data: dataMovie, isLoading } = useFetchData({
-    queryKey: ['dataMovie', paramCategory],
-    queryFn: fetchDataByCate,
-    enabled: !!paramCategory,
-  })
-
+  const { category, title } = props
   const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase() || '')
 
-  // -------------------- Render UI -----------------------------
+  const { data: movieCate, isLoading: isLoadingList } = useMoviesByCate({ category })
+
+  const filteredMovies = useMemo(() => {
+    const items = movieCate?.items?.filter(
+      (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
+    )
+    return { ...movieCate, items }
+  }, [movieCate])
+
   return (
-    <section className='flex-1 flex flex-col gap-9'>
+    <section
+      id={category}
+      className='flex-1 flex flex-col gap-9'
+    >
       <header className='flex items-center justify-between'>
         <h2 className={`text-3xl max-md:text-xl font-semibold uppercase text-secondary-color`}>
           {title}
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h2>
-        {!isLoading && paramCategory && (
+        {!isLoadingList && category && (
           <Link
-            href={`/danh-sach/${paramCategory}?page=1`}
+            href={`/danh-sach/${category}?page=1`}
             className='text-sm text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
-            onClick={() => loader.show()}
-            aria-label={`Xem thêm các ${dataMovie?.titlePage}`}
           >
             Xem thêm
             <ChevronRight size={16} />
@@ -60,33 +47,12 @@ export default function CategoryMovie(props: CategoryMovieProps) {
         )}
       </header>
       <div className='grid grid-cols-4 max-md:grid-cols-2 gap-[20px] gap-y-7 max-lg:gap-x-4 max-md:gap-x-6'>
-        {isLoading ? (
+        {isLoadingList ? (
           <SkeletonCard />
         ) : (
-          <CardImage
-            data={dataMovie as MovieCategoryItem}
-            paramCategory={paramCategory}
-            itemLength={dataMovie?.items?.length}
-          />
+          <CardImage data={filteredMovies as MovieCategoryItem} />
         )}
       </div>
     </section>
-  )
-}
-
-const SkeletonCard = () => {
-  return (
-    <>
-      {Array.from({ length: 8 }).map((_, index) => (
-        <div
-          key={index}
-          className='flex flex-col gap-3'
-        >
-          <Skeleton className='w-full h-[270px] max-[400px]:h-[220px] bg-skeleton rounded-md' />
-          <Skeleton className='w-full h-[15px] bg-skeleton' />
-          <Skeleton className='w-1/2 h-[15px] bg-skeleton' />
-        </div>
-      ))}
-    </>
   )
 }

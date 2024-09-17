@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
 
 class HttpError extends Error {
   status: number
@@ -25,19 +25,15 @@ axiosInstance.interceptors.request.use(
 )
 
 axiosInstance.interceptors.response.use(
-  (response) => response.data,
-  (error) => {
+  (response: AxiosResponse) => response.data,
+  (error: AxiosError) => {
     if (error.response) {
-      const {
-        status,
-        data: { message },
-      } = error.response
-      if (!message) {
-        return new HttpError(status, 'Something went wrong!')
-      }
+      const { status, data } = error.response
+      const { message } = data as AxiosError
+
       return new HttpError(status, message)
     }
-    return new Error(error)
+    return new Error(error.message)
   },
 )
 
