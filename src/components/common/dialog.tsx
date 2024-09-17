@@ -9,37 +9,77 @@ import {
   DialogTrigger,
 } from '../ui/dialog'
 import { Button } from '../ui/button'
+import { DialogContentProps } from '@radix-ui/react-dialog'
+import { LoaderCircle } from 'lucide-react'
 
 interface DialogCustomProps {
-  children?: React.ReactNode
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   title?: React.ReactNode
   content: React.ReactNode
+  textCancel?: string
   textConfirm?: string
   onConfirm?: () => void
+  DialogContentProps?: DialogContentProps
+  ButtonLeftProps?: React.ComponentProps<typeof Button>
+  ButtonRightProps?: React.ComponentProps<typeof Button>
 }
 
-export default function DialogCustom(props: DialogCustomProps) {
-  const { children, open, setOpen, title, content, textConfirm, onConfirm } = props
+const DialogCustom = (props: DialogCustomProps) => {
+  const {
+    open,
+    setOpen,
+    title,
+    content,
+    textCancel,
+    textConfirm,
+    onConfirm,
+    DialogContentProps,
+    ButtonLeftProps,
+    ButtonRightProps,
+  } = props
+
   return (
     <Dialog
       open={open}
       onOpenChange={setOpen}
     >
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className='bg-inherit border-none max-w-[60%] max-lg:max-w-[80%] max-sm:max-w-[90%] outline-none'>
+      <DialogContent
+        className='bg-inherit border-none max-w-[60%] max-xl:max-w-[80%] outline-none'
+        {...DialogContentProps}
+      >
         <DialogHeader>
           <DialogTitle className='text-2xl text-left font-bold'>{title}</DialogTitle>
-          <DialogDescription>{content}</DialogDescription>
+          <DialogDescription className='text-base'>{content}</DialogDescription>
         </DialogHeader>
-        {textConfirm && (
-          <DialogFooter>
-            <Button onClick={() => setOpen(false)}>Hủy</Button>
-            <Button onClick={onConfirm}>{textConfirm}</Button>
-          </DialogFooter>
-        )}
+        <DialogFooter>
+          {textCancel && (
+            <Button
+              variant='secondary'
+              onClick={() => setOpen(false)}
+              {...ButtonLeftProps}
+            >
+              {textCancel}
+            </Button>
+          )}
+          {textConfirm && (
+            <Button
+              onClick={onConfirm}
+              {...ButtonRightProps}
+            >
+              {ButtonRightProps?.disabled && (
+                <LoaderCircle
+                  size={15}
+                  className='animate-spin mr-1'
+                />
+              )}
+              {textConfirm}
+            </Button>
+          )}
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
 }
+
+export default DialogCustom

@@ -1,13 +1,13 @@
 'use client'
 
 import cleanString from '@/helpers/cleanString'
-import { DetailResponse } from '@/models/detail'
+import { DetailResponse } from '@/models/interfaces/detail'
 import { Video } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import DialogCustom from '../common/dialog'
 import { Button } from '../ui/button'
-import { useMediaQuery } from 'react-responsive'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
@@ -41,9 +41,7 @@ export default function MovieInfo(props: MovieInfoProps) {
 
   const details = useMemo(
     () => [
-      ...(detail.episode_current?.toLowerCase() !== 'full'
-        ? [{ label: 'Trạng thái', value: detail.episode_current }]
-        : []),
+      { label: 'Trạng thái', value: detail.episode_current },
       { label: 'Phụ đề', value: detail.lang },
       { label: 'Thể loại', value: categories },
       { label: 'Quốc gia', value: countries },
@@ -56,8 +54,11 @@ export default function MovieInfo(props: MovieInfoProps) {
 
   // ----------------- Render UI -----------------------------
   return (
-    <div className='flex max-md:flex-col gap-[30px]'>
-      <div className='relative max-w-[300px] h-[440px] bg-gray-50 bg-opacity-10 rounded-md m-auto overflow-hidden'>
+    <section
+      id='info-movie'
+      className='flex max-md:flex-col gap-[30px]'
+    >
+      <div className='relative max-w-[300px] h-[440px] bg-gray-50 bg-opacity-10 rounded-md mx-auto overflow-hidden'>
         <Image
           src={errorImage ? detail.thumb_url : detail.poster_url}
           width={300}
@@ -67,20 +68,18 @@ export default function MovieInfo(props: MovieInfoProps) {
           onError={() => setErrorImage(true)}
           className='w-full h-full object-cover rounded-md'
         />
-        <div className='absolute h-[56px] flex items-center justify-around gap-2 bottom-0 left-0 w-full bg-black bg-opacity-85'>
-          <Button
-            className='text-lg uppercase hover:bg-transparent bg-transparent group hover:text-primary-color'
-            onClick={() => setOpenDialogTrailer(true)}
-          >
-            <Video
-              size={24}
-              strokeWidth={1}
-              className='mr-2 text-primary-foreground group-hover:text-primary-color'
-              fill='currentColor'
-            />
-            Trailer
-          </Button>
-        </div>
+        <Button
+          className='absolute bottom-0 h-[56px] w-full text-lg uppercase bg-black bg-opacity-90 hover:bg-label-color rounded-none'
+          onClick={() => setOpenDialogTrailer(true)}
+        >
+          <Video
+            size={24}
+            strokeWidth={1}
+            className='mr-2 text-primary-foreground'
+            fill='currentColor'
+          />
+          Trailer
+        </Button>
       </div>
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>
@@ -103,7 +102,7 @@ export default function MovieInfo(props: MovieInfoProps) {
                   key={item.label}
                   className='text-sm capitalize flex gap-6'
                 >
-                  <span className='opacity-70 min-w-[130px]'>{item.label}:</span>
+                  <span className='opacity-70 min-w-[130px] font-medium'>{item.label}:</span>
                   <span
                     className={`flex-1 line-clamp-2 ${item.label.toLowerCase() === 'phụ đề' && 'text-red-600'}`}
                   >
@@ -131,6 +130,6 @@ export default function MovieInfo(props: MovieInfoProps) {
           ></iframe>
         }
       />
-    </div>
+    </section>
   )
 }

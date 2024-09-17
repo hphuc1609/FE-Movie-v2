@@ -1,5 +1,3 @@
-'use client'
-
 import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query'
 
 interface FetchDataOptions<T>

@@ -5,7 +5,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { BreadCrumb } from '@/models/list-movie'
+import { BreadCrumb } from '@/models/interfaces/list-movie'
 import Link from 'next/link'
 import React from 'react'
 
@@ -34,7 +34,7 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
               <BreadcrumbItem>
                 {!item.isCurrent ? (
                   <Link
-                    href={`${item.slug}?page=1` || ''}
+                    href={`${item.slug}?page=1`}
                     className='hover:text-primary-color capitalize'
                   >
                     {item.name}

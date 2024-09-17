@@ -3,20 +3,18 @@ import { NextRequest, NextResponse } from 'next/server'
 const authPaths = ['/login', '/register']
 
 export function middleware(request: NextRequest) {
-  //   const { pathname } = request.nextUrl
+  const { pathname } = request.nextUrl
+  const verify = request.cookies.get('userVerify')?.value
+  const token = verify ? JSON.parse(verify)?.token : null
 
-  //   // Redirect to home page if authenticated
-  //   if (authPaths.includes(pathname)) {
-  //     return NextResponse.redirect(new URL('/login', request.url))
-  //   }
-  //   // Redirect to login page if not authenticated
-  //   if (!authPaths.includes(pathname)) {
-  //     return NextResponse.redirect(new URL('/', request.url))
-  //   }
+  // Redirect to home page if authenticated
+  if (authPaths.includes(pathname) && token) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
+
   return NextResponse.next()
 }
 
-// See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/:path*', '/login', '/register'],
+  matcher: ['/:path*'],
 }
