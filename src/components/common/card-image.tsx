@@ -61,7 +61,10 @@ export default function CardImage(props: CardImageProps) {
                 <Link
                   key={cate.id}
                   href={`/danh-sach/${cate.slug}?page=1`}
-                  className='text-[10px] font-medium rounded-xl bg-slate-100 bg-opacity-5 hover:text-primary-color px-2 py-1'
+                  className={cn(
+                    'text-[10px] font-medium rounded-xl bg-slate-100 bg-opacity-5 hover:text-primary-color px-2 py-1',
+                    cate.slug.toLowerCase() === 'dang-cap-nhat' && 'pointer-events-none',
+                  )}
                 >
                   {cate.name}
                 </Link>

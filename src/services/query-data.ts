@@ -48,12 +48,16 @@ export const useBanners = (options?: QueryOptions<any>): QueryObserverResult<Mov
     ...options,
   })
 
-export const useNewMovies = (
-  options?: QueryOptions<any>,
-): QueryObserverResult<NewMovieResponse['items']> =>
+export const useNewMovies = ({
+  page,
+  options,
+}: {
+  page?: string | number
+  options?: QueryOptions<any>
+}): QueryObserverResult<NewMovieResponse['items']> =>
   useFetchData({
     queryKey: ['newMovies'],
-    queryFn: () => fetchData(movieApi.getNewMovies()),
+    queryFn: () => fetchData(movieApi.getNewMovies({ page })),
     ...options,
   })
 

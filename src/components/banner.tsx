@@ -49,15 +49,11 @@ const Banner = () => {
     setErrorImage((prev) => ({ ...prev, [index]: true }))
   }
 
-  const handleButtonClick = (slug: string) => {
-    router.push(`/phim/${slug}`)
-  }
-
   const imageUrl = (item: MovieItem, imageIndex: number) => {
     const hasError = errorImage[imageIndex]
     return !hasError && banners?.APP_DOMAIN_CDN_IMAGE
-      ? `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
-      : `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
+      ? `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
+      : `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
   }
 
   if (isLoadingBanners) {
@@ -110,16 +106,15 @@ const Banner = () => {
                 </div>
               </div>
               <Button
-                variant='outline'
-                size='lg'
-                className={`w-[170px] p-0 text-sm uppercase font-medium mt-8 hover:bg-[#242424] hover:bg-opacity-80 hover:text-secondary rounded-full bg-[#242424] border-2 border-yellow-400 transition-all ${
+                variant='default'
+                className={`w-[170px] h-12 p-0 text-base uppercase mt-8 rounded-full bg-primary/80 border-2 border-yellow-400/80 transition-all ${
                   index !== activeSlide ? 'invisible opacity-0' : 'visible opacity-100'
                 }`}
                 style={{ transitionDuration: '2000ms', transitionDelay: '2500ms' }}
-                onClick={() => handleButtonClick(item.slug)}
+                onClick={() => router.push(`/phim/${item.slug}`)}
               >
                 <Play
-                  size={15}
+                  size={20}
                   fill='white'
                   className='mr-3'
                 />

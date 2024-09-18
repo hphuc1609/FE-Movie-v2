@@ -12,7 +12,7 @@ export default function NewUpdateMovie() {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
-  const { data: newMovies = [], isLoading: isLoadingMovies } = useNewMovies()
+  const { data: newMovies = [], isLoading: isLoadingMovies } = useNewMovies({})
 
   const imageUrl = (item: NewMovieItem, index: number) => {
     const hasError = errorImage[index]

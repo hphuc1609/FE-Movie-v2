@@ -44,6 +44,15 @@ export interface Movie {
   category: Category[]
   country: Country[]
   episodes: Episode[]
+  tmdb: MovieTMDB
+}
+
+export interface MovieTMDB {
+  id: number
+  session: number | string
+  type: string
+  vote_average: number
+  vote_count: number
 }
 
 export interface ServerData {

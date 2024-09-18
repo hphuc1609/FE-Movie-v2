@@ -20,7 +20,7 @@ const Detail = ({ detail }: DetailProps) => {
   const slugCate = detail?.movie?.category?.[0]?.slug
 
   const { data: movies, isLoading: isLoadingMovies } = useMoviesByCate({
-    category: slugCate,
+    category: slugCate.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
     limit: 64,
   })
   const { data: newMovies } = useMoviesByCate({ category: 'phim-le', limit: 64 })
