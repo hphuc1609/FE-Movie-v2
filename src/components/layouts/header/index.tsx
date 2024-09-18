@@ -105,7 +105,7 @@ const HeaderMenubar = React.memo(() => {
       <div className='flex gap-8 h-full items-center'>
         <Link
           href='/'
-          className='text-3xl text-nowrap font-mono font-bold'
+          className='text-3xl max-sm:text-2xl text-nowrap font-mono font-bold'
         >
           Mephim<span className='text-primary-color'>247</span>
         </Link>
@@ -133,7 +133,7 @@ const HeaderMenubar = React.memo(() => {
         ) : (
           <Button
             variant={'link'}
-            className='text-base text-current hover:no-underline font-semibold p-0'
+            className='text-base max-sm:text-sm text-current hover:no-underline font-semibold p-0'
             onClick={() => router.push('/login')}
           >
             Đăng nhập
@@ -159,7 +159,7 @@ const HeaderMenubar = React.memo(() => {
         content={
           <div className='flex items-center'>
             <Input
-              placeholder='Nhập tên phim, chương trình,...'
+              placeholder='Tìm kiếm phim...'
               autoFocus
               onKeyDown={(e) => handleKeyDown(e)}
               onChange={(e) => handleInputChange(e)}

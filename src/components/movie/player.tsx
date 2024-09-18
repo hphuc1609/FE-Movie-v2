@@ -130,7 +130,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       id='video'
       className='flex flex-col'
     >
-      <div className='relative h-[350px] lg:h-[550px] flex flex-col flex-auto gap-3 bg-black bg-opacity-80'>
+      <div className='relative h-[250px] lg:h-[550px] flex flex-col flex-auto gap-3 bg-black bg-opacity-80'>
         {renderPlayerUI()}
         {!isPlaying && serverIndex === 'server 2' && (
           <div

@@ -20,8 +20,8 @@ const RelateMovies = (props: RelateMoviesProps) => {
 
   const swiperConfig: SwiperProps = {
     breakpoints: {
-      320: { slidesPerView: 2 },
-      560: { slidesPerView: 3 },
+      320: { slidesPerView: 3 },
+      // 560: { slidesPerView: 3 },
       768: { slidesPerView: 4 },
       1024: { slidesPerView: 5 },
       1320: { slidesPerView: 6 },
@@ -36,15 +36,15 @@ const RelateMovies = (props: RelateMoviesProps) => {
       <h3 className='text-2xl max-md:text-xl font-bold text-primary-color uppercase'>{title}</h3>
       <Swiper
         {...swiperConfig}
-        spaceBetween={24}
+        spaceBetween={mobile ? 12 : 24}
         loop={data.items.length > 5}
         autoplay={{ delay: 5000, disableOnInteraction: false, pauseOnMouseEnter: true }}
         modules={[Autoplay]}
         className='w-full'
       >
         {!data.items.length ? (
-          <div className='grid grid-cols-6 max-sm:grid-cols-2 max-xl:grid-cols-5 gap-5 gap-y-7'>
-            <SkeletonCard itemLength={mobile ? 2 : tablet ? 5 : 6} />
+          <div className='grid grid-cols-6 max-sm:grid-cols-3 max-xl:grid-cols-5 gap-5 gap-y-7 max-sm:gap-3'>
+            <SkeletonCard itemLength={mobile ? 3 : tablet ? 5 : 6} />
           </div>
         ) : (
           data.items.map((item, index) => (
@@ -54,7 +54,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
             >
               <Link
                 href={`/phim/${item.slug}`}
-                className='relative group rounded-sm bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
+                className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
               >
                 <ImageComponent
                   index={index}

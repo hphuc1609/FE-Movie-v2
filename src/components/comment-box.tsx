@@ -15,6 +15,7 @@ import { Avatar, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import { Textarea } from './ui/textarea'
+import { cn } from '@/lib/utils'
 
 const CommentBox = () => {
   const { toast } = useToast()
@@ -125,7 +126,7 @@ const CommentBox = () => {
   }
 
   return (
-    <div className='h-fit flex flex-col gap-6 p-6 bg-black/50'>
+    <div className='h-fit flex flex-col gap-6 p-6 max-sm:p-4 bg-black/50'>
       <h5 className='text-lg font-bold uppercase'>Bình luận phim</h5>
       <Controller
         control={control}
@@ -141,7 +142,7 @@ const CommentBox = () => {
             <Button
               className='w-fit h-9 rounded flex gap-2 bg-blue-600/80 hover:bg-blue-700/80'
               onClick={handleSubmit(handleSend)}
-              disabled={!isDirty || submitMutation.isPending}
+              disabled={!isDirty}
             >
               Gửi bình luận
             </Button>
@@ -150,13 +151,13 @@ const CommentBox = () => {
       />
 
       {/* List comment */}
-      <div className='mt-5 grid gap-6'>
+      <div className={cn('mt-5 grid gap-6', !filteredComments.length && 'hidden')}>
         {filteredComments.slice(0, count).map((comment) => (
           <div
             key={comment._id}
-            className='flex items-center gap-4'
+            className='flex items-center gap-4 max-sm:gap-2'
           >
-            <Avatar className='w-12 h-12'>
+            <Avatar className='w-12 h-12 max-sm:w-8 max-sm:h-8'>
               <AvatarImage
                 src={'https://github.com/shadcn.png'}
                 alt={comment.username}
@@ -168,10 +169,12 @@ const CommentBox = () => {
             </Avatar>
             <div className='flex flex-col gap-1'>
               <div className='flex items-center gap-2'>
-                <span className='text-lg font-semibold'>{comment.username}</span>
-                <span className='text-sm text-gray-300'>{formatDate(comment.date)}</span>
+                <span className='text-lg font-semibold max-sm:text-sm'>{comment.username}</span>
+                <span className='text-sm text-gray-300 max-sm:text-xs'>
+                  {formatDate(comment.date)}
+                </span>
               </div>
-              <p className='text-sm text-gray-300'>{comment.content}</p>
+              <p className='text-sm text-gray-300 max-sm:text-xs'>{comment.content}</p>
               {username === comment.username && expiredDateComment(comment.date) && (
                 <div
                   className='flex items-start gap-1 mt-2 text-xs text-red-500 cursor-pointer hover:underline'
@@ -200,7 +203,7 @@ const CommentBox = () => {
         open={openDialogDelete}
         setOpen={setOpenDialogDelete}
         title='Xóa bình luận?'
-        content='Bạn có chắc xóa bình luận này? Hành động này sẽ xóa bình luận.'
+        content='Hành động này sẽ xóa bình luận. Bạn có chắc xóa bình luận này?'
         textCancel='Hủy'
         textConfirm='Xóa'
         onConfirm={() => handleDelete(commentId)}

@@ -35,7 +35,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
     totalStars = 5,
     size = 20,
     fill = true,
-    Icon = <Star />,
+    Icon = <Star fill='currentColor' />,
     variant = 'default',
   } = props
 
@@ -52,7 +52,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
 
   return (
     <div
-      className={cn('flex items-center gap-3')}
+      className={cn('flex items-center max-sm:flex-col max-sm:items-start gap-3')}
       {...props}
     >
       <div className='flex items-center gap-1'>
@@ -73,7 +73,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
         )}
       </div>
       <span className='text-muted-foreground text-sm'>
-        {rating > 1 ? `${rating}/${ratingCount}` : 0} đánh giá
+        {rating > 1 ? `${rating.toFixed(1)}đ / ${ratingCount}` : 0} đánh giá
       </span>
     </div>
   )

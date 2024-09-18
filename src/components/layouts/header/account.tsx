@@ -10,11 +10,13 @@ import isSuccessResponse from '@/helpers/check-response'
 import { showToast } from '@/helpers/toast'
 import authApi from '@/services/api-client/auth'
 import { MenubarSeparator } from '@radix-ui/react-menubar'
-import { deleteCookie } from 'cookies-next'
+import { deleteCookie, getCookie } from 'cookies-next'
 import { LogOutIcon, User, User as UserIcon } from 'lucide-react'
 
 const Account = () => {
   const context = useContextGlobal()
+  const userInfo = getCookie('userVerify') as string
+  const username = userInfo ? JSON.parse(userInfo)?.username : null
 
   const handleLogout = async () => {
     try {
@@ -42,12 +44,9 @@ const Account = () => {
             />
           </MenubarTrigger>
           <MenubarContent className='grid gap-2 py-2 mr-4 bg-neutral-800 z-50 border-none text-white'>
-            <MenubarItem
-              onClick={handleLogout}
-              className='cursor-pointer hover:!bg-white hover:!bg-opacity-10 hover:!text-white flex items-center gap-2'
-            >
+            <MenubarItem className='cursor-pointer hover:!bg-white hover:!bg-opacity-10 hover:!text-white flex items-center gap-2'>
               <User size={16} />
-              Thông tin
+              {username}
             </MenubarItem>
             <MenubarSeparator style={{ backgroundColor: 'gray', height: '1px' }} />
             <MenubarItem

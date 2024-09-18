@@ -1,7 +1,8 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Loader from './loader'
+import { getCookie } from 'cookies-next'
 
 const ContextGlobal = React.createContext({
   isLoading: false,
@@ -20,6 +21,11 @@ interface ContextProviderProps {
 const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
   const [isLoading, setLoading] = React.useState(false)
   const [isLogin, setLogin] = React.useState(false)
+
+  useEffect(() => {
+    const userInfo = getCookie('userVerify')
+    if (userInfo) setLogin(true)
+  }, [])
 
   const showLoading = () => {
     setLoading(true)

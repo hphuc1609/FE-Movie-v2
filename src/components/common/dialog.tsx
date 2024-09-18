@@ -45,7 +45,7 @@ const DialogCustom = (props: DialogCustomProps) => {
       onOpenChange={setOpen}
     >
       <DialogContent
-        className='bg-inherit border-none max-w-[60%] max-xl:max-w-[80%] outline-none'
+        className='bg-primary border-none max-sm:p-4 max-w-[60%] max-xl:max-w-[90%] outline-none'
         {...DialogContentProps}
       >
         <DialogHeader>

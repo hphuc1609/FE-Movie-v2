@@ -20,10 +20,10 @@ export const metadata: Metadata = {
     'phim le',
     'phim bo',
     'phim hay',
-    'phim hoat hinh',
+    'hoat hinh',
     'mê phim',
     'mephim',
-    'mephim247',
+    'mephim 247',
     'Mephim247',
     'phim vietsub',
     'phim thuyet minh',
@@ -63,7 +63,12 @@ export default function RootLayout({
           content={googleKey}
         />
       </head>
-      <body className={cn(inter.className, 'bg-[#141414] text-primary-foreground')}>
+      <body
+        className={cn(
+          inter.className,
+          'bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#0d0d0d] text-primary-foreground',
+        )}
+      >
         <TanstackProvider>
           <ContextProvider>
             <Header />

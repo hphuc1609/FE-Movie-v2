@@ -16,7 +16,6 @@ interface MovieInfoProps {
 }
 
 export default function MovieInfo({ detail }: MovieInfoProps) {
-  console.log('🚀 ~ MovieInfo ~ detail:', detail)
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
 
@@ -77,7 +76,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       id='info-movie'
       className='flex max-md:flex-col gap-[30px] overflow-hidden'
     >
-      <div className='relative max-w-[300px] h-[440px] bg-gray-50 bg-opacity-10 rounded-md mx-auto overflow-hidden'>
+      <div className='relative max-w-[300px] h-[440px] bg-gray-50 bg-opacity-10 mx-auto overflow-hidden'>
         <Image
           src={errorImage ? detail.thumb_url : detail.poster_url}
           width={300}
@@ -85,7 +84,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
           alt={detail.name}
           priority
           onError={() => setErrorImage(true)}
-          className='w-full h-full object-cover rounded-md'
+          className='w-full h-full object-cover'
         />
         <Button
           className='absolute bottom-0 h-[56px] w-full text-lg uppercase bg-black bg-opacity-90 hover:bg-label-color rounded-none'
@@ -102,7 +101,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       </div>
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>
-        <div className='flex flex-col gap-1'>
+        <div className='flex flex-col gap-1 max-sm:gap-2'>
           <h1 className='text-2xl font-semibold text-primary-color'>{detail.name}</h1>
           <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
           <Ratings
@@ -123,7 +122,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
                 >
                   <span className='opacity-70 min-w-[130px] font-semibold'>{item.label}:</span>
                   <span
-                    className={`flex-1 line-clamp-2 ${item.label.toLowerCase() === 'phụ đề' && 'text-red-600'}`}
+                    className={`flex-1 line-clamp-2 ${item.label.includes('Phụ đề') && 'text-red-600'}`}
                   >
                     {item.value}
                   </span>

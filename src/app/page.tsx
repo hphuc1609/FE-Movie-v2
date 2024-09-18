@@ -9,8 +9,8 @@ export default async function Home() {
   return (
     <>
       <Banner />
-      <div className='max-w-screen-xl m-auto px-10 py-20 max-lg:px-[25px] flex gap-9'>
-        <div className='flex-1 flex flex-col gap-20'>
+      <div className='max-w-screen-xl m-auto px-10 py-14 max-lg:px-[25px] flex gap-9'>
+        <div className='flex-1 flex flex-col gap-14'>
           {categories.map((item) => (
             <CategoryMovie
               key={item}

@@ -45,7 +45,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
       id='table-pagination'
       className='flex flex-col gap-10 pb-5 overflow-hidden'
     >
-      <div className='grid grid-cols-6 max-sm:grid-cols-2 max-md:grid-cols-3 max-lg:grid-cols-4 max-xl:grid-cols-5 gap-5 gap-y-9'>
+      <div className='grid grid-cols-6 max-sm:grid-cols-3 max-lg:grid-cols-4 max-xl:grid-cols-5 gap-x-5 gap-y-9 max-sm:gap-x-3'>
         <CardImage
           data={data}
           itemLength={dataPagination.totalItemsPerPage}

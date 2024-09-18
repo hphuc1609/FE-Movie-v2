@@ -21,11 +21,11 @@ export default function CardImage(props: CardImageProps) {
       {data.items?.slice(0, itemLength).map((item, index) => (
         <div
           key={item._id}
-          className='h-fit flex flex-col gap-3 overflow-hidden'
+          className='h-fit flex flex-col gap-3'
         >
           <Link
             href={`/phim/${item.slug}`}
-            className='relative group rounded-sm bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
+            className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
             onClick={openRandomAdLink}
           >
             <ImageComponent
@@ -36,16 +36,16 @@ export default function CardImage(props: CardImageProps) {
             <div className='absolute w-full h-full bg-black opacity-0 transition-all duration-300 group-hover:opacity-50' />
             <PlayButton
               PlayIconProps={{ size: 25 }}
-              className='w-[50px] h-[50px] opacity-0 group-hover:opacity-100 transition-all duration-300'
+              className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
-            <p className='absolute top-2 left-1 text-[12px] font-semibold bg-label-color opacity-85 px-2 py-[2px] rounded'>
+            <p className='absolute top-1 left-1 text-xs max-sm:text-[10px] font-semibold bg-label-color opacity-85 px-2 py-[2px] max-sm:px-1 rounded text-nowrap'>
               {item.episode_current}
             </p>
           </Link>
           {/* Movie name */}
           <Link
             href={`/phim/${item.slug}`}
-            className='text-sm grid gap-1'
+            className='text-sm max-sm:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>
               {item.name} ({item.year})
@@ -56,7 +56,7 @@ export default function CardImage(props: CardImageProps) {
           </Link>
           {/* Categories */}
           {item.category && (
-            <div className='flex items-center flex-wrap gap-1'>
+            <div className='flex items-center flex-wrap gap-1 max-sm:hidden'>
               {item.category.map((cate) => (
                 <Link
                   key={cate.id}
@@ -108,7 +108,7 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
       priority
       onError={() => handleErrorImage(index)}
       className={cn(
-        'object-cover group-hover:scale-110 h-[270px] max-[400px]:h-[180px] w-full transition-all duration-500',
+        'object-cover group-hover:scale-110 h-[270px] max-xl:h-[230px] max-lg:h-[200px] max-[400px]:h-[150px] w-full transition-all duration-500',
         `${props.ImageProps?.className}`,
       )}
     />

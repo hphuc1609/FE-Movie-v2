@@ -29,24 +29,24 @@ export default function CategoryMovie(props: CategoryMovieProps) {
   return (
     <section
       id={category}
-      className='flex-1 flex flex-col gap-9'
+      className='flex-1 flex flex-col gap-8 max-lg:gap-6'
     >
       <header className='flex items-center justify-between'>
-        <h2 className={`text-3xl max-md:text-xl font-semibold uppercase text-secondary-color`}>
+        <h2 className={`text-3xl max-sm:text-lg font-semibold uppercase text-secondary-color`}>
           {title}
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h2>
         {!isLoadingList && category && (
           <Link
             href={`/danh-sach/${category}?page=1`}
-            className='text-sm text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
+            className='text-sm max-sm:text-xs text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
           >
             Xem thêm
             <ChevronRight size={16} />
           </Link>
         )}
       </header>
-      <div className='grid grid-cols-4 max-md:grid-cols-2 gap-[20px] gap-y-7 max-lg:gap-x-4 max-md:gap-x-6'>
+      <div className='grid grid-cols-4 max-sm:grid-cols-3 max-lg:grid-cols-5 gap-5 gap-y-7 max-xl:gap-x-3'>
         {isLoadingList ? (
           <SkeletonCard />
         ) : (
