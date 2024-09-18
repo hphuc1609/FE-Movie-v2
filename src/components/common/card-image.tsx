@@ -39,7 +39,7 @@ export default function CardImage(props: CardImageProps) {
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
             <p className='absolute top-1 left-1 text-xs max-sm:text-[10px] font-semibold bg-label-color opacity-85 px-2 py-[2px] max-sm:px-1 rounded text-nowrap'>
-              {item.episode_current}
+              {item.episode_current ? item.episode_current : 'Full'}
             </p>
           </Link>
           {/* Movie name */}
