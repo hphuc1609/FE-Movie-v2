@@ -1,6 +1,6 @@
 'use client'
 
-import InputText from '@/components/common/input-form/text'
+import InputCustom from '@/components/common/input-form/text'
 import { Button } from '@/components/ui/button'
 import isSuccessResponse from '@/helpers/check-response'
 import { showToast } from '@/helpers/toast'
@@ -43,23 +43,25 @@ const RegisterForm = () => {
   return (
     <>
       <h1 className='text-3xl font-extrabold'>Đăng ký</h1>
-      <InputText
+      <InputCustom
         name='username'
         label='Tên đăng nhập'
         control={control}
         placeholder='Nhập tên đăng nhập'
       />
-      <InputText
+      <InputCustom
         name='password'
         label='Mật khẩu'
         control={control}
         placeholder='Nhập mật khẩu'
+        type='password'
       />
-      <InputText
+      <InputCustom
         name='confirmPassword'
         label='Xác nhận mật khẩu'
         control={control}
         placeholder='Nhập lại mật khẩu'
+        type='password'
       />
       <Button
         className={cn(

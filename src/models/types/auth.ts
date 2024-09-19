@@ -6,14 +6,9 @@ export type LoginData = {
 }
 
 export const LoginSchema: z.ZodType<LoginData> = z.object({
-  username: z
-    .string()
-    .min(1, {
-      message: 'Vui lòng nhập tên tài khoản.',
-    })
-    .min(2, {
-      message: 'Tên tài khoản phải có ít nhất 2 ký tự.',
-    }),
+  username: z.string().min(1, {
+    message: 'Vui lòng nhập tên đăng nhập.',
+  }),
   password: z.string().min(2, {
     message: 'Mật khẩu phải có ít nhất 2 ký tự.',
   }),
@@ -33,7 +28,7 @@ export const RegisterSchema: z.ZodType<RegisterData> = z
         message: 'Vui lòng nhập tên đăng nhập.',
       })
       .min(2, {
-        message: 'Tên tài khoản phải có ít nhất 2 ký tự.',
+        message: 'Tên đăng nhập phải có ít nhất 2 ký tự.',
       }),
     password: z.string().min(2, {
       message: 'Mật khẩu phải có ít nhất 2 ký tự.',

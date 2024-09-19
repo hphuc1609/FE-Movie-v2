@@ -14,18 +14,29 @@ import { setCookie } from 'cookies-next'
 import { Loader } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 const LoginForm = () => {
   const router = useRouter()
   const context = useContextGlobal()
   const [loading, setLoading] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
 
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: { username: '', password: '' },
   })
+
+  useEffect(() => {
+    // Load saved username from local storage if available
+    const savedUsername = localStorage.getItem('savedUsername')
+    if (savedUsername) setValue('username', savedUsername)
+
+    // Load "Remember Me" state from local storage if available
+    const savedRememberMe = localStorage.getItem('rememberMe')
+    if (savedRememberMe === 'true') setRememberMe(true)
+  }, [setValue])
 
   const onSubmit = async (data: LoginData) => {
     setLoading(true)
@@ -36,6 +47,16 @@ const LoginForm = () => {
 
         setCookie('userVerify', payload, { maxAge: 60 * 60 * 24 })
         context.setLogin(true)
+
+        // Save username if "Remember Me" is checked
+        if (rememberMe) {
+          localStorage.setItem('savedUsername', data.username)
+          localStorage.setItem('rememberMe', 'true')
+        } else {
+          localStorage.removeItem('savedUsername')
+          localStorage.removeItem('rememberMe')
+        }
+
         router.back()
         return
       }
@@ -55,14 +76,15 @@ const LoginForm = () => {
         label='Tên đăng nhập'
         control={control}
         placeholder='Nhập tên đăng nhập'
-        InputTextProps={{ autoComplete: 'username' }}
+        InputCustomProps={{ autoComplete: 'username' }}
       />
       <InputText
         name='password'
         label='Mật khẩu'
         control={control}
         placeholder='Nhập mật khẩu'
-        InputTextProps={{ autoComplete: 'current-password' }}
+        type='password'
+        InputCustomProps={{ autoComplete: 'current-password' }}
       />
       <Button
         className={cn(
@@ -81,8 +103,12 @@ const LoginForm = () => {
         Đăng nhập
       </Button>
 
-      <div className='flex gap-2'>
-        <Checkbox className='w-5 h-5 bg-secondary data-[state=checked]:bg-white data-[state=checked]:text-primary' />
+      <div className='flex gap-2 items-center'>
+        <Checkbox
+          className='w-5 h-5 bg-secondary data-[state=checked]:bg-white data-[state=checked]:text-primary'
+          checked={rememberMe}
+          onClick={() => setRememberMe((prev) => !prev)}
+        />
         <p className='text-[15px] font-medium'>Nhớ đăng nhập</p>
       </div>
       <p className='text-[15px] text-gray-300 flex gap-2'>
