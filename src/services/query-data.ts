@@ -41,10 +41,18 @@ const fetchData = async (apiMethod: Promise<any>) => {
 
 const itemsToShow = 24 // 24 items per page
 
-export const useBanners = (options?: QueryOptions<any>): QueryObserverResult<MovieCategoryItem> =>
+export const useBanners = ({
+  category,
+  limit,
+  options,
+}: {
+  category: string
+  limit?: string | number
+  options?: QueryOptions<any>
+}): QueryObserverResult<MovieCategoryItem> =>
   useFetchData({
-    queryKey: ['banners'],
-    queryFn: () => fetchData(movieApi.getListByCate({ category: 'phim-le', limit: itemsToShow })),
+    queryKey: ['banners', { category }],
+    queryFn: () => fetchData(movieApi.getListByCate({ category, limit: limit || itemsToShow })),
     ...options,
   })
 

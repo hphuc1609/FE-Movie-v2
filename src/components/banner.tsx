@@ -1,7 +1,6 @@
 'use client'
 
 import { MovieItem } from '@/models/interfaces/list-movie'
-import { NewMovieItem } from '@/models/interfaces/new-movie'
 import { useBanners } from '@/services/query-data'
 import { CalendarDays, MoveLeft, MoveRight, Play } from 'lucide-react'
 import Image from 'next/image'
@@ -28,16 +27,25 @@ const Banner = () => {
   const [activeSlide, setActiveSlide] = useState(0)
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
-  const { data: banners, isLoading: isLoadingBanners } = useBanners()
+  const { data: banners, isLoading: isLoadingBanners } = useBanners({
+    category: 'phim-le',
+    limit: 64,
+  })
 
   const filteredNewMovies = useMemo(() => {
     const currentYear = new Date().getFullYear()
-    return (
-      banners?.items?.filter(
-        (movie) =>
-          movie.year === currentYear && !movie.category.some((cat) => cat.slug === 'phim-18'),
-      ) || []
-    )
+    const yearsToCheck = Array.from({ length: currentYear + 1 }, (_, i) => currentYear - i)
+
+    return yearsToCheck.reduce((movies, year) => {
+      if (movies.length === 0) {
+        return (
+          banners?.items.filter(
+            (movie) => movie.year === year && !movie.category.some((cat) => cat.slug === 'phim-18'),
+          ) || []
+        )
+      }
+      return movies
+    }, [] as MovieItem[])
   }, [banners?.items])
 
   // ------------------- Event Handlers -----------------------------

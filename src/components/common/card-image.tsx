@@ -1,12 +1,12 @@
 'use client'
 
+import openRandomAdLink from '@/helpers/handle-ads'
+import { cn } from '@/lib/utils'
 import { MovieCategoryItem, MovieCategoryResponse, MovieItem } from '@/models/interfaces/list-movie'
 import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import PlayButton from './play-button'
-import openRandomAdLink from '@/helpers/handle-ads'
-import { cn } from '@/lib/utils'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
@@ -38,7 +38,7 @@ export default function CardImage(props: CardImageProps) {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
-            <p className='absolute top-1 left-1 text-xs max-sm:text-[10px] font-semibold bg-label-color opacity-85 px-2 py-[2px] max-sm:px-1 rounded text-nowrap'>
+            <p className='absolute top-1 left-1 text-xs max-sm:text-[10px] font-semibold bg-label-color opacity-85 px-2 py-[2px] max-sm:px-1 rounded-[2px] text-nowrap'>
               {item.episode_current ? item.episode_current : 'Full'}
             </p>
           </Link>
