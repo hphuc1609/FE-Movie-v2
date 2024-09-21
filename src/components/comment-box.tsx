@@ -3,11 +3,12 @@
 import formatDate from '@/helpers/format-date'
 import { showToast } from '@/helpers/toast'
 import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
 import commentApi from '@/services/api-client/comments'
 import { useComments, useMovieInfo } from '@/services/query-data'
 import { useMutation } from '@tanstack/react-query'
 import { getCookie } from 'cookies-next'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import DialogCustom from './common/dialog'
@@ -15,12 +16,9 @@ import { Avatar, AvatarImage } from './ui/avatar'
 import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
 import { Textarea } from './ui/textarea'
-import { cn } from '@/lib/utils'
 
 const CommentBox = () => {
   const { toast } = useToast()
-  const router = useRouter()
-
   const pathname = usePathname()
   const slug = pathname.split('/').pop() as string
 
@@ -29,8 +27,9 @@ const CommentBox = () => {
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
   const [loadedAvatar, setLoadedAvatar] = useState(false)
 
-  const userInfo = getCookie('userVerify')
-  const username: string = userInfo ? JSON.parse(userInfo).username : null
+  const userInfo = getCookie('userVerify') as string
+  const username: string = typeof userInfo !== 'undefined' ? JSON.parse(userInfo).username : null
+
   const expiredDateComment = (date: string) =>
     new Date().getTime() - new Date(date).getTime() < 24 * 60 * 60 * 1000 // 24 hours
 
@@ -59,7 +58,7 @@ const CommentBox = () => {
       if (!userInfo) {
         throw new Error('please login')
       }
-      return await commentApi.create({ ...data, movieId })
+      return await commentApi.create({ ...data, username, movieId })
     },
     onSuccess: () => {
       reset()

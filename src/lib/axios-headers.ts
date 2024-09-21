@@ -10,7 +10,10 @@ class HttpError extends Error {
 }
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_DOMAIN,
+  baseURL:
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:5000/api'
+      : process.env.NEXT_PUBLIC_BACKEND_DOMAIN,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,7 +30,7 @@ axiosInstance.interceptors.request.use(
     return config
   },
   (error) => {
-    return new Error(error)
+    throw new Error(error)
   },
 )
 

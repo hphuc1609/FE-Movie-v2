@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
     return config
   },
   (error) => {
-    return new Error(error)
+    throw new Error(error)
   },
 )
 
@@ -33,7 +33,7 @@ axiosInstance.interceptors.response.use(
 
       return new HttpError(status, message)
     }
-    return new Error(error.message)
+    throw new Error(error.message)
   },
 )
 
