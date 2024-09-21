@@ -47,6 +47,7 @@ const LoginForm = () => {
       if (isSuccessResponse(res)) {
         setCookie('userVerify', res.data, { maxAge: 60 * 60 * 24 }) // 1 day
         context.setLogin(true)
+        showToast({ variant: 'success', title: 'Thành công', description: 'Đăng nhập thành công!' })
 
         // Save username if "Remember Me" is checked
         if (rememberMe) {
