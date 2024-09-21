@@ -11,6 +11,7 @@ import {
 import { Button } from '../ui/button'
 import { DialogContentProps } from '@radix-ui/react-dialog'
 import { LoaderCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface DialogCustomProps {
   open: boolean
@@ -45,8 +46,11 @@ const DialogCustom = (props: DialogCustomProps) => {
       onOpenChange={setOpen}
     >
       <DialogContent
-        className='bg-primary border-none max-sm:p-4 max-w-[60%] max-xl:max-w-[90%] outline-none'
         {...DialogContentProps}
+        className={cn(
+          'bg-primary border-none max-sm:p-4 max-w-[60%] max-md:max-w-[90%] outline-none',
+          DialogContentProps?.className,
+        )}
       >
         <DialogHeader>
           <DialogTitle className='text-2xl text-left font-bold'>{title}</DialogTitle>

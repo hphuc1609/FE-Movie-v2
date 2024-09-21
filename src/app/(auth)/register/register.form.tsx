@@ -20,12 +20,7 @@ const RegisterForm = () => {
 
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: {
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    },
+    defaultValues: { username: '', password: '', confirmPassword: '' },
   })
 
   const onSubmit = async (data: RegisterData) => {
@@ -53,12 +48,6 @@ const RegisterForm = () => {
         label='Tên đăng nhập'
         control={control}
         placeholder='Nhập tên đăng nhập'
-      />
-      <InputCustom
-        name='email'
-        label='Email'
-        control={control}
-        placeholder='Nhập email'
       />
       <InputCustom
         name='password'

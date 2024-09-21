@@ -108,7 +108,7 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
       priority
       onError={() => handleErrorImage(index)}
       className={cn(
-        'object-cover group-hover:scale-110 md:min-h-[270px] max-h-[270px] max-[400px]:h-[150px] w-full transition-all duration-500',
+        'object-cover group-hover:scale-110 md:min-h-[250px] max-h-[270px] max-[400px]:h-[150px] w-full transition-all duration-500',
         `${props.ImageProps?.className}`,
       )}
     />

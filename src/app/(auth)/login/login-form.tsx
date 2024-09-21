@@ -20,6 +20,7 @@ import { useForm } from 'react-hook-form'
 const LoginForm = () => {
   const router = useRouter()
   const context = useContextGlobal()
+
   const [loading, setLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
 
@@ -55,7 +56,6 @@ const LoginForm = () => {
           localStorage.removeItem('savedUsername')
           localStorage.removeItem('rememberMe')
         }
-
         router.back()
         return
       }
@@ -72,10 +72,10 @@ const LoginForm = () => {
       <h1 className='text-3xl font-extrabold'>Đăng nhập</h1>
       <InputText
         name='username'
-        label='Tài khoản'
+        label='Tên đăng nhập'
         control={control}
-        placeholder='Nhập email hoặc tên đăng nhập'
-        InputCustomProps={{ autoComplete: 'email' }}
+        placeholder='Nhập tên đăng nhập'
+        InputCustomProps={{ autoComplete: 'username' }}
       />
       <InputText
         name='password'
@@ -102,13 +102,21 @@ const LoginForm = () => {
         Đăng nhập
       </Button>
 
-      <div className='flex gap-2 items-center'>
-        <Checkbox
-          className='w-5 h-5 bg-secondary data-[state=checked]:bg-white data-[state=checked]:text-primary'
-          checked={rememberMe}
-          onClick={() => setRememberMe((prev) => !prev)}
-        />
-        <p className='text-[15px] font-medium'>Nhớ đăng nhập</p>
+      <div className='flex justify-between items-center'>
+        <div className='flex gap-2 items-center'>
+          <Checkbox
+            className='w-5 h-5 bg-secondary data-[state=checked]:bg-white data-[state=checked]:text-primary'
+            checked={rememberMe}
+            onClick={() => setRememberMe((prev) => !prev)}
+          />
+          <p className='text-[15px] font-medium'>Nhớ đăng nhập</p>
+        </div>
+        <Link
+          href='#'
+          className='text-[15px] text-gray-300 hover:underline'
+        >
+          Quên mật khẩu?
+        </Link>
       </div>
       <p className='text-[15px] text-gray-300 flex gap-2'>
         Bạn chưa có tài khoản?
