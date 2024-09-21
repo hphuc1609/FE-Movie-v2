@@ -130,11 +130,11 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       id='video'
       className='flex flex-col'
     >
-      <div className='relative h-[250px] lg:h-[550px] flex flex-col flex-auto gap-3 bg-black bg-opacity-80'>
+      <div className='relative w-full max-sm:h-[250px] sm:h-[550px] flex flex-col flex-auto gap-3 bg-black'>
         {renderPlayerUI()}
         {!isPlaying && serverIndex === 'server 2' && (
           <div
-            className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-5'
+            className='absolute top-0 left-0 w-full h-full'
             onClick={handlePlayClick}
           >
             <PlayButton />

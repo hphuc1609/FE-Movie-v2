@@ -101,7 +101,7 @@ const HeaderMenubar = React.memo(() => {
   }
 
   return (
-    <div className='mx-auto max-w-screen-xl w-full px-[25px] py-8 lg:px-10 flex justify-between items-center gap-8 z-50'>
+    <div className='mx-auto max-w-screen-xl w-full px-[25px] lg:px-10 flex justify-between items-center gap-8'>
       <div className='flex gap-8 h-full items-center'>
         <Link
           href='/'

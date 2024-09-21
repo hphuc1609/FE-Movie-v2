@@ -42,10 +42,9 @@ const LoginForm = () => {
     setLoading(true)
     try {
       const res = await authApi.login(data)
-      if (isSuccessResponse(res)) {
-        const payload = { username: res.username, token: res.token }
 
-        setCookie('userVerify', payload, { maxAge: 60 * 60 * 24 })
+      if (isSuccessResponse(res)) {
+        setCookie('userVerify', res.data, { maxAge: 60 * 60 * 24 }) // 1 day
         context.setLogin(true)
 
         // Save username if "Remember Me" is checked
@@ -73,10 +72,10 @@ const LoginForm = () => {
       <h1 className='text-3xl font-extrabold'>Đăng nhập</h1>
       <InputText
         name='username'
-        label='Tên đăng nhập'
+        label='Tài khoản'
         control={control}
-        placeholder='Nhập tên đăng nhập'
-        InputCustomProps={{ autoComplete: 'username' }}
+        placeholder='Nhập email hoặc tên đăng nhập'
+        InputCustomProps={{ autoComplete: 'email' }}
       />
       <InputText
         name='password'
