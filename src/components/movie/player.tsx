@@ -157,7 +157,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           ))}
         </div>
         <span className='text-lg font-bold uppercase sticky top-0 p-2'>Danh sách tập</span>
-        <div className='grid grid-cols-12 max-xl:grid-cols-9 max-sm:grid-cols-6 gap-2 px-2 pb-3 overflow-auto'>
+        <div className='flex items-center flex-wrap gap-2 px-2 pb-3 overflow-y-auto'>
           {dataEpisode.map((item) =>
             item.server_data.map((episode, serverIndex) => {
               const isLastEpisode =
@@ -172,7 +172,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
                   onClick={() => handleEpisodeClick(episode.slug)}
                 >
                   {!['full', 'tập đặc biệt', 'lồng tiếng'].includes(episode.name?.toLowerCase())
-                    ? episode.name.split(' ')[1]
+                    ? 'Tập ' + episode.name.split(' ')[1]
                     : episode.name}
                   {isLastEpisode && ' END'}
                 </Button>

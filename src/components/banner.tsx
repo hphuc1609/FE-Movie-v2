@@ -65,7 +65,7 @@ const Banner = () => {
   }
 
   if (isLoadingBanners) {
-    return <Skeleton className='w-full h-[650px] bg-black bg-opacity-30' />
+    return <Skeleton className='w-full h-[650px] max-sm:h-[350px] bg-neutral-400/15' />
   }
 
   return (

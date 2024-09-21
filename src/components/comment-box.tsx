@@ -59,8 +59,7 @@ const CommentBox = () => {
       if (!userInfo) {
         throw new Error('please login')
       }
-
-      return await commentApi.create({ ...data, username, movieId })
+      return await commentApi.create({ ...data, movieId })
     },
     onSuccess: () => {
       reset()

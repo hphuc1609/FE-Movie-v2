@@ -45,7 +45,7 @@ export default function CardImage(props: CardImageProps) {
           {/* Movie name */}
           <Link
             href={`/phim/${item.slug}`}
-            className='text-sm max-md:text-xs grid gap-1'
+            className='text-sm max-lg:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>
               {item.name} ({item.year})
@@ -103,12 +103,12 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
       {...props.ImageProps}
       src={imageUrl(item, index)}
       alt={item.name}
-      width={275}
-      height={275}
+      width={270}
+      height={270}
       priority
       onError={() => handleErrorImage(index)}
       className={cn(
-        'object-cover group-hover:scale-110 md:min-h-[250px] max-h-[270px] max-[400px]:h-[150px] w-full transition-all duration-500',
+        'object-cover group-hover:scale-110 min-[500px]:h-[200px] md:min-h-[245px] lg:min-h-[250px] max-h-[270px] max-[400px]:h-[150px] w-full transition-all duration-500',
         `${props.ImageProps?.className}`,
       )}
     />

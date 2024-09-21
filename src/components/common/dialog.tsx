@@ -48,7 +48,7 @@ const DialogCustom = (props: DialogCustomProps) => {
       <DialogContent
         {...DialogContentProps}
         className={cn(
-          'bg-primary border-none max-sm:p-4 max-w-[60%] max-md:max-w-[90%] outline-none',
+          'bg-primary border-none max-sm:p-4 max-w-[60%] max-md:max-w-[90%] outline-none !rounded-sm',
           DialogContentProps?.className,
         )}
       >

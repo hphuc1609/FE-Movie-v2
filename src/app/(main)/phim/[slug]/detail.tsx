@@ -91,7 +91,7 @@ const SkeletonDetail = () => {
           </div>
         </div>
       </div>
-      <Skeleton className='w-full h-[550px] max-xl:h-[250px] rounded-none bg-skeleton' />
+      <Skeleton className='w-full max-sm:h-[250px] sm:h-[550px] rounded-none bg-skeleton' />
     </>
   )
 }
