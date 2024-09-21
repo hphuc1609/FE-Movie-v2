@@ -45,7 +45,7 @@ export default function CardImage(props: CardImageProps) {
           {/* Movie name */}
           <Link
             href={`/phim/${item.slug}`}
-            className='text-sm max-sm:text-xs grid gap-1'
+            className='text-sm max-md:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>
               {item.name} ({item.year})
@@ -56,7 +56,7 @@ export default function CardImage(props: CardImageProps) {
           </Link>
           {/* Categories */}
           {item.category && (
-            <div className='flex items-center flex-wrap gap-1 max-sm:hidden'>
+            <div className='flex items-center flex-wrap gap-1 max-md:hidden'>
               {item.category.map((cate) => (
                 <Link
                   key={cate.id}
@@ -108,7 +108,7 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
       priority
       onError={() => handleErrorImage(index)}
       className={cn(
-        'object-cover group-hover:scale-110 h-[270px] max-xl:h-[230px] max-lg:h-[200px] max-[400px]:h-[150px] w-full transition-all duration-500',
+        'object-cover group-hover:scale-110 md:min-h-[270px] max-h-[270px] max-[400px]:h-[150px] w-full transition-all duration-500',
         `${props.ImageProps?.className}`,
       )}
     />

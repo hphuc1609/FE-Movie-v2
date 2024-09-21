@@ -73,7 +73,7 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
         </div>
       )}
       {isLoading && (
-        <div className='grid grid-cols-6 max-sm:grid-cols-3 max-xl:grid-cols-5 gap-5 gap-y-7 max-sm:gap-3'>
+        <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
           <SkeletonCard itemLength={12} />
         </div>
       )}

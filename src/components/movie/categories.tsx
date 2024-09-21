@@ -46,7 +46,7 @@ export default function CategoryMovie(props: CategoryMovieProps) {
           </Link>
         )}
       </header>
-      <div className='grid grid-cols-4 max-sm:grid-cols-3 max-lg:grid-cols-5 gap-5 gap-y-7 max-xl:gap-x-3'>
+      <div className='grid grid-cols-4 max-sm:grid-cols-3 gap-x-6 gap-y-7 max-sm:gap-x-3 '>
         {isLoadingList ? (
           <SkeletonCard />
         ) : (
