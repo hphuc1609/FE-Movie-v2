@@ -18,8 +18,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const userInfo = getCookie('userVerify')
-    const token = userInfo ? JSON.parse(userInfo)?.token : null
+    const userInfo = getCookie('userVerify') as string
+    const token = typeof userInfo !== 'undefined' ? JSON.parse(userInfo).token : null
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
@@ -42,7 +42,7 @@ axiosInstance.interceptors.response.use(
 
       return new HttpError(status, message)
     }
-    return new Error(error.message)
+    throw new Error(error.message)
   },
 )
 
