@@ -1,16 +1,18 @@
 export interface ILoginResponse {
-  token: string
-  username: string
-  message: string
   status: boolean | number
+  message: string
+  data: {
+    username: string
+    token: string
+  }
 }
 
 export interface IRegisterResponse {
-  message: string
   status: boolean | number
+  message: string
 }
 
 export interface ILogoutResponse {
-  message: string
   status: boolean | number
+  message: string
 }
