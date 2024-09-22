@@ -12,10 +12,10 @@ export default function AuthLayout({
         fill
         src={authBackground}
         alt='Background'
-        className='object-cover h-screen'
+        className='object-cover'
       />
-      <div className='absolute top-0 left-0 w-full min-h-full max-xl:h-screen bg-black/50'></div>
-      <div className='py-12 px-16 max-sm:p-10 max-w-[450px] w-full flex flex-col gap-6 shadow-lg backdrop-brightness-110 bg-black/75'>
+      <div className='absolute top-0 left-0 w-full min-h-full bg-black/50'></div>
+      <div className='py-12 px-16 max-sm:p-10 max-w-[450px] w-full h-fit flex flex-col gap-6 shadow-lg backdrop-brightness-110 bg-black/75 z-50'>
         {children}
       </div>
     </div>
