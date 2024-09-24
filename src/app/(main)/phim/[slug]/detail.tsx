@@ -17,27 +17,36 @@ interface DetailProps {
 }
 
 const Detail = ({ detail }: DetailProps) => {
+  // Lấy thể loại của phim
   const slugCate = detail?.movie?.category?.[0]?.slug
 
-  const { data: movies, isLoading: isLoadingMovies } = useMoviesByCate({
+  const { data: moviesType, isLoading: isLoadingMovies } = useMoviesByCate({
     category: slugCate.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
     limit: 64,
   })
-  const { data: newMovies } = useMoviesByCate({ category: 'phim-le', limit: 64 })
+
+  const { data: phimLe } = useMoviesByCate({ category: 'phim-le', limit: 64 })
+  const { data: phimBo } = useMoviesByCate({ category: 'phim-bo', limit: 64 })
+
+  const allMovies = useMemo(() => {
+    return {
+      ...phimLe,
+      items: [...(phimBo?.items || []), ...(phimLe?.items || [])],
+    }
+  }, [phimBo, phimLe])
 
   const filteredNewMovies = useMemo(() => {
     const currentYear = new Date().getFullYear()
     const filtered =
-      newMovies?.items?.filter(
+      allMovies?.items?.filter(
         (movie) =>
           movie.year === currentYear && !movie.category.some((cat) => cat.slug === 'phim-18'),
       ) || []
 
     return {
-      ...newMovies,
       items: filtered,
     }
-  }, [newMovies])
+  }, [allMovies?.items])
 
   if (!detail?.status || typeof detail !== 'object') return <ErrorMessage message={detail?.msg} />
 
@@ -47,22 +56,24 @@ const Detail = ({ detail }: DetailProps) => {
       {isLoadingMovies ? (
         <SkeletonDetail />
       ) : (
-        <>
+        <div className='flex flex-col gap-20 max-sm:gap-10'>
           <MovieInfo detail={detail.movie} />
-          <MoviePlayer
-            detail={detail.movie}
-            dataEpisode={detail.episodes}
-          />
-          <CommentBox />
-          <RelateMovies
-            title='Có thể bạn muốn xem'
-            data={movies as MovieCategoryItem}
-          />
-          <RelateMovies
-            title='Phim mới đề cử'
-            data={filteredNewMovies as MovieCategoryItem}
-          />
-        </>
+          <div className='flex flex-col gap-10'>
+            <MoviePlayer
+              detail={detail.movie}
+              dataEpisode={detail.episodes}
+            />
+            <CommentBox />
+            <RelateMovies
+              title='Có thể bạn muốn xem'
+              data={moviesType as MovieCategoryItem}
+            />
+            <RelateMovies
+              title='Phim mới đề cử'
+              data={filteredNewMovies as MovieCategoryItem}
+            />
+          </div>
+        </div>
       )}
     </>
   )
@@ -91,7 +102,7 @@ const SkeletonDetail = () => {
           </div>
         </div>
       </div>
-      <Skeleton className='w-full max-sm:h-[250px] sm:h-[550px] rounded-none bg-skeleton' />
+      <Skeleton className='w-full aspect-video rounded-none bg-skeleton' />
     </>
   )
 }

@@ -1,5 +1,6 @@
-import movieApi from '@/services/api-client/movies'
+import { myWebsite } from '@/constants/domain'
 import isSuccessResponse from '@/helpers/check-response'
+import movieApi from '@/services/api-client/movies'
 import { Metadata } from 'next'
 import Detail from './detail'
 
@@ -10,12 +11,11 @@ interface Params {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   try {
     const { slug } = params
-    const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
     const res = await movieApi.getDetail(slug)
 
     if (!isSuccessResponse(res)) {
       return {
-        title: 'Not Found',
+        title: 'Page Not Found',
         description: 'The page you are looking for does not exist',
       }
     }
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     // Meta data
     const metaTitle = `Phim ${seoOnPage.name}`
     const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} với chất lượng HD tại Mephim247. ${seoOnPage.content}`
-    const metaUrl = `${baseUrl}/phim/${seoOnPage.slug}`
+    const metaUrl = `${myWebsite}/phim/${seoOnPage.slug}`
     const metaImage = seoOnPage.poster_url || seoOnPage.thumb_url
 
     return {
@@ -35,13 +35,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: metaTitle,
         description: metaDescription,
         url: metaUrl,
-        images: [{ url: metaImage, width: 1200, height: 630, alt: seoOnPage.origin_name }],
+        images: metaImage,
       },
     }
   } catch (error: any) {
     console.error(error.message)
     return {
-      title: 'Not Found',
+      title: 'Page Not Found',
       description: 'The page you are looking for does not exist',
     }
   }

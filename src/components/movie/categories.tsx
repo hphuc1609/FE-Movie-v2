@@ -15,7 +15,7 @@ interface CategoryMovieProps {
 
 export default function CategoryMovie(props: CategoryMovieProps) {
   const { category, title } = props
-  const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase() || '')
+  const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase() as string)
 
   const { data: movieCate, isLoading: isLoadingList } = useMoviesByCate({ category })
 

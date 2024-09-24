@@ -28,7 +28,7 @@ type FooterSectionProps = {
 
 const FooterSection = ({ title, links }: FooterSectionProps) => (
   <div>
-    <h4 className='text-lg font-semibold text-white mb-3'>{title}</h4>
+    <h4 className='text-lg font-semibold mb-3'>{title}</h4>
     <ul className='space-y-2'>
       {links.map((link, index) => (
         <FooterLink

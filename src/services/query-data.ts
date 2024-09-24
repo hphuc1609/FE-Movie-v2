@@ -2,8 +2,8 @@
 
 import { dataNamPhatHanh } from '@/data/category'
 import isSuccessResponse from '@/helpers/check-response'
-import useFetchData from '@/hooks/use-fetch'
-import { toast } from '@/hooks/use-toast'
+import useFetchData from '@/hooks/useFetch'
+import { toast } from '@/hooks/useToast'
 import { ICategory } from '@/models/interfaces/category'
 import { ICommentItem } from '@/models/interfaces/comment'
 import { DetailResponse } from '@/models/interfaces/detail'

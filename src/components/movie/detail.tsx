@@ -1,9 +1,9 @@
 'use client'
 
 import cleanString from '@/helpers/cleanString'
-import { showToast } from '@/helpers/toast'
+import { cn } from '@/lib/utils'
 import { DetailResponse } from '@/models/interfaces/detail'
-import { Video } from 'lucide-react'
+import { Play, Video } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
@@ -16,6 +16,7 @@ interface MovieInfoProps {
 }
 
 export default function MovieInfo({ detail }: MovieInfoProps) {
+  console.log('🚀 ~ MovieInfo ~ detail:', detail.thumb_url)
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
 
@@ -57,26 +58,22 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
     [detail, categories, countries, actors],
   )
 
-  const handleOpenTrailer = () => {
-    if (!detail.trailer_url) {
-      showToast({
-        variant: 'info',
-        title: 'Thông báo',
-        description: 'Trailer của phim hiện chưa có sẵn.',
-      })
-      return
-    }
-
-    setOpenDialogTrailer(true)
-  }
-
   // ----------------- Render UI -----------------------------
   return (
     <section
       id='info-movie'
       className='flex max-md:flex-col gap-[30px] overflow-hidden'
     >
-      <div className='relative max-w-[300px] h-[440px] bg-gray-50 bg-opacity-10 mx-auto overflow-hidden'>
+      <div className='absolute top-0 left-0 w-full min-h-[630px] rounded-md overflow-hidden -z-10'>
+        <Image
+          fill
+          src={detail.thumb_url}
+          alt={detail.name}
+          className='absolute top-0 left-0 w-full object-cover'
+        />
+        <div className='absolute top-0 left-0 w-full h-full bg-black/80' />
+      </div>
+      <div className='relative max-w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>
         <Image
           src={errorImage ? detail.thumb_url : detail.poster_url}
           width={300}
@@ -86,23 +83,43 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
           onError={() => setErrorImage(true)}
           className='w-full h-full object-cover'
         />
-        <Button
-          className='absolute bottom-0 h-[56px] w-full text-lg uppercase bg-black bg-opacity-90 hover:bg-label-color rounded-none'
-          onClick={() => handleOpenTrailer()}
-        >
-          <Video
-            size={24}
-            strokeWidth={1}
-            className='mr-2 text-primary-foreground'
-            fill='currentColor'
-          />
-          Trailer
-        </Button>
+        <div className='absolute bottom-5 w-full flex justify-evenly'>
+          <Button
+            className={cn(
+              'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
+              { 'bg-neutral-500 border-neutral-500 pointer-events-none': !detail.trailer_url },
+            )}
+            onClick={() => setOpenDialogTrailer(true)}
+          >
+            <Video
+              size={16}
+              strokeWidth={1}
+              className='mr-2'
+              fill='currentColor'
+            />
+            Trailer
+          </Button>
+          <Button
+            className='h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit'
+            onClick={() =>
+              document.getElementById('player')?.scrollIntoView({ behavior: 'smooth' })
+            }
+          >
+            <Play
+              size={16}
+              strokeWidth={1}
+              className='mr-2'
+              fill='currentColor'
+            />
+            Xem phim
+          </Button>
+        </div>
       </div>
+
       {/* Information */}
       <div className='flex flex-1 flex-col gap-6'>
         <div className='flex flex-col gap-1 max-sm:gap-2'>
-          <h1 className='text-2xl font-semibold text-primary-color'>{detail.name}</h1>
+          <h1 className='text-3xl font-semibold text-primary-color'>{detail.name}</h1>
           <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
           <Ratings
             rating={detail.tmdb.vote_average}
@@ -111,7 +128,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
             totalStars={10}
           />
         </div>
-        <p className='md:max-h-[130px] max-sm:max-h-[200px] overflow-auto text-base'>{content}</p>
+        <p className='md:max-h-[130px] max-sm:max-h-[200px] overflow-auto text-sm'>{content}</p>
         <div className='flex flex-col gap-2'>
           {details.map(
             (item) =>
@@ -147,6 +164,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
             title='Trailer'
           ></iframe>
         }
+        DialogContentProps={{ className: 'max-w-[70%]' }}
       />
     </section>
   )

@@ -1,4 +1,4 @@
-import { toast } from '@/hooks/use-toast'
+import { toast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 
 export const showToast = ({

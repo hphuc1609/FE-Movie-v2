@@ -1,8 +1,8 @@
 'use client'
 
 import formatDate from '@/helpers/format-date'
+import randomColor from '@/helpers/random-color'
 import { showToast } from '@/helpers/toast'
-import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import commentApi from '@/services/api-client/comments'
 import { useComments, useMovieInfo } from '@/services/query-data'
@@ -12,20 +12,17 @@ import { usePathname } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { Controller, FieldValues, useForm } from 'react-hook-form'
 import DialogCustom from './common/dialog'
-import { Avatar, AvatarImage } from './ui/avatar'
+import { Avatar } from './ui/avatar'
 import { Button } from './ui/button'
-import { Skeleton } from './ui/skeleton'
 import { Textarea } from './ui/textarea'
 
 const CommentBox = () => {
-  const { toast } = useToast()
   const pathname = usePathname()
   const slug = pathname.split('/').pop() as string
 
   const [count, setCount] = useState(10)
   const [commentId, setCommentId] = useState('')
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
-  const [loadedAvatar, setLoadedAvatar] = useState(false)
 
   const userInfo = getCookie('userVerify') as string
   const username: string = typeof userInfo !== 'undefined' ? JSON.parse(userInfo).username : null
@@ -72,10 +69,11 @@ const CommentBox = () => {
           description: 'Vui lòng đăng nhập để có thể bình luận.',
         })
       } else {
+        console.error(error.message)
         showToast({
           variant: 'error',
-          title: 'Failed to add comment.',
-          description: `There was a problem with your request. ${error.message}`,
+          title: 'Lỗi',
+          description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
         })
       }
     },
@@ -90,10 +88,11 @@ const CommentBox = () => {
       setOpenDialogDelete(false)
     },
     onError: (error) => {
+      console.error(error.message)
       showToast({
         variant: 'error',
-        title: 'Failed to delete comment.',
-        description: `There was a problem with your request. ${error.message}`,
+        title: 'Lỗi',
+        description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
       })
     },
   })
@@ -103,10 +102,11 @@ const CommentBox = () => {
     try {
       submitMutation.mutate(data)
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong.',
-        description: `There was a problem with your request. ${error.message}`,
+      console.error(error.message)
+      showToast({
+        variant: 'error',
+        title: 'Lỗi',
+        description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
       })
     }
   }
@@ -115,17 +115,18 @@ const CommentBox = () => {
     try {
       deleteMutation.mutate(id)
     } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Something went wrong.',
-        description: `There was a problem with your request. ${error.message}`,
+      console.error(error.message)
+      showToast({
+        variant: 'error',
+        title: 'Lỗi',
+        description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
       })
     }
   }
 
   return (
-    <div className='h-fit flex flex-col gap-6 p-6 max-sm:p-4 bg-black/50'>
-      <h5 className='text-lg font-bold uppercase'>Bình luận phim</h5>
+    <div className='h-fit flex flex-col gap-4 p-6 max-sm:p-4 bg-black/50'>
+      <h5 className='text-lg font-bold'>{filteredComments.length} Bình luận</h5>
       <Controller
         control={control}
         name='content'
@@ -133,7 +134,7 @@ const CommentBox = () => {
           <>
             <Textarea
               {...field}
-              placeholder='Nhập bình luận của bạn...'
+              placeholder='Nhập bình luận...'
               rows={4}
               className='rounded-none focus-visible:ring-0 focus-visible:ring-offset-0 text-primary'
             />
@@ -156,14 +157,12 @@ const CommentBox = () => {
             className='flex items-center gap-4 max-sm:gap-2'
           >
             <Avatar className='w-12 h-12 max-sm:w-8 max-sm:h-8'>
-              <AvatarImage
-                src={'https://github.com/shadcn.png'}
-                alt={comment.username}
-                onLoadingStatusChange={(status) => {
-                  status === 'loaded' ? setLoadedAvatar(true) : null
-                }}
-              />
-              {!loadedAvatar && <Skeleton className='w-full h-full rounded-full' />}
+              <div
+                className='flex items-center justify-center w-full h-full rounded-full'
+                style={{ backgroundColor: randomColor(), fontSize: '1.25rem', color: 'white' }}
+              >
+                {comment.username.charAt(0).toUpperCase()}
+              </div>
             </Avatar>
             <div className='flex flex-col gap-1'>
               <div className='flex items-center gap-2'>

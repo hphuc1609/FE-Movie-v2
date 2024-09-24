@@ -33,7 +33,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
     rating,
     ratingCount = 0,
     totalStars = 5,
-    size = 20,
+    size = 18,
     fill = true,
     Icon = <Star fill='currentColor' />,
     variant = 'default',
@@ -72,7 +72,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
           }),
         )}
       </div>
-      <span className='text-muted-foreground text-sm'>
+      <span className='text-primary-foreground text-sm'>
         {rating > 1 ? `${rating.toFixed(1)}đ / ${ratingCount}` : 0} đánh giá
       </span>
     </div>

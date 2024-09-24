@@ -3,7 +3,6 @@
 import openRandomAdLink from '@/helpers/handle-ads'
 import { cn } from '@/lib/utils'
 import { DetailResponse } from '@/models/interfaces/detail'
-// import { useVideoPlayer } from '@/services/query-data'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import ReactHlsPlayer from 'react-hls-player'
@@ -27,21 +26,8 @@ export default function MoviePlayer(props: MoviePlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [serverIndex, setServerIndex] = useState('server 1')
 
-  // const removeLeadingZero = (name: string) => {
-  //   return name.replace(/tap-0(\d+)/, 'tap-$1')
-  // }
-
-  // const movieName = detail.slug.replace(/-\d{4}$/, '')
-  // const { data: dataVideo = [] } = useVideoPlayer({ slug: movieName })
-
   // Handle render video url by server change
   useEffect(() => {
-    // const sever3 = dataVideo.map((episode) => {
-    //   const param =
-    //     episodeParam === 'full' ? `tap-${episodeParam}` : removeLeadingZero(`${episodeParam}`)
-    //   return episode.items.find((item) => item.slug === param)
-    // })
-
     const filteredServer = dataEpisode.map((episode) =>
       episode.server_data.find((item) => item.slug === episodeParam),
     )
@@ -54,9 +40,6 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       case 'server 2':
         video = filteredServer[0]?.link_m3u8 || dataEpisode[0]?.server_data[0]?.link_m3u8
         break
-      // case 'server 3':
-      //   video = sever3[0]?.embed as string
-      //   break
       default:
         break
     }
@@ -106,17 +89,6 @@ export default function MoviePlayer(props: MoviePlayerProps) {
         ) : (
           <VideoNotAvailable />
         )
-      // case 'server 3':
-      //   return urlVideo ? (
-      //     <iframe
-      //       src={urlVideo}
-      //       className='w-full h-full'
-      //       allowFullScreen
-      //       loading='lazy'
-      //     ></iframe>
-      //   ) : (
-      //     <VideoNotAvailable />
-      //   )
       default:
         return null
     }
@@ -127,10 +99,10 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   return (
     <section
-      id='video'
+      id='player'
       className='flex flex-col'
     >
-      <div className='relative w-full max-sm:h-[250px] sm:h-[550px] flex flex-col flex-auto gap-3 bg-black'>
+      <div className='relative w-full aspect-video flex flex-col flex-auto gap-3 bg-black'>
         {renderPlayerUI()}
         {!isPlaying && serverIndex === 'server 2' && (
           <div
@@ -142,38 +114,62 @@ export default function MoviePlayer(props: MoviePlayerProps) {
         )}
       </div>
       <div className='max-h-[300px] flex flex-col gap-2 p-2 bg-black/50'>
-        <div className='flex items-center gap-2 p-2'>
-          {['server 1', 'server 2'].map((server, index) => (
-            <Button
-              key={index}
-              className={cn(
-                `text-white bg-zinc-300/5 hover:bg-label-color h-10 min-w-[30px] uppercase font-bold`,
-                `${serverIndex === server && 'bg-label-color'}`,
-              )}
-              onClick={() => setServerIndex(server)}
-            >
-              {server}
-            </Button>
-          ))}
+        <div className='flex flex-col items-center gap-2 p-2'>
+          <div className='flex gap-2'>
+            {['server 1', 'server 2'].map((server, index) => (
+              <Button
+                key={index}
+                className={cn(
+                  `text-white bg-zinc-300/5 hover:bg-blue-500/80 capitalize h-fit rounded-sm`,
+                  { 'bg-blue-500/80': serverIndex === server },
+                )}
+                onClick={() => setServerIndex(server)}
+              >
+                {server}
+              </Button>
+            ))}
+          </div>
         </div>
         <span className='text-lg font-bold uppercase sticky top-0 p-2'>Danh sách tập</span>
-        <div className='flex items-center flex-wrap gap-2 px-2 pb-3 overflow-y-auto'>
+        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 px-2 pb-3 overflow-y-auto'>
           {dataEpisode.map((item) =>
             item.server_data.map((episode, serverIndex) => {
               const isLastEpisode =
                 serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
+
+              const isDubbed = item.server_name.toLowerCase().includes('lồng tiếng')
+              const isNarrated = item.server_name.toLowerCase().includes('thuyết minh')
+              const isVietsub = item.server_name.toLowerCase().includes('vietsub')
+
+              const displayText = !['full', 'tập đặc biệt'].includes(episode.name?.toLowerCase())
+                ? episode.name.split(' ')[1]
+                : isDubbed
+                  ? 'Lồng tiếng'
+                  : isNarrated
+                    ? 'Thuyết minh'
+                    : episode.name
+
+              const isActive = episodeParam
+                ? (isDubbed && episodeParam === 'lồng tiếng') ||
+                  (isNarrated && episodeParam === 'thuyết minh') ||
+                  (episodeParam === 'full' && isVietsub) ||
+                  (!episodeParam.includes('full') && episodeParam === episode.slug)
+                : serverIndex === 0
+
               return (
                 <Button
                   key={episode.name}
                   className={cn(
-                    `text-sm min-w-fit h-9 hover:bg-label-color rounded-md text-center px-2 py-1 cursor-pointer text-nowrap bg-zinc-300/5`,
-                    `${(episodeParam ? episode.slug === episodeParam : serverIndex === 0) && 'bg-label-color'}`,
+                    `text-sm h-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
+                    { 'bg-primary-color text-black': isActive },
                   )}
-                  onClick={() => handleEpisodeClick(episode.slug)}
+                  onClick={() =>
+                    handleEpisodeClick(
+                      isDubbed ? 'lồng tiếng' : isNarrated ? 'thuyết minh' : episode.slug,
+                    )
+                  }
                 >
-                  {!['full', 'tập đặc biệt', 'lồng tiếng'].includes(episode.name?.toLowerCase())
-                    ? 'Tập ' + episode.name.split(' ')[1]
-                    : episode.name}
+                  {displayText}
                   {isLastEpisode && ' END'}
                 </Button>
               )
@@ -187,8 +183,8 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
 const VideoNotAvailable = () => {
   return (
-    <div className='w-full h-full text-lg flex items-center justify-center'>
-      Không có video vui lòng chọn server khác
-    </div>
+    <span className='w-full h-full text-lg flex items-center justify-center'>
+      Video is not available
+    </span>
   )
 }

@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/menubar'
 import { Separator } from '@/components/ui/separator'
 import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
-import useScrollPosition from '@/hooks/use-scroll'
+import useScrollPosition from '@/hooks/useScroll'
 import { cn } from '@/lib/utils'
 import { INavbar } from '@/models/interfaces/navbar'
 import { useCountries } from '@/services/query-data'
@@ -25,11 +25,11 @@ import React, { useEffect, useState } from 'react'
 import Drawer from '../drawer'
 import Account from './account'
 
-export default function Header() {
+const Header = () => {
   const pathname = usePathname()
   const scrollPosition = useScrollPosition()
 
-  const isHomePathname = pathname === '/'
+  const isHomePathname = pathname === '/' || !pathname.includes('/phim')
   const isAuthPath = pathname === '/login' || pathname === '/register'
 
   return (
@@ -44,8 +44,10 @@ export default function Header() {
 }
 
 const HeaderMenubar = React.memo(() => {
+  const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useContextGlobal()
+
   const [hasToken, setHasToken] = useState(false)
 
   // Check token
@@ -100,6 +102,12 @@ const HeaderMenubar = React.memo(() => {
     setOpenMenu(false)
   }
 
+  const activeLink = (link: string) => pathname.endsWith(link)
+
+  const checkUrl = (link: string) => {
+    return link === '/' ? link : `/danh-sach${link.startsWith('/') ? link : `/${link}`}?page=1`
+  }
+
   return (
     <div className='mx-auto max-w-screen-xl w-full px-[25px] lg:px-10 flex justify-between items-center gap-8'>
       <div className='flex gap-8 h-full items-center'>
@@ -107,15 +115,54 @@ const HeaderMenubar = React.memo(() => {
           href='/'
           className='text-3xl max-sm:text-2xl text-nowrap font-mono font-bold'
         >
-          Mephim<span className='text-primary-color'>247</span>
+          Mephim
+          <span className='text-primary-color ml-1'>247</span>
         </Link>
         <nav className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
-          {navbarItems.map((menuItem) => (
-            <TextMenubar
-              key={menuItem.name}
-              item={menuItem}
-            />
-          ))}
+          <Menubar className='flex gap-3 bg-transparent border-none p-0'>
+            {navbarItems.map((menuItem) => (
+              <React.Fragment key={menuItem.name}>
+                {menuItem.href ? (
+                  <Link
+                    href={checkUrl(menuItem.href)}
+                    className={cn(
+                      'text-base capitalize font-semibold hover:text-primary-color',
+                      activeLink(menuItem.href) && 'text-primary-color',
+                    )}
+                  >
+                    {menuItem.name}
+                  </Link>
+                ) : (
+                  <MenubarMenu>
+                    <MenubarTrigger className='p-0 !bg-transparent text-base capitalize font-semibold data-[state=open]:text-primary-color'>
+                      <div className='cursor-pointer flex items-center hover:text-primary-color'>
+                        {menuItem.name}
+                        <ChevronDown
+                          strokeWidth={2}
+                          size={16}
+                          className='ml-1'
+                        />
+                      </div>
+                    </MenubarTrigger>
+                    {menuItem.subMenu && (
+                      <MenubarContent className='min-w-fit px-5 mt-4 grid grid-cols-4 gap-x-5 gap-y-1 bg-neutral-900 z-50 border-none text-current'>
+                        {menuItem.subMenu.map((subItem) => (
+                          <Link
+                            key={subItem.slug}
+                            href={checkUrl(subItem.slug)}
+                          >
+                            <MenubarItem className='cursor-pointer capitalize block text-center hover:!bg-inherit hover:!text-yellow-400'>
+                              {subItem.name}
+                            </MenubarItem>
+                          </Link>
+                        ))}
+                      </MenubarContent>
+                    )}
+                  </MenubarMenu>
+                )}
+              </React.Fragment>
+            ))}
+          </Menubar>
         </nav>
       </div>
       <div className='flex items-center gap-2'>
@@ -133,7 +180,7 @@ const HeaderMenubar = React.memo(() => {
         ) : (
           <Button
             variant={'link'}
-            className='text-base max-sm:text-sm text-current hover:no-underline font-semibold p-0'
+            className='text-base max-sm:text-sm text-current hover:no-underline hover:text-primary-color font-semibold p-0'
             onClick={() => router.push('/login')}
           >
             Đăng nhập
@@ -155,11 +202,10 @@ const HeaderMenubar = React.memo(() => {
       <DialogCustom
         open={openDialogSearch}
         setOpen={setOpenDialogSearch}
-        title={'Bạn tìm phim gì?'}
         content={
           <div className='flex items-center'>
             <Input
-              placeholder='Tìm kiếm phim...'
+              placeholder='Tìm kiếm phim, tv shows...'
               autoFocus
               onKeyDown={(e) => handleKeyDown(e)}
               onChange={(e) => handleInputChange(e)}
@@ -179,54 +225,4 @@ const HeaderMenubar = React.memo(() => {
 
 HeaderMenubar.displayName = 'HeaderMenubar'
 
-const TextMenubar = ({ item }: { item: INavbar }) => {
-  const pathname = usePathname()
-
-  const activeLink = (link: string) => pathname.endsWith(link)
-
-  const checkUrl = (link: string) => {
-    return link === '/' ? link : `/danh-sach${link.startsWith('/') ? link : `/${link}`}?page=1`
-  }
-
-  return (
-    <Menubar className='bg-transparent border-none p-0'>
-      <MenubarMenu>
-        <MenubarTrigger className='p-0 !bg-transparent text-base capitalize font-semibold !text-current'>
-          {item.href ? (
-            <Link
-              href={checkUrl(item.href)}
-              className={cn('opacity-80 hover:opacity-100', activeLink(item.href) && 'opacity-100')}
-            >
-              {item.name}
-            </Link>
-          ) : (
-            <div className='cursor-pointer flex items-center opacity-80 hover:opacity-100'>
-              {item.name}
-              <ChevronDown
-                strokeWidth={2}
-                size={16}
-                className='ml-1'
-              />
-            </div>
-          )}
-        </MenubarTrigger>
-        {item.subMenu && (
-          <MenubarContent className='min-w-fit px-5 py-2 mt-4 grid grid-cols-4 gap-x-5 gap-y-2 bg-neutral-800 z-50 border-none text-white'>
-            {item.subMenu.map((subItem) => (
-              <Link
-                key={subItem.slug}
-                href={checkUrl(subItem.slug)}
-              >
-                <MenubarItem className='cursor-pointer capitalize block text-center'>
-                  {subItem.name}
-                </MenubarItem>
-              </Link>
-            ))}
-          </MenubarContent>
-        )}
-      </MenubarMenu>
-    </Menubar>
-  )
-}
-
-TextMenubar.displayName = 'TextMenubar'
+export default Header

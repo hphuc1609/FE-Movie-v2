@@ -3,7 +3,7 @@ const isSuccessResponse = (response: any) => {
 
   const { status } = response as Response
 
-  if ([400, 401, 403].includes(status)) return false
+  if ([400, 401, 403, 500].includes(status)) return false
 
   if (typeof status === 'string' && status !== 'success') return false
 
@@ -11,5 +11,4 @@ const isSuccessResponse = (response: any) => {
 
   return true
 }
-
 export default isSuccessResponse

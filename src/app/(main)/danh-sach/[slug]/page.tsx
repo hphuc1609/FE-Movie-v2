@@ -1,6 +1,7 @@
 import movieApi from '@/services/api-client/movies'
 import { Metadata } from 'next'
 import Detail from './detail'
+import { myWebsite } from '@/constants/domain'
 
 interface Params {
   params: { slug: string }
@@ -10,7 +11,6 @@ interface Params {
 export async function generateMetadata({ params, searchParams }: Params) {
   const { slug } = params
   const { keyword } = searchParams
-  const myUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
 
   try {
     if (keyword) {
@@ -23,7 +23,7 @@ export async function generateMetadata({ params, searchParams }: Params) {
         openGraph: {
           title: seoOnPage.titleHead,
           description: seoOnPage.descriptionHead,
-          url: `${myUrl}/danh-sach/${slug}`,
+          url: `${myWebsite}/danh-sach/${slug}`,
           images: seoOnPage.og_image.map(
             (image) => `${dataSearch.data.APP_DOMAIN_CDN_IMAGE}/${image}`,
           ),
@@ -40,7 +40,7 @@ export async function generateMetadata({ params, searchParams }: Params) {
       openGraph: {
         title: seoOnPage.titleHead,
         description: seoOnPage.descriptionHead,
-        url: `${myUrl}/danh-sach/${slug}`,
+        url: `${myWebsite}/danh-sach/${slug}`,
         images: seoOnPage.og_image.map(
           (image) => `${dataCategory.data.APP_DOMAIN_CDN_IMAGE}/${image}`,
         ),

@@ -29,10 +29,10 @@ const RegisterForm = () => {
       const res = await authApi.register(data)
       if (isSuccessResponse(res)) {
         router.push('/login')
-        showToast({ variant: 'success', description: res.message })
+        showToast({ variant: 'success', description: 'Đăng ký thành công!' })
         return
       }
-      showToast({ variant: 'error', title: 'Something went wrong.', description: res.message })
+      showToast({ variant: 'error', description: res.message })
     } catch (error: any) {
       showToast({ variant: 'error', title: 'Something went wrong.', description: error.message })
     } finally {

@@ -48,11 +48,11 @@ const DialogCustom = (props: DialogCustomProps) => {
       <DialogContent
         {...DialogContentProps}
         className={cn(
-          'bg-primary border-none max-sm:p-4 max-w-[60%] max-md:max-w-[90%] outline-none !rounded-sm',
+          'bg-primary border-none p-4 max-w-[50%] max-md:max-w-[90%] outline-none !rounded-sm',
           DialogContentProps?.className,
         )}
       >
-        <DialogHeader>
+        <DialogHeader className='flex flex-col gap-2'>
           <DialogTitle className='text-2xl text-left font-bold'>{title}</DialogTitle>
           <DialogDescription className='text-base'>{content}</DialogDescription>
         </DialogHeader>

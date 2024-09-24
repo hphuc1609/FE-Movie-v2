@@ -7,27 +7,12 @@ import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
+import { googleKey, myUrl } from '@/constants/domain'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 
-const googleKey = process.env.NEXT_PUBLIC_KEY_GOOGLE_ANALYTICS
-const myUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
-
 export const metadata: Metadata = {
   metadataBase: new URL(`${myUrl}`),
-  keywords: [
-    'phim moi',
-    'phim le',
-    'phim bo',
-    'phim hay',
-    'hoat hinh',
-    'mê phim',
-    'mephim',
-    'mephim 247',
-    'Mephim247',
-    'phim vietsub',
-    'phim thuyet minh',
-  ],
   title: {
     default: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
     template: '%s | Mephim247',
@@ -38,13 +23,30 @@ export const metadata: Metadata = {
     title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh  hay nhất',
     description:
       'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+    url: `${myUrl}`,
+    siteName: 'Mephim247',
+    images: './icon.png',
+    locale: 'vi',
+    type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
     description:
       'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+    images: './icon.png',
   },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    shortcut: '/favicon.ico',
+  },
+  verification: {
+    google: googleKey,
+  },
+  referrer: 'origin-when-cross-origin',
 }
 
 export default function RootLayout({
@@ -57,12 +59,6 @@ export default function RootLayout({
       lang='vi'
       suppressHydrationWarning
     >
-      <head>
-        <meta
-          name='google-site-verification'
-          content={googleKey}
-        />
-      </head>
       <body
         className={cn(
           inter.className,
