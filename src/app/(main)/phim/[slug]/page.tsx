@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const seoOnPage = res.movie
 
     // Meta data
-    const metaTitle = `Phim ${seoOnPage.name}`
-    const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} với chất lượng HD tại Mephim247. ${seoOnPage.content}`
+    const metaTitle = `Phim ${seoOnPage.name} [${seoOnPage.quality} - ${seoOnPage.lang}]`
+    const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} chất lượng Full HD tại Mephim247. ${seoOnPage.content}`
     const metaUrl = `${myWebsite}/phim/${seoOnPage.slug}`
     const metaImage = seoOnPage.poster_url || seoOnPage.thumb_url
 

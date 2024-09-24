@@ -48,7 +48,12 @@ const Account = () => {
               <User size={16} />
               {username}
             </MenubarItem>
-            <MenubarItem className='cursor-pointer hover:!bg-white hover:!bg-opacity-10 hover:!text-white flex items-center gap-2'>
+            <MenubarItem
+              className='cursor-pointer hover:!bg-white hover:!bg-opacity-10 hover:!text-white flex items-center gap-2'
+              onClick={() =>
+                showToast({ variant: 'info', description: 'Tính năng đang cập nhật!' })
+              }
+            >
               <HistoryIcon size={16} />
               Lịch sử xem
             </MenubarItem>

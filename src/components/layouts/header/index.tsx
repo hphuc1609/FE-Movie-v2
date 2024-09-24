@@ -29,7 +29,7 @@ const Header = () => {
   const pathname = usePathname()
   const scrollPosition = useScrollPosition()
 
-  const isHomePathname = pathname === '/' || !pathname.includes('/phim')
+  const isHomePathname = pathname === '/'
   const isAuthPath = pathname === '/login' || pathname === '/register'
 
   return (

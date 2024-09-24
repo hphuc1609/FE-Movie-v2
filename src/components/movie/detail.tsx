@@ -16,7 +16,6 @@ interface MovieInfoProps {
 }
 
 export default function MovieInfo({ detail }: MovieInfoProps) {
-  console.log('🚀 ~ MovieInfo ~ detail:', detail.thumb_url)
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
 
@@ -64,15 +63,17 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       id='info-movie'
       className='flex max-md:flex-col gap-[30px] overflow-hidden'
     >
-      <div className='absolute top-0 left-0 w-full min-h-[630px] rounded-md overflow-hidden -z-10'>
+      <div className='absolute top-0 left-0 w-full min-h-[630px] overflow-hidden -z-10'>
         <Image
           fill
           src={detail.thumb_url}
           alt={detail.name}
-          className='absolute top-0 left-0 w-full object-cover'
+          className='w-full object-cover'
         />
         <div className='absolute top-0 left-0 w-full h-full bg-black/80' />
+        <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-14 max-sm:h-10 bg-gradient-to-t from-[#0d0d0d] max-sm:from-[#1a1a1a] via-[#1a1a1a] to-transparent' />
       </div>
+
       <div className='relative max-w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>
         <Image
           src={errorImage ? detail.thumb_url : detail.poster_url}
@@ -139,7 +140,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
                 >
                   <span className='opacity-70 min-w-[130px] font-semibold'>{item.label}:</span>
                   <span
-                    className={`flex-1 line-clamp-2 ${item.label.includes('Phụ đề') && 'text-red-600'}`}
+                    className={`flex-1 line-clamp-2 ${item.label.includes('Phụ đề') && 'text-red-600 font-semibold'}`}
                   >
                     {item.value}
                   </span>

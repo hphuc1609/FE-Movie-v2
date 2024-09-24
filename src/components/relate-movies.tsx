@@ -83,7 +83,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
           >
             <Link
               href={
-                item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}?`
+                item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`
               }
               className='relative group bg-skeleton flex items-center justify-center overflow-hidden'
             >
@@ -99,7 +99,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
             </Link>
             <Link
               href={
-                item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}?`
+                item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`
               }
               className='text-sm max-sm:text-xs grid gap-1'
             >

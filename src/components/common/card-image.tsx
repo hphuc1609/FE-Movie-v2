@@ -25,9 +25,7 @@ export default function CardImage(props: CardImageProps) {
           className='h-fit flex flex-col gap-3'
         >
           <Link
-            href={
-              item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}?`
-            }
+            href={item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`}
             className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
             onClick={openRandomAdLink}
           >
@@ -40,17 +38,13 @@ export default function CardImage(props: CardImageProps) {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
-            <p className='absolute top-1 left-1 right-1 w-fit text-xs max-sm:text-[8px] font-semibold bg-label-color opacity-85 px-2 py-[2px] max-sm:px-1 rounded-[2px] line-clamp-1'>
-              {item.episode_current.includes('Full')
-                ? item.lang
-                : item.episode_current || 'Vietsub'}
+            <p className='absolute top-1 left-1 right-1 w-fit text-xs max-sm:text-[8px] font-medium bg-blue-600/90 px-2 py-[2px] max-sm:px-1 rounded-[2px] line-clamp-1'>
+              {item.episode_current.includes('Full') ? item.lang : item.episode_current}
             </p>
           </Link>
           {/* Movie name */}
           <Link
-            href={
-              item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}?`
-            }
+            href={item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`}
             className='text-sm max-md:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>

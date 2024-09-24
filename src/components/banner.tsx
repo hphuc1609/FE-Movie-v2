@@ -99,7 +99,7 @@ const Banner = () => {
             <div className='absolute top-0 w-full h-full bg-black/55' />
             <div className='absolute top-1/2 -translate-y-1/2 left-20 max-lg:left-[25px] max-md:right-[25px] md:max-w-[650px] flex flex-col gap-4'>
               <div
-                className={cn('transition-all opacity-100 grid gap-y-7 max-sm:gap-y-4', {
+                className={cn('transition-all opacity-100 grid gap-y-7 max-sm:gap-y-5', {
                   'opacity-0 ': index !== activeSlide,
                 })}
               >
@@ -109,9 +109,9 @@ const Banner = () => {
                   </p>
                   <p className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</p>
                 </div>
-                <div className='text-base max-sm:text-sm text-gray-50 flex items-center gap-5'>
+                <div className='text-base max-sm:text-xs text-gray-50 flex items-center gap-5'>
                   <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>
-                  <span className='line-clamp-1 w-1/2'>
+                  <span className='line-clamp-1 max-w-1/2'>
                     {item.category.map((cat) => cat.name).join(', ')}
                   </span>
                   <span className='flex items-center gap-2 text-nowrap'>
@@ -136,7 +136,13 @@ const Banner = () => {
                     { 'invisible opacity-0': index !== activeSlide },
                     'hover:bg-yellow-400 hover:text-black hover:fill-current',
                   )}
-                  onClick={() => router.push(`/phim/${item.slug}?episode=full`)}
+                  onClick={() =>
+                    router.push(
+                      item.type === 'single'
+                        ? `/phim/${item.slug}?episode=full`
+                        : `/phim/${item.slug}`,
+                    )
+                  }
                 >
                   <Play
                     size={16}
