@@ -1,13 +1,13 @@
 'use client'
 
 import openRandomAdLink from '@/helpers/handle-ads'
+import useLazyLoadImg from '@/hooks/useLazyImage'
 import { cn } from '@/lib/utils'
-import { MovieCategoryItem, MovieCategoryResponse, MovieItem } from '@/models/interfaces/list-movie'
+import { MovieCategoryResponse, MovieItem } from '@/models/interfaces/list-movie'
 import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import PlayButton from './play-button'
-import useLazyLoadImg from '@/hooks/useLazyImage'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
@@ -38,9 +38,11 @@ export default function CardImage(props: CardImageProps) {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 transition-all duration-300'
             />
-            <p className='absolute top-1 left-1 right-1 w-fit text-xs max-sm:text-[8px] font-medium bg-blue-600/90 px-2 py-[2px] max-sm:px-1 rounded-[2px] line-clamp-1'>
-              {item.episode_current.includes('Full') ? item.lang : item.episode_current}
-            </p>
+            {item.episode_current && (
+              <p className='absolute top-1 left-1 right-1 w-fit text-xs max-sm:text-[8px] font-medium bg-blue-600/90 px-2 py-[2px] max-sm:px-1 rounded-[2px] line-clamp-1'>
+                {item.episode_current.includes('Full') ? item.lang : item.episode_current}
+              </p>
+            )}
           </Link>
           {/* Movie name */}
           <Link
@@ -56,7 +58,7 @@ export default function CardImage(props: CardImageProps) {
           </Link>
           {/* Categories */}
           <div className='flex items-center gap-1 max-sm:hidden'>
-            {item.category.slice(0, 2).map(
+            {item.category?.slice(0, 2).map(
               (cate) =>
                 cate.name && (
                   <Link
@@ -71,7 +73,7 @@ export default function CardImage(props: CardImageProps) {
                   </Link>
                 ),
             )}
-            {item.category.length > 2 && (
+            {item.category && item.category.length > 2 && (
               <p className='text-[8px] font-medium rounded-xl bg-slate-100 bg-opacity-5 px-2 py-1'>
                 +{item.category.length - 2}
               </p>
@@ -99,7 +101,11 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
   const imageUrl = (item: MovieItem, index: number) => {
     const hasError = errorImage[index]
     const posterUrl = hasError ? item.thumb_url : item.poster_url
-    return posterUrl ? `${process.env.NEXT_PUBLIC_DOMAIN_CDN_IMAGE}/${posterUrl}` : ''
+    return posterUrl
+      ? (item.thumb_url || item.poster_url).includes('https')
+        ? posterUrl
+        : `${process.env.NEXT_PUBLIC_DOMAIN_CDN_IMAGE}/${posterUrl}`
+      : ''
   }
 
   const handleErrorImage = (index: number) => {

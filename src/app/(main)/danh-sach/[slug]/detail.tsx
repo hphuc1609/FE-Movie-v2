@@ -4,7 +4,7 @@ import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/table-pagination'
 import SkeletonCard from '@/components/common/skeleton-card'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
-import { useMoviesByCate, useMoviesSearch } from '@/services/query-data'
+import { useMoviesByCate, useMoviesSearch, useNewMovies } from '@/services/query-data'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
@@ -26,14 +26,18 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
   const { data: movies, isFetching: isFetchingMovies } = useMoviesByCate({
     category: lastSegment,
     page: currentPage,
+    options: { enabled: !lastSegment.includes('moi-cap-nhat') },
+  })
+  const { data: newMovies, isFetching: isFetchingNewMovies } = useNewMovies({
+    options: { enabled: lastSegment.includes('moi-cap-nhat') },
+    page: currentPage,
   })
   const { data: moviesSearch, isLoading: isLoadingSearch } = useMoviesSearch(keyword)
 
   // Refetch list movie
   useEffect(() => {
-    queryClient.refetchQueries({
-      queryKey: ['movies', { category: lastSegment }],
-    })
+    queryClient.refetchQueries({ queryKey: ['movies', { category: lastSegment }] })
+    queryClient.refetchQueries({ queryKey: ['newMovies'] })
   }, [currentPage, lastSegment, queryClient])
 
   const renderTitle = () => {
@@ -50,17 +54,32 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
       return movies?.breadCrumb[0]?.name.includes('Phim')
         ? movies?.breadCrumb[0]?.name
         : `Phim ${movies?.breadCrumb[0]?.name}`
+
+    if (isNotEmpty(newMovies)) return 'Phim mới cập nhật'
   }
 
   const getBreadCrumb = () => {
     if (isNotEmpty(moviesSearch) || isNotEmpty(movies)) {
       return moviesSearch?.breadCrumb || movies?.breadCrumb || []
     }
+
+    if (isNotEmpty(newMovies))
+      return [
+        {
+          isCurrent: false,
+          name: 'Phim mới cập nhật',
+          slug: '/danh-sach/phim-moi-cap-nhat',
+        },
+        {
+          isCurrent: true,
+          name: `Trang ${currentPage}`,
+        },
+      ]
     return '...'
   }
 
-  const hasMovies = isNotEmpty(moviesSearch?.items || movies?.items)
-  const isLoading = isLoadingSearch || isFetchingMovies
+  const hasMovies = isNotEmpty(moviesSearch?.items || movies?.items || newMovies?.items)
+  const isLoading = isLoadingSearch || isFetchingMovies || isFetchingNewMovies
 
   return (
     <>
@@ -69,7 +88,9 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
       {hasMovies && !isLoading && (
         <div className='grid gap-6'>
           <h1 className='text-3xl max-sm:text-xl font-semibold capitalize'>{renderTitle()}</h1>
-          <TablePagination data={(moviesSearch || movies) as MovieCategoryItem} />
+          <TablePagination
+            data={(moviesSearch || movies || newMovies) as MovieCategoryItem}
+          />
         </div>
       )}
       {isLoading && (

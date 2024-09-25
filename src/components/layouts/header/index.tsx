@@ -12,13 +12,13 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar'
 import { Separator } from '@/components/ui/separator'
-import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
+import { dataNamPhatHanh, dataTheLoai, movieTypes } from '@/data/category'
 import useScrollPosition from '@/hooks/useScroll'
 import { cn } from '@/lib/utils'
 import { INavbar } from '@/models/interfaces/navbar'
 import { useCountries } from '@/services/query-data'
 import { getCookie } from 'cookies-next'
-import { ChevronDown, Menu, Search } from 'lucide-react'
+import { Calendar, ChevronDown, Film, Globe, Grid, Menu, Search } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -64,16 +64,52 @@ const HeaderMenubar = React.memo(() => {
 
   const [openDialogSearch, setOpenDialogSearch] = useState(false)
   const [searchValue, setSearchValue] = useState('')
-  const [openMenu, setOpenMenu] = useState(false)
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   const { data: countries = [] } = useCountries()
 
+  const sizeIcon = 18
   const navbarItems: INavbar[] = [
-    { name: 'Phim lẻ', href: '/phim-le' },
-    { name: 'Phim bộ', href: '/phim-bo' },
-    { name: 'Thể loại', subMenu: dataTheLoai },
-    { name: 'Quốc gia', subMenu: countries },
-    { name: 'Năm', subMenu: dataNamPhatHanh },
+    {
+      name: 'Loại phim',
+      icon: (
+        <Film
+          size={sizeIcon}
+          strokeWidth={1.5}
+        />
+      ),
+      subMenu: movieTypes,
+    },
+    {
+      name: 'Thể loại',
+      subMenu: dataTheLoai,
+      icon: (
+        <Grid
+          size={sizeIcon}
+          strokeWidth={1.5}
+        />
+      ),
+    },
+    {
+      name: 'Quốc gia',
+      subMenu: countries,
+      icon: (
+        <Globe
+          size={sizeIcon}
+          strokeWidth={1.5}
+        />
+      ),
+    },
+    {
+      name: 'Năm',
+      subMenu: dataNamPhatHanh,
+      icon: (
+        <Calendar
+          size={sizeIcon}
+          strokeWidth={1.5}
+        />
+      ),
+    },
   ]
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -99,7 +135,7 @@ const HeaderMenubar = React.memo(() => {
   }
 
   const handleCloseDrawer = () => {
-    setOpenMenu(false)
+    setOpenDrawer(false)
   }
 
   const activeLink = (link: string) => pathname.endsWith(link)
@@ -134,7 +170,7 @@ const HeaderMenubar = React.memo(() => {
                   </Link>
                 ) : (
                   <MenubarMenu>
-                    <MenubarTrigger className='p-0 !bg-transparent text-base capitalize font-semibold data-[state=open]:text-primary-color'>
+                    <MenubarTrigger className='p-0 !bg-transparent text-base capitalize font-semibold data-[state=open]:text-primary-color data-[state=closed]:!text-white'>
                       <div className='cursor-pointer flex items-center hover:text-primary-color'>
                         {menuItem.name}
                         <ChevronDown
@@ -145,7 +181,12 @@ const HeaderMenubar = React.memo(() => {
                       </div>
                     </MenubarTrigger>
                     {menuItem.subMenu && (
-                      <MenubarContent className='min-w-fit px-5 mt-4 grid grid-cols-4 gap-x-5 gap-y-1 bg-neutral-900 z-50 border-none text-current'>
+                      <MenubarContent
+                        className={cn(
+                          'min-w-fit px-5 mt-4 grid grid-cols-4 gap-x-5 gap-y-1 bg-neutral-900 z-50 border-none text-current',
+                          { 'grid-cols-2 gap-x-3': menuItem.subMenu.length < 6 },
+                        )}
+                      >
                         {menuItem.subMenu.map((subItem) => (
                           <Link
                             key={subItem.slug}
@@ -188,14 +229,14 @@ const HeaderMenubar = React.memo(() => {
         )}
         <Menu
           className='md:hidden cursor-pointer'
-          onClick={() => setOpenMenu(true)}
+          onClick={() => setOpenDrawer(true)}
         />
       </div>
 
       {/* Mobile menu */}
       <Drawer
         data={navbarItems}
-        openMenu={openMenu}
+        open={openDrawer}
         onClose={handleCloseDrawer}
       />
 

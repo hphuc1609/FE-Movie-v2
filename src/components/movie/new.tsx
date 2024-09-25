@@ -12,7 +12,7 @@ export default function NewUpdateMovie() {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
-  const { data: newMovies = [], isLoading: isLoadingMovies } = useNewMovies({})
+  const { data: newMovies, isLoading: isLoadingMovies } = useNewMovies({})
 
   const imageUrl = (item: NewMovieItem, index: number) => {
     const hasError = errorImage[index]
@@ -35,7 +35,7 @@ export default function NewUpdateMovie() {
       >
         {isLoadingMovies
           ? Array.from({ length: 8 }).map((_, index) => <SkeletonList key={index} />)
-          : newMovies.map((item, index) => (
+          : newMovies?.items.map((item, index) => (
               <Link
                 key={item._id}
                 href={`/phim/${item.slug}`}

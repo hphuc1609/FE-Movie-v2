@@ -1,5 +1,11 @@
 import generateYearList from '@/helpers/generate-year'
 
+const movieTypes = [
+  { name: 'Phim lẻ', slug: 'phim-le' },
+  { name: 'Phim bộ', slug: 'phim-bo' },
+  { name: 'Phim mới cập nhật', slug: 'phim-moi-cap-nhat' },
+]
+
 const dataTheLoai = [
   { name: 'Hành động', slug: 'hanh-dong' },
   { name: 'Hài hước', slug: 'hai-huoc' },
@@ -64,4 +70,4 @@ const dataQuocGia = [
 
 const dataNamPhatHanh = generateYearList(2000).sort((a, b) => b.name.localeCompare(a.name))
 
-export { dataNamPhatHanh, dataQuocGia, dataTheLoai }
+export { dataNamPhatHanh, dataQuocGia, dataTheLoai, movieTypes }

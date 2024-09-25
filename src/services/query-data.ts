@@ -29,7 +29,7 @@ const fetchData = async (apiMethod: Promise<any>) => {
       })
       return
     }
-    return res.data || res.items || res
+    return res.data || res
   } catch (error: any) {
     toast({
       variant: 'destructive',
@@ -62,7 +62,7 @@ export const useNewMovies = ({
 }: {
   page?: string | number
   options?: QueryOptions<any>
-}): QueryObserverResult<NewMovieResponse['items']> =>
+}): QueryObserverResult<NewMovieResponse> =>
   useFetchData({
     queryKey: ['newMovies'],
     queryFn: () => fetchData(movieApi.getNewMovies({ page })),
