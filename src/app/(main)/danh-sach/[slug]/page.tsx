@@ -1,16 +1,15 @@
-import movieApi from '@/services/api-client/movies'
-import { Metadata } from 'next'
-import Detail from './detail'
 import { myWebsite } from '@/constants/domain'
+import movieApi from '@/services/api-client/movies'
+import Detail from './detail'
 
 interface Params {
   params: { slug: string }
-  searchParams: { keyword: string }
+  searchParams: { keyword: string; page: string }
 }
 
 export async function generateMetadata({ params, searchParams }: Params) {
   const { slug } = params
-  const { keyword } = searchParams
+  const { keyword, page } = searchParams
 
   try {
     if (keyword) {
@@ -31,7 +30,9 @@ export async function generateMetadata({ params, searchParams }: Params) {
       }
     }
 
-    const dataCategory = await movieApi.getListByCate({ category: slug })
+    if (slug === 'phim-moi-cap-nhat') return
+
+    const dataCategory = await movieApi.getListByCate({ category: slug, page })
     const seoOnPage = dataCategory.data.seoOnPage
 
     return {

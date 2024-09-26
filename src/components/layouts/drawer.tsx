@@ -44,7 +44,7 @@ export default function Drawer(props: DrawerProps) {
       >
         <X
           size={20}
-          className='cursor-pointer ml-auto mr-5 text-gray-400'
+          className='cursor-pointer ml-auto mr-5 mb-3 text-gray-400'
           onClick={handleClose}
           xlinkTitle='Đóng'
         />
@@ -101,7 +101,7 @@ export default function Drawer(props: DrawerProps) {
                     <div className='pl-10 grid grid-cols-2 gap-x-3 text-sm font-normal'>
                       {menuItem.subMenu.map((item) => (
                         <Link
-                          key={item.id}
+                          key={item.slug}
                           href={checkUrl(item.slug)}
                           className={cn(
                             'hover:text-primary-color py-2',

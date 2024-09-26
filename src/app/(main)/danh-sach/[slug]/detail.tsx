@@ -88,9 +88,7 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
       {hasMovies && !isLoading && (
         <div className='grid gap-6'>
           <h1 className='text-3xl max-sm:text-xl font-semibold capitalize'>{renderTitle()}</h1>
-          <TablePagination
-            data={(moviesSearch || movies || newMovies) as MovieCategoryItem}
-          />
+          <TablePagination data={(moviesSearch || movies || newMovies) as MovieCategoryItem} />
         </div>
       )}
       {isLoading && (

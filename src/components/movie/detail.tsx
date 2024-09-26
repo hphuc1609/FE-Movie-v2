@@ -68,6 +68,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
           fill
           src={detail.thumb_url}
           alt={detail.name}
+          priority
           className='w-full object-cover'
         />
         <div className='absolute top-0 left-0 w-full h-full bg-black/80' />

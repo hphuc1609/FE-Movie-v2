@@ -47,7 +47,7 @@ export default function CardImage(props: CardImageProps) {
           {/* Movie name */}
           <Link
             href={item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`}
-            className='text-sm max-md:text-xs grid gap-1'
+            className='text-sm max-[400px]:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>
               {item.name} ({item.year})

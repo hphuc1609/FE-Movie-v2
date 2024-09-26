@@ -131,7 +131,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           </div>
         </div>
         <span className='text-lg font-bold uppercase sticky top-0 p-2'>Danh sách tập</span>
-        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 gap-2 px-2 pb-3 overflow-y-auto'>
+        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-2 px-2 pb-3 overflow-y-auto'>
           {dataEpisode.map((item) =>
             item.server_data.map((episode, serverIndex) => {
               const isLastEpisode =
