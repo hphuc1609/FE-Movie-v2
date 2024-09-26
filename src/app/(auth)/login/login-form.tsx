@@ -57,7 +57,9 @@ const LoginForm = () => {
           localStorage.removeItem('savedUsername')
           localStorage.removeItem('rememberMe')
         }
-        router.back()
+
+        const lastPath = localStorage.getItem('lastPath')
+        router.push(lastPath || '/')
         return
       }
       showToast({ variant: 'error', title: 'Something went wrong.', description: res.message })

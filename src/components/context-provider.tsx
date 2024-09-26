@@ -1,8 +1,9 @@
 'use client'
 
+import { getCookie } from 'cookies-next'
+import { usePathname } from 'next/navigation'
 import React, { useEffect } from 'react'
 import Loader from './loader'
-import { getCookie } from 'cookies-next'
 
 const ContextGlobal = React.createContext({
   isLoading: false,
@@ -22,6 +23,17 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
   const [isLoading, setLoading] = React.useState(false)
   const [isLogin, setLogin] = React.useState(false)
 
+  const pathname = usePathname()
+
+  // Set last path
+  useEffect(() => {
+    if (['/login', '/register'].includes(pathname)) {
+      return
+    }
+    localStorage.setItem('lastPath', pathname)
+  }, [pathname])
+
+  // Check login
   useEffect(() => {
     const userInfo = getCookie('userVerify')
     if (userInfo) setLogin(true)
