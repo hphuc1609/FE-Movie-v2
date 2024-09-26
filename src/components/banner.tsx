@@ -112,7 +112,10 @@ const Banner = () => {
                 <div className='text-base max-sm:text-xs text-gray-50 flex items-center gap-5'>
                   <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>
                   <span className='line-clamp-1 max-w-1/2'>
-                    {item.category.map((cat) => cat.name).join(', ')}
+                    {item.category
+                      .slice(0, 2)
+                      .map((cat) => cat.name)
+                      .join(', ')}
                   </span>
                   <span className='flex items-center gap-2 text-nowrap'>
                     <Clock4

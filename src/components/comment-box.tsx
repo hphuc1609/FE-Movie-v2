@@ -1,7 +1,6 @@
 'use client'
 
 import formatDate from '@/helpers/format-date'
-import randomColor from '@/helpers/random-color'
 import { showToast } from '@/helpers/toast'
 import { cn } from '@/lib/utils'
 import commentApi from '@/services/api-client/comments'
@@ -14,6 +13,7 @@ import { Controller, FieldValues, useForm } from 'react-hook-form'
 import DialogCustom from './common/dialog'
 import { Avatar } from './ui/avatar'
 import { Button } from './ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import { Textarea } from './ui/textarea'
 
 const CommentBox = () => {
@@ -23,6 +23,7 @@ const CommentBox = () => {
   const [count, setCount] = useState(10)
   const [commentId, setCommentId] = useState('')
   const [openDialogDelete, setOpenDialogDelete] = useState(false)
+  const [sortOrder, setSortOrder] = useState<'oldest' | 'newest'>('newest')
 
   const userInfo = getCookie('userVerify') as string
   const username: string = typeof userInfo !== 'undefined' ? JSON.parse(userInfo).username : null
@@ -45,8 +46,20 @@ const CommentBox = () => {
 
   // Filter comment by movie id
   const filteredComments = useMemo(() => {
-    return comments.filter((comment) => comment.movieId === movieInfo?.movie._id)
-  }, [comments, movieInfo])
+    const sortedComments = comments.filter((comment) => comment.movieId === movieInfo?.movie._id)
+
+    // Sort comments based on sortOrder
+    if (sortOrder === 'newest') {
+      return sortedComments.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    } else {
+      return sortedComments.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    }
+  }, [comments, movieInfo, sortOrder])
+
+  // Handlers for sorting
+  const handleSort = (order: 'oldest' | 'newest') => {
+    setSortOrder(order)
+  }
 
   // Mutations
   const submitMutation = useMutation({
@@ -70,11 +83,7 @@ const CommentBox = () => {
         })
       } else {
         console.error(error.message)
-        showToast({
-          variant: 'error',
-          title: 'Lỗi',
-          description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
-        })
+        handleErrorToast()
       }
     },
   })
@@ -89,11 +98,7 @@ const CommentBox = () => {
     },
     onError: (error) => {
       console.error(error.message)
-      showToast({
-        variant: 'error',
-        title: 'Lỗi',
-        description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
-      })
+      handleErrorToast()
     },
   })
 
@@ -103,11 +108,7 @@ const CommentBox = () => {
       submitMutation.mutate(data)
     } catch (error: any) {
       console.error(error.message)
-      showToast({
-        variant: 'error',
-        title: 'Lỗi',
-        description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
-      })
+      handleErrorToast()
     }
   }
 
@@ -116,17 +117,36 @@ const CommentBox = () => {
       deleteMutation.mutate(id)
     } catch (error: any) {
       console.error(error.message)
-      showToast({
-        variant: 'error',
-        title: 'Lỗi',
-        description: `Đã xảy ra lỗi vui lòng báo cho quản trị viên hoặc thử lại sau.`,
-      })
+      handleErrorToast()
     }
+  }
+
+  const handleErrorToast = () => {
+    return showToast({
+      variant: 'error',
+      title: 'Lỗi',
+      description: `Đã xảy ra lỗi vui lòng thử lại sau.`,
+    })
   }
 
   return (
     <div className='h-fit flex flex-col gap-4 p-6 max-sm:p-4 bg-black/50'>
-      <h5 className='text-lg font-bold'>{filteredComments.length} Bình luận</h5>
+      <div className='flex items-center justify-between'>
+        <h5 className='text-lg font-bold'>{filteredComments.length} Bình luận</h5>
+        {/* Dropdown Sort */}
+        <Select
+          onValueChange={(value) => handleSort(value as 'newest' | 'oldest')}
+          defaultValue='newest'
+        >
+          <SelectTrigger className='max-w-[100px] bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0'>
+            <SelectValue placeholder='Sắp xếp' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value='newest'>Mới nhất</SelectItem>
+            <SelectItem value='oldest'>Cũ nhất</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <Controller
         control={control}
         name='content'
@@ -159,7 +179,7 @@ const CommentBox = () => {
             <Avatar className='w-12 h-12 max-sm:w-8 max-sm:h-8'>
               <div
                 className='flex items-center justify-center w-full h-full rounded-full'
-                style={{ backgroundColor: randomColor(), fontSize: '1.25rem', color: 'white' }}
+                style={{ backgroundColor: '#3b835e', fontSize: '1.25rem', color: 'white' }}
               >
                 {comment.username.charAt(0).toUpperCase()}
               </div>
