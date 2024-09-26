@@ -34,9 +34,12 @@ const Header = () => {
 
   return (
     <header
-      className={`w-full h-16 flex items-center justify-between ${
-        isHomePathname ? 'fixed' : 'sticky border-b border-neutral-200 border-opacity-10'
-      } top-0 z-50 transition duration-300 ${scrollPosition > 0 && 'bg-neutral-900/50 backdrop-blur-md'} ${isAuthPath && 'hidden'}`}
+      className={cn(
+        'w-full h-16 flex fixed items-center justify-between top-0 z-50 transition duration-300',
+        !isHomePathname ? 'sticky border-b border-neutral-200 border-opacity-10' : '',
+        scrollPosition > 0 ? 'bg-neutral-900/50 backdrop-blur-md' : '',
+        isAuthPath ? 'hidden' : '',
+      )}
     >
       <HeaderMenubar />
     </header>
