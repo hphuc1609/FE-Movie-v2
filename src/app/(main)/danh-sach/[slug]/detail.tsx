@@ -36,8 +36,14 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
 
   // Refetch list movie
   useEffect(() => {
-    queryClient.refetchQueries({ queryKey: ['movies', { category: lastSegment }] })
-    queryClient.refetchQueries({ queryKey: ['newMovies'] })
+    const refetch = async () => {
+      if (lastSegment.includes('moi-cap-nhat')) {
+        await queryClient.refetchQueries({ queryKey: ['newMovies'] })
+      } else {
+        await queryClient.refetchQueries({ queryKey: ['movies', { category: lastSegment }] })
+      }
+    }
+    refetch()
   }, [currentPage, lastSegment, queryClient])
 
   const renderTitle = () => {

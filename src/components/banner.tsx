@@ -104,14 +104,14 @@ const Banner = () => {
                 })}
               >
                 <div>
-                  <p className='text-[42px] font-bold line-clamp-2 leading-tight max-md:text-2xl'>
+                  <p className='text-[42px] font-bold line-clamp-2 leading-tight max-sm:text-2xl'>
                     {item.name}
                   </p>
                   <p className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</p>
                 </div>
-                <div className='text-base max-sm:text-xs text-gray-50 flex items-center gap-5'>
+                <div className='text-base max-sm:text-xs text-gray-50 flex items-center gap-5 max-sm:gap-3'>
                   <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>
-                  <span className='line-clamp-1 max-w-1/2'>
+                  <span className='line-clamp-1'>
                     {item.category
                       .slice(0, 2)
                       .map((cat) => cat.name)
