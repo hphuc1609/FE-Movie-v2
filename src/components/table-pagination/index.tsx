@@ -1,3 +1,4 @@
+'use client'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
