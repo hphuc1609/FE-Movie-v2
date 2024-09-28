@@ -134,41 +134,54 @@ export default function MoviePlayer(props: MoviePlayerProps) {
         <span className='text-lg max-sm:text-base font-semibold uppercase sticky top-0 p-2'>
           Danh sách tập
         </span>
-        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 overflow-y-auto'>
+        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 overflow-x-hidden overflow-y-auto'>
           {dataEpisode.map((item) =>
             item.server_data.map((episode, serverIndex) => {
+              console.log('🚀 ~ item.server_data.map ~ episode:', episode.slug)
               const isLastEpisode =
                 serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
 
-              const isDubbed = item.server_name.toLowerCase().includes('lồng tiếng')
-              const isNarrated = item.server_name.toLowerCase().includes('thuyết minh')
-              const isVietsub = item.server_name.toLowerCase().includes('vietsub')
+              const isDubbed =
+                item.server_name?.toLowerCase().includes('lồng tiếng') &&
+                !item.server_name?.toLowerCase().includes('vietsub')
+              const isNarrated =
+                item.server_name?.toLowerCase().includes('thuyết minh') &&
+                !item.server_name?.toLowerCase().includes('vietsub')
+              const isVietsub = item.server_name?.toLowerCase().includes('vietsub')
 
-              const displayText = !['full', 'tập đặc biệt'].includes(episode.name?.toLowerCase())
+              const displayText = !['full', 'tap-dac-biet', 'long-tieng', 'thuyet-minh'].includes(
+                episode.slug?.toLowerCase(),
+              )
                 ? episode.name.split(' ')[1]
-                : isDubbed
-                  ? 'Lồng tiếng'
-                  : isNarrated
-                    ? 'Thuyết minh'
+                : isNarrated
+                  ? 'Thuyết minh'
+                  : isDubbed
+                    ? 'Lồng tiếng'
                     : episode.name
 
-              const isActive = episodeParam
-                ? (isDubbed && episodeParam === 'lồng tiếng') ||
-                  (isNarrated && episodeParam === 'thuyết minh') ||
-                  (episodeParam === 'full' && isVietsub) ||
-                  (!episodeParam.includes('full') && episodeParam === episode.slug)
-                : serverIndex === 0
+              const episodeConditions: Record<string, boolean> = {
+                long_tieng: isDubbed,
+                thuyet_minh: isNarrated,
+                full: isVietsub,
+              }
+              const isActiveEpisode =
+                dataEpisode.length > 1
+                  ? episodeConditions[episodeParam?.replace('-', '_')]
+                  : !episodeParam
+                    ? serverIndex === 0
+                    : (episodeParam === episode.slug && !episodeParam.includes('full')) ||
+                      (episodeParam === 'thuyet-minh' && episode.slug === 'full')
 
               return (
                 <Button
                   key={episode.name}
                   className={cn(
-                    `text-sm h-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
-                    { 'bg-primary-color text-black': isActive },
+                    `text-sm h-fit min-w-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
+                    { 'bg-primary-color text-black': isActiveEpisode },
                   )}
                   onClick={() =>
                     handleEpisodeClick(
-                      isDubbed ? 'lồng tiếng' : isNarrated ? 'thuyết minh' : episode.slug,
+                      isDubbed ? 'long-tieng' : isNarrated ? 'thuyet-minh' : episode.slug,
                     )
                   }
                 >

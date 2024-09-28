@@ -1,5 +1,6 @@
 'use client'
 
+import { convertToPathname } from '@/helpers/cleanString'
 import openRandomAdLink from '@/helpers/handle-ads'
 import useLazyLoadImg from '@/hooks/useLazyImage'
 import { cn } from '@/lib/utils'
@@ -17,6 +18,9 @@ interface CardImageProps {
 export default function CardImage(props: CardImageProps) {
   const { data, itemLength = 8 } = props
 
+  const checkType = (movie: MovieItem) =>
+    movie.type === 'single' || movie.episode_current?.toLowerCase() === 'full'
+
   return (
     <>
       {data.items?.slice(0, itemLength).map((item, index) => (
@@ -25,7 +29,11 @@ export default function CardImage(props: CardImageProps) {
           className='h-fit flex flex-col gap-3'
         >
           <Link
-            href={item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`}
+            href={
+              checkType(item)
+                ? `/phim/${item.slug}?episode=${item.lang.includes('Vietsub') ? 'full' : convertToPathname(item.lang)}`
+                : `/phim/${item.slug}`
+            }
             className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
             onClick={openRandomAdLink}
           >
@@ -46,7 +54,11 @@ export default function CardImage(props: CardImageProps) {
           </Link>
           {/* Movie name */}
           <Link
-            href={item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`}
+            href={
+              checkType(item)
+                ? `/phim/${item.slug}?episode=${item.lang.includes('Vietsub') ? 'full' : convertToPathname(item.lang)}`
+                : `/phim/${item.slug}`
+            }
             className='text-sm max-[400px]:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>

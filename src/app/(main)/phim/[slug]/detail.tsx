@@ -21,7 +21,7 @@ const Detail = ({ detail }: DetailProps) => {
   const slugCate = detail?.movie?.category?.[0]?.slug
 
   const { data: moviesType, isLoading: isLoadingMovies } = useMoviesByCate({
-    category: slugCate.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
+    category: slugCate?.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
     limit: 64,
   })
 
