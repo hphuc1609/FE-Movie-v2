@@ -1,6 +1,6 @@
 'use client'
 
-import cleanString from '@/helpers/cleanString'
+import { cleanString } from '@/helpers/cleanString'
 import { cn } from '@/lib/utils'
 import { DetailResponse } from '@/models/interfaces/detail'
 import { Play, Video } from 'lucide-react'
@@ -18,6 +18,7 @@ interface MovieInfoProps {
 export default function MovieInfo({ detail }: MovieInfoProps) {
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
+  const [errorBanner, setErrorBanner] = useState(false)
 
   const mobile = useMediaQuery({ query: '(max-width: 640px)' })
 
@@ -66,9 +67,10 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       <div className='absolute top-0 left-0 w-full min-h-[630px] overflow-hidden -z-10'>
         <Image
           fill
-          src={detail.thumb_url}
+          src={errorBanner ? detail.poster_url : detail.thumb_url}
           alt={detail.name}
           priority
+          onError={() => setErrorBanner(true)}
           className='w-full object-cover'
         />
         <div className='absolute top-0 left-0 w-full h-full bg-black/80' />

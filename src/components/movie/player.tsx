@@ -8,6 +8,7 @@ import { useEffect, useRef, useState } from 'react'
 import ReactHlsPlayer from 'react-hls-player'
 import PlayButton from '../common/play-button'
 import { Button } from '../ui/button'
+import { convertToPathname } from '@/helpers/cleanString'
 
 interface MoviePlayerProps {
   dataEpisode: DetailResponse['episodes']
@@ -21,6 +22,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   const searchParams = useSearchParams()
   const episodeParam = searchParams.get('episode') as string
+  const langParam = searchParams.get('lang') as string
 
   const [urlVideo, setUrlVideo] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
@@ -57,9 +59,9 @@ export default function MoviePlayer(props: MoviePlayerProps) {
     }
   }
 
-  const handleEpisodeClick = (episode: string) => {
+  const handleEpisodeClick = (episode: string, lang: string) => {
     openRandomAdLink()
-    router.push(`?episode=${episode}`)
+    router.push(`?lang=${convertToPathname(lang)}&episode=${episode}`)
   }
 
   // ------------------ Render UI -------------------------------
@@ -113,7 +115,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           </div>
         )}
       </div>
-      <div className='max-h-[300px] flex flex-col gap-2 p-2 bg-black/50'>
+      <div className='flex flex-col gap-2 p-2 bg-black/50'>
         <div className='flex flex-col items-center gap-2 p-2'>
           <div className='flex gap-2'>
             {['server 1', 'server 2'].map((server, index) => (
@@ -129,56 +131,72 @@ export default function MoviePlayer(props: MoviePlayerProps) {
               </Button>
             ))}
           </div>
-          <p className='text-xs text-red-500'>Vui lòng chọn server khác nếu không xem được</p>
+          <p className='text-xs text-red-500'>Chọn server khác nếu không xem được</p>
         </div>
-        <span className='text-lg max-sm:text-base font-semibold uppercase sticky top-0 p-2'>
-          Danh sách tập
-        </span>
-        <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 overflow-y-auto'>
-          {dataEpisode.map((item) =>
-            item.server_data.map((episode, serverIndex) => {
-              const isLastEpisode =
-                serverIndex > 0 && serverIndex === Number(detail.episode_total) - 1
+        {dataEpisode.map((item) => (
+          <div
+            key={item.server_name}
+            className='grid gap-3'
+          >
+            <span className='text-base max-sm:text-base font-semibold sticky top-0 p-2'>
+              # {item.server_name.match(/\((.*?)\)/)?.[1]}
+            </span>
 
-              const isDubbed = item.server_name.toLowerCase().includes('lồng tiếng')
-              const isNarrated = item.server_name.toLowerCase().includes('thuyết minh')
-              const isVietsub = item.server_name.toLowerCase().includes('vietsub')
+            <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 max-h-[300px] overflow-x-hidden overflow-y-auto'>
+              {item.server_data.map((episode, episodeIndex) => {
+                const isLastEpisode =
+                  episodeIndex > 0 && episodeIndex === Number(detail.episode_total) - 1
 
-              const displayText = !['full', 'tập đặc biệt'].includes(episode.name?.toLowerCase())
-                ? episode.name.split(' ')[1]
-                : isDubbed
-                  ? 'Lồng tiếng'
-                  : isNarrated
-                    ? 'Thuyết minh'
-                    : episode.name
+                const isLongTieng =
+                  item.server_name?.toLowerCase().includes('lồng tiếng') &&
+                  !item.server_name?.toLowerCase().includes('vietsub')
+                const isThuyetMinh =
+                  item.server_name?.toLowerCase().includes('thuyết minh') &&
+                  !item.server_name?.toLowerCase().includes('vietsub')
 
-              const isActive = episodeParam
-                ? (isDubbed && episodeParam === 'lồng tiếng') ||
-                  (isNarrated && episodeParam === 'thuyết minh') ||
-                  (episodeParam === 'full' && isVietsub) ||
-                  (!episodeParam.includes('full') && episodeParam === episode.slug)
-                : serverIndex === 0
+                const displayText = !['full', 'tap-dac-biet', 'long-tieng', 'thuyet-minh'].includes(
+                  episode.slug?.toLowerCase(),
+                )
+                  ? episode.name.split(' ')[1]
+                  : episode.name
 
-              return (
-                <Button
-                  key={episode.name}
-                  className={cn(
-                    `text-sm h-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
-                    { 'bg-primary-color text-black': isActive },
-                  )}
-                  onClick={() =>
-                    handleEpisodeClick(
-                      isDubbed ? 'lồng tiếng' : isNarrated ? 'thuyết minh' : episode.slug,
-                    )
-                  }
-                >
-                  {displayText}
-                  {isLastEpisode && ' END'}
-                </Button>
-              )
-            }),
-          )}
-        </div>
+                const episodeOptions = isThuyetMinh
+                  ? 'Thuyết minh'
+                  : isLongTieng
+                    ? 'Lồng tiếng'
+                    : 'Vietsub'
+
+                const isActiveEpisode =
+                  langParam &&
+                  langParam.includes(`${convertToPathname(episodeOptions)}`) &&
+                  episodeParam === episode.slug
+
+                return (
+                  <Button
+                    key={`${item.server_name}-${episode.slug}-${episodeIndex}`}
+                    className={cn(
+                      `text-sm h-fit min-w-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
+                      { 'bg-primary-color text-black': isActiveEpisode },
+                    )}
+                    onClick={() =>
+                      handleEpisodeClick(
+                        episode.slug,
+                        item.server_data.length <= 1
+                          ? (item.server_name.match(/\((.*?)\)/)?.[1] as string)
+                          : detail.type === 'single'
+                            ? episode.slug
+                            : (item.server_name.match(/\((.*?)\)/)?.[1] as string),
+                      )
+                    }
+                  >
+                    {displayText}
+                    {isLastEpisode && ' END'}
+                  </Button>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   )
