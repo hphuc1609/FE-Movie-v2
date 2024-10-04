@@ -18,8 +18,15 @@ interface CardImageProps {
 export default function CardImage(props: CardImageProps) {
   const { data, itemLength = 8 } = props
 
-  const checkType = (movie: MovieItem) =>
+  const isSingleType = (movie: MovieItem) =>
     movie.type === 'single' || movie.episode_current?.toLowerCase() === 'full'
+
+  const handleNavigate = (item: MovieItem) => {
+    const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
+    const episode = isSingleType(item) ? 'full' : 'tap-01'
+
+    return `/phim/${item.slug}?lang=${lang}&episode=${episode}`
+  }
 
   return (
     <>
@@ -29,11 +36,7 @@ export default function CardImage(props: CardImageProps) {
           className='h-fit flex flex-col gap-3'
         >
           <Link
-            href={
-              checkType(item)
-                ? `/phim/${item.slug}?episode=${item.lang.includes('Vietsub') ? 'full' : convertToPathname(item.lang)}`
-                : `/phim/${item.slug}`
-            }
+            href={handleNavigate(item)}
             className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
             onClick={openRandomAdLink}
           >
@@ -54,11 +57,7 @@ export default function CardImage(props: CardImageProps) {
           </Link>
           {/* Movie name */}
           <Link
-            href={
-              checkType(item)
-                ? `/phim/${item.slug}?episode=${item.lang.includes('Vietsub') ? 'full' : convertToPathname(item.lang)}`
-                : `/phim/${item.slug}`
-            }
+            href={handleNavigate(item)}
             className='text-sm max-[400px]:text-xs grid gap-1'
           >
             <p className='hover:text-primary-color font-semibold line-clamp-2'>

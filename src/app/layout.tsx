@@ -36,16 +36,9 @@ export const metadata: Metadata = {
       'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
     images: './icon.png',
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  icons: {
-    shortcut: '/favicon.ico',
-  },
-  verification: {
-    google: googleKey,
-  },
+  robots: { index: true, follow: true },
+  icons: { shortcut: '/favicon.ico' },
+  verification: { google: googleKey },
   referrer: 'origin-when-cross-origin',
 }
 

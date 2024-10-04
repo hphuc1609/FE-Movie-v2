@@ -15,14 +15,13 @@ export async function generateMetadata({ params, searchParams }: Params) {
     if (keyword) {
       const dataSearch = await movieApi.getMoviesSearch({ keyword })
       const seoOnPage = dataSearch.data.seoOnPage
-
       return {
         title: seoOnPage.titleHead,
         description: seoOnPage.descriptionHead,
         openGraph: {
           title: seoOnPage.titleHead,
           description: seoOnPage.descriptionHead,
-          url: `${myWebsite}/danh-sach/${slug}`,
+          url: `${myWebsite}/danh-sach/${slug}?page=1`,
           images: seoOnPage.og_image.map(
             (image) => `${dataSearch.data.APP_DOMAIN_CDN_IMAGE}/${image}`,
           ),
@@ -32,8 +31,9 @@ export async function generateMetadata({ params, searchParams }: Params) {
 
     if (slug === 'phim-moi-cap-nhat') return
 
-    const dataCategory = await movieApi.getListByCate({ category: slug, page })
-    const seoOnPage = dataCategory.data.seoOnPage
+    const newSlug = slug.includes('nam') ? slug.replace('nam-', '') : slug
+    const response = await movieApi.getListByCate({ category: newSlug, page })
+    const seoOnPage = response.data.seoOnPage
 
     return {
       title: seoOnPage.titleHead,
@@ -41,10 +41,8 @@ export async function generateMetadata({ params, searchParams }: Params) {
       openGraph: {
         title: seoOnPage.titleHead,
         description: seoOnPage.descriptionHead,
-        url: `${myWebsite}/danh-sach/${slug}`,
-        images: seoOnPage.og_image.map(
-          (image) => `${dataCategory.data.APP_DOMAIN_CDN_IMAGE}/${image}`,
-        ),
+        url: `${myWebsite}/danh-sach/${slug}?page=1`,
+        images: seoOnPage.og_image.map((image) => `${response.data.APP_DOMAIN_CDN_IMAGE}/${image}`),
       },
     }
   } catch (error: any) {

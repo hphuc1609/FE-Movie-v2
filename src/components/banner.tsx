@@ -1,5 +1,7 @@
 'use client'
 
+import { convertToPathname } from '@/helpers/cleanString'
+import { cn } from '@/lib/utils'
 import { MovieItem } from '@/models/interfaces/list-movie'
 import { useBanners } from '@/services/query-data'
 import { CalendarDays, Clock4, MoveLeft, MoveRight, Play } from 'lucide-react'
@@ -17,7 +19,6 @@ import 'swiper/css/effect-fade'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import '../css/banner.css'
-import { cn } from '@/lib/utils'
 
 const Banner = () => {
   const nextBtnRef = useRef<HTMLButtonElement>(null)
@@ -62,6 +63,13 @@ const Banner = () => {
     return !hasError && banners?.APP_DOMAIN_CDN_IMAGE
       ? `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
       : `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
+  }
+
+  const handleNavigate = (item: MovieItem) => {
+    const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
+    const episode = item.type === 'single' ? 'full' : 'tap-01'
+
+    router.push(`/phim/${item.slug}?lang=${lang}&episode=${episode}`)
   }
 
   if (isLoadingBanners) {
@@ -139,13 +147,7 @@ const Banner = () => {
                     { 'invisible opacity-0': index !== activeSlide },
                     'hover:bg-yellow-400 hover:text-black hover:fill-current',
                   )}
-                  onClick={() =>
-                    router.push(
-                      item.type === 'single'
-                        ? `/phim/${item.slug}?episode=full`
-                        : `/phim/${item.slug}`,
-                    )
-                  }
+                  onClick={() => handleNavigate(item)}
                 >
                   <Play
                     size={16}
