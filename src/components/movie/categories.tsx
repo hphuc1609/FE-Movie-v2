@@ -39,10 +39,13 @@ export default function CategoryMovie(props: CategoryMovieProps) {
         {!isLoadingList && category && (
           <Link
             href={`/danh-sach/${category}?page=1`}
-            className='text-sm max-sm:text-xs text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
+            className='group text-sm max-sm:text-xs text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
           >
-            Xem thêm
-            <ChevronRight size={16} />
+            Xem tất cả
+            <ChevronRight
+              size={16}
+              className='group-hover:animate-spin group-hover:translate-x-0.5'
+            />
           </Link>
         )}
       </header>
