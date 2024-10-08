@@ -3,6 +3,7 @@ import isSuccessResponse from '@/helpers/check-response'
 import movieApi from '@/services/api-client/movies'
 import { Metadata } from 'next'
 import Detail from './detail'
+import { convertToPathname } from '@/helpers/cleanString'
 
 interface Params {
   params: { slug: string }
@@ -21,11 +22,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     }
 
     const seoOnPage = res.movie
+    const lang = seoOnPage.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(seoOnPage.lang)
+    const episode = seoOnPage.type === 'single' ? 'full' : 'tap-01'
 
     // Meta data
     const metaTitle = `Phim ${seoOnPage.name}`
     const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} chất lượng Full HD tại Mephim247. ${seoOnPage.content}`
-    const metaUrl = `${myWebsite}/phim/${seoOnPage.slug}`
+    const metaUrl = `${myWebsite}/phim/${seoOnPage.slug}?lang=${lang}&episode=${episode}`
     const metaImage = seoOnPage.poster_url || seoOnPage.thumb_url
 
     return {

@@ -1,5 +1,5 @@
 import PlayButton from '@/components/common/play-button'
-import { MovieCategoryItem } from '@/models/interfaces/list-movie'
+import { MovieCategoryItem, MovieItem } from '@/models/interfaces/list-movie'
 import { StepBack, StepForward } from 'lucide-react'
 import Link from 'next/link'
 import { useRef } from 'react'
@@ -9,6 +9,7 @@ import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from 'swiper/react'
 import { ImageComponent } from './common/card-image'
 import { Button } from './ui/button'
+import { convertToPathname } from '@/helpers/cleanString'
 
 interface RelateMoviesProps {
   data: MovieCategoryItem
@@ -29,6 +30,13 @@ const RelateMovies = (props: RelateMoviesProps) => {
       1024: { slidesPerView: 5 },
       1320: { slidesPerView: 6 },
     },
+  }
+
+  const handleNavigate = (item: MovieItem) => {
+    const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
+    const episode = item.type === 'single' ? 'full' : 'tap-01'
+
+    return `/phim/${item.slug}?lang=${lang}&episode=${episode}`
   }
 
   if (!data.items.length) return null
@@ -82,9 +90,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
             className='!grid !gap-2'
           >
             <Link
-              href={
-                item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`
-              }
+              href={handleNavigate(item)}
               className='relative group bg-skeleton flex items-center justify-center overflow-hidden'
             >
               <ImageComponent
@@ -98,9 +104,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
               />
             </Link>
             <Link
-              href={
-                item.type === 'single' ? `/phim/${item.slug}?episode=full` : `/phim/${item.slug}`
-              }
+              href={handleNavigate(item)}
               className='text-sm max-sm:text-xs grid gap-1'
             >
               <p className='hover:text-primary-color font-semibold line-clamp-2'>

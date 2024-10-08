@@ -90,8 +90,10 @@ const Banner = () => {
       speed={1500}
       autoplay={{ delay: 7000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, EffectFade]}
-      className='relative max-w-screen-2xl h-[610px] max-sm:h-[550px] cursor-grab'
+      className='relative max-w-screen-2xl h-[610px] max-sm:h-[550px]'
     >
+      <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#0d0d0d] max-sm:from-[#0d0d0d] via-[#1a1a1a] z-10' />
+
       {filteredNewMovies.slice(0, 5).map((item, index) => {
         return (
           <SwiperSlide key={item._id}>
@@ -157,7 +159,7 @@ const Banner = () => {
       })}
 
       {filteredNewMovies.length > 0 && (
-        <div className='absolute z-50 bottom-3 right-0 lg:pr-20 pr-[25px] flex items-center gap-3'>
+        <div className='absolute z-50 bottom-[73px] max-md:bottom-5 right-0 lg:pr-20 pr-[25px] flex items-center gap-2.5'>
           <Button
             ref={prevBtnRef}
             size={'icon'}
