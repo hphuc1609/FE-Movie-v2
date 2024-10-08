@@ -24,6 +24,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Drawer from '../drawer'
 import Account from './account'
+import { convertToPathname } from '@/helpers/cleanString'
 
 const Header = () => {
   const pathname = usePathname()
@@ -130,7 +131,7 @@ const HeaderMenubar = React.memo(() => {
 
     setOpenDialogSearch(false)
     setSearchValue('')
-    router.push(`/danh-sach/tim-kiem?keyword=${searchValue}`)
+    router.push(`/danh-sach/tim-kiem?keyword=${convertToPathname(searchValue)}`)
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,10 +153,11 @@ const HeaderMenubar = React.memo(() => {
       <div className='flex gap-8 h-full items-center'>
         <Link
           href='/'
-          className='text-3xl max-sm:text-2xl text-nowrap font-mono font-bold'
+          className='relative flex items-center gap-2 text-2xl text-nowrap'
+          style={{ fontFamily: 'Vampiro One, system-ui', fontWeight: 400 }}
         >
-          Mephim
-          <span className='text-primary-color ml-1'>247</span>
+          <span className='text-primary-color'>Mephim</span>
+          <span className='text-sm'>247</span>
         </Link>
         <nav className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
           <Menubar className='flex gap-3 bg-transparent border-none p-0'>

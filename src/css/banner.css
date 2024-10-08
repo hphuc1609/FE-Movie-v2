@@ -1,9 +1,24 @@
-/* .swiper-pagination-bullet-active {
-  background-color: #ffba08 !important;
-} */
+.swiper-pagination-bullet-active {
+  width: 35px !important;
+}
 
 .swiper-pagination-bullet {
-  background-color: #ffff;
+  background-color: #fff;
   width: 12px;
-  height: 12px;
+  height: 6px;
+  border-radius: 20px;
+  transition: all 0.5s ease;
+}
+
+.swiper-pagination-horizontal {
+  text-align: right;
+  padding-right: 180px;
+  bottom: 20px !important;
+}
+
+@media screen and (max-width: 768px) {
+  .swiper-pagination-horizontal {
+    text-align: center;
+    padding-right: 0;
+  }
 }

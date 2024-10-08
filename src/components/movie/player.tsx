@@ -131,7 +131,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
               </Button>
             ))}
           </div>
-          <p className='text-xs text-red-500'>Chọn server khác nếu không xem được</p>
+          <p className='text-xs text-red-600'>Chọn server khác nếu không xem được</p>
         </div>
         {dataEpisode.map((item) => (
           <div
