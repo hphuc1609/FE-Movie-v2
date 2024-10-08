@@ -64,7 +64,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       id='info-movie'
       className='flex max-md:flex-col gap-[30px] overflow-hidden'
     >
-      <div className='absolute top-0 left-0 w-full min-h-[630px] overflow-hidden -z-10'>
+      <div className='absolute top-0 left-0 w-full min-h-[650px] overflow-hidden -z-10'>
         <Image
           fill
           src={errorBanner ? detail.poster_url : detail.thumb_url}
@@ -74,7 +74,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
           className='w-full object-cover'
         />
         <div className='absolute top-0 left-0 w-full h-full bg-black/80' />
-        <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-14 max-sm:h-10 bg-gradient-to-t from-[#0d0d0d] max-sm:from-[#1a1a1a] via-[#1a1a1a] to-transparent' />
+        <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-16 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] max-sm:from-[#1a1a1a] via-[#0d0d0d] to-transparent' />
       </div>
 
       <div className='relative max-w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>
@@ -91,9 +91,12 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
           <Button
             className={cn(
               'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
-              { 'bg-neutral-500 border-neutral-500 pointer-events-none': !detail.trailer_url },
+              {
+                'bg-neutral-600 border-neutral-600 cursor-not-allowed hover:border-neutral-600 hover:bg-neutral-600 hover:text-white':
+                  !detail.trailer_url,
+              },
             )}
-            onClick={() => setOpenDialogTrailer(true)}
+            onClick={() => detail.trailer_url && setOpenDialogTrailer(true)}
           >
             <Video
               size={16}

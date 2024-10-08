@@ -12,13 +12,25 @@
 
 .swiper-pagination-horizontal {
   text-align: right;
-  padding-right: 180px;
-  bottom: 20px !important;
+  padding-right: 185px;
+  bottom: 82px !important;
+  z-index: 20;
 }
 
+/* Mobile */
 @media screen and (max-width: 768px) {
   .swiper-pagination-horizontal {
     text-align: center;
     padding-right: 0;
+    bottom: 30px !important;
+  }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .swiper-pagination-horizontal {
+    text-align: right;
+    padding-right: 130px;
+    bottom: 82px !important;
   }
 }

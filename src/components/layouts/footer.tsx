@@ -61,11 +61,11 @@ export default function Footer() {
           <div className='text-center lg:text-left'>
             <Link
               href='/'
-              className='text-2xl flex items-center gap-2 hover:text-white transition-all duration-300'
+              className='text-2xl flex items-baseline justify-center gap-1.5 hover:text-white transition-all duration-300'
               style={{ fontFamily: 'Vampiro One, system-ui', fontWeight: 400 }}
             >
               <span className='text-primary-color'>Mephim</span>
-              <span className='text-sm'>247</span>
+              <span className='text-xl'>247</span>
             </Link>
             <p className='mt-2 text-sm text-gray-400'>Xem phim chất lượng cao, miễn phí</p>
           </div>

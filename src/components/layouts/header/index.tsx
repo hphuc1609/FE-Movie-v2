@@ -153,11 +153,11 @@ const HeaderMenubar = React.memo(() => {
       <div className='flex gap-8 h-full items-center'>
         <Link
           href='/'
-          className='relative flex items-center gap-2 text-2xl text-nowrap'
+          className='relative flex items-baseline gap-1.5 text-2xl text-nowrap'
           style={{ fontFamily: 'Vampiro One, system-ui', fontWeight: 400 }}
         >
           <span className='text-primary-color'>Mephim</span>
-          <span className='text-sm'>247</span>
+          <span className='text-xl'>247</span>
         </Link>
         <nav className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
           <Menubar className='flex gap-3 bg-transparent border-none p-0'>
