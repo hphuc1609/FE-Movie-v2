@@ -130,7 +130,7 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
       src={imageUrl(item, index)}
       alt={item.name}
       width={270}
-      height={270}
+      height={180}
       priority
       onError={() => handleErrorImage(index)}
       className={cn(

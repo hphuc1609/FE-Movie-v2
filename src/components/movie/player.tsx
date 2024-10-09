@@ -30,24 +30,35 @@ export default function MoviePlayer(props: MoviePlayerProps) {
 
   // Handle render video url by server change
   useEffect(() => {
-    const filteredServer = dataEpisode.map((episode) =>
-      episode.server_data.find((item) => item.slug === episodeParam),
+    const episodeData = dataEpisode.flatMap((episode) =>
+      episode.server_data.find((item) => item.slug === episodeParam)
+        ? {
+            server: episode.server_name.match(/\((.*?)\)/)?.[1],
+            data: episode.server_data.find((item) => item.slug === episodeParam),
+          }
+        : [],
     )
 
+    const linkVideo = episodeData.filter(
+      (item) => convertToPathname(item.server as string) === langParam,
+    )[0]?.data?.link_embed
+
     let video = ''
-    switch (serverIndex) {
-      case 'server 1':
-        video = filteredServer[0]?.link_embed || dataEpisode[0]?.server_data[0]?.link_embed
-        break
-      case 'server 2':
-        video = filteredServer[0]?.link_m3u8 || dataEpisode[0]?.server_data[0]?.link_m3u8
-        break
-      default:
-        break
+    if (episodeData.length > 0) {
+      switch (serverIndex) {
+        case 'server 1':
+          video = linkVideo || episodeData[0].data?.link_embed || ''
+          break
+        case 'server 2':
+          video = linkVideo || episodeData[0].data?.link_embed || ''
+          break
+        default:
+          break
+      }
     }
 
     setUrlVideo(video)
-  }, [dataEpisode, serverIndex, episodeParam])
+  }, [dataEpisode, serverIndex, episodeParam, langParam])
 
   // ------------------ Handlers ----------------------------
   const handlePlayClick = () => {
@@ -104,35 +115,39 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       id='player'
       className='flex flex-col'
     >
-      <div className='relative w-full aspect-video flex flex-col flex-auto gap-3 bg-black'>
-        {renderPlayerUI()}
-        {!isPlaying && serverIndex === 'server 2' && (
-          <div
-            className='absolute top-0 left-0 w-full h-full'
-            onClick={handlePlayClick}
-          >
-            <PlayButton />
+      {langParam && episodeParam && (
+        <div className='relative w-full aspect-video flex flex-col flex-auto gap-3 bg-black'>
+          {renderPlayerUI()}
+          {!isPlaying && serverIndex === 'server 2' && (
+            <div
+              className='absolute top-0 left-0 w-full h-full'
+              onClick={handlePlayClick}
+            >
+              <PlayButton />
+            </div>
+          )}
+        </div>
+      )}
+      <div className='flex flex-col gap-2 p-2 bg-black/50'>
+        {langParam && episodeParam && (
+          <div className='flex flex-col items-center gap-2 p-2'>
+            <div className='flex gap-2'>
+              {['server 1', 'server 2'].map((server, index) => (
+                <Button
+                  key={index}
+                  className={cn(
+                    `text-white bg-zinc-300/5 hover:bg-blue-500/80 capitalize h-fit rounded-sm`,
+                    { 'bg-blue-500/80': serverIndex === server },
+                  )}
+                  onClick={() => setServerIndex(server)}
+                >
+                  {server}
+                </Button>
+              ))}
+            </div>
+            <p className='text-xs text-red-600'>Chọn server khác nếu không xem được</p>
           </div>
         )}
-      </div>
-      <div className='flex flex-col gap-2 p-2 bg-black/50'>
-        <div className='flex flex-col items-center gap-2 p-2'>
-          <div className='flex gap-2'>
-            {['server 1', 'server 2'].map((server, index) => (
-              <Button
-                key={index}
-                className={cn(
-                  `text-white bg-zinc-300/5 hover:bg-blue-500/80 capitalize h-fit rounded-sm`,
-                  { 'bg-blue-500/80': serverIndex === server },
-                )}
-                onClick={() => setServerIndex(server)}
-              >
-                {server}
-              </Button>
-            ))}
-          </div>
-          <p className='text-xs text-red-600'>Chọn server khác nếu không xem được</p>
-        </div>
         {dataEpisode.map((item) => (
           <div
             key={item.server_name}
@@ -141,7 +156,6 @@ export default function MoviePlayer(props: MoviePlayerProps) {
             <span className='text-base max-sm:text-base font-semibold sticky top-0 p-2'>
               # {item.server_name.match(/\((.*?)\)/)?.[1]}
             </span>
-
             <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 max-h-[300px] overflow-x-hidden overflow-y-auto'>
               {item.server_data.map((episode, episodeIndex) => {
                 const isLastEpisode =
@@ -167,9 +181,10 @@ export default function MoviePlayer(props: MoviePlayerProps) {
                     : 'Vietsub'
 
                 const isActiveEpisode =
-                  langParam &&
-                  langParam.includes(`${convertToPathname(episodeOptions)}`) &&
-                  episodeParam === episode.slug
+                  (langParam &&
+                    langParam.includes(`${convertToPathname(episodeOptions)}`) &&
+                    episodeParam === episode.slug) ||
+                  (episodeIndex === 0 && !item.server_data.some((ep) => ep.slug === episodeParam))
 
                 return (
                   <Button
