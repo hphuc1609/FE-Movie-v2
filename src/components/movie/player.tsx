@@ -28,29 +28,34 @@ export default function MoviePlayer(props: MoviePlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [serverIndex, setServerIndex] = useState('server 1')
 
+  const normalizeSlug = (slug: string) => slug?.replace(/^tap-0*/, 'tap-')
+
   // Handle render video url by server change
   useEffect(() => {
-    const episodeData = dataEpisode.flatMap((episode) =>
-      episode.server_data.find((item) => item.slug === episodeParam)
+    const episodeData = dataEpisode.flatMap((episode) => {
+      const matchedData = episode.server_data.find(
+        (item) => normalizeSlug(item.slug) === normalizeSlug(episodeParam),
+      )
+      return matchedData
         ? {
             server: episode.server_name.match(/\((.*?)\)/)?.[1],
-            data: episode.server_data.find((item) => item.slug === episodeParam),
+            data: matchedData,
           }
-        : [],
-    )
+        : []
+    })
 
     const linkVideo = episodeData.filter(
       (item) => convertToPathname(item.server as string) === langParam,
-    )[0]?.data?.link_embed
+    )[0]?.data
 
     let video = ''
     if (episodeData.length > 0) {
       switch (serverIndex) {
         case 'server 1':
-          video = linkVideo || episodeData[0].data?.link_embed || ''
+          video = linkVideo?.link_embed || episodeData[0].data?.link_embed || ''
           break
         case 'server 2':
-          video = linkVideo || episodeData[0].data?.link_embed || ''
+          video = linkVideo?.link_m3u8 || episodeData[0].data?.link_m3u8 || ''
           break
         default:
           break
@@ -118,7 +123,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       {langParam && episodeParam && (
         <div className='relative w-full aspect-video flex flex-col flex-auto gap-3 bg-black'>
           {renderPlayerUI()}
-          {!isPlaying && serverIndex === 'server 2' && (
+          {!isPlaying && serverIndex === 'server 2' && urlVideo && (
             <div
               className='absolute top-0 left-0 w-full h-full'
               onClick={handlePlayClick}
@@ -151,7 +156,9 @@ export default function MoviePlayer(props: MoviePlayerProps) {
         {dataEpisode.map((item) => (
           <div
             key={item.server_name}
-            className='grid gap-3'
+            className={cn('grid gap-3', {
+              hidden: !item.server_name.match(/\((.*?)\)/)?.[1],
+            })}
           >
             <span className='text-base max-sm:text-base font-semibold sticky top-0 p-2'>
               # {item.server_name.match(/\((.*?)\)/)?.[1]}
@@ -184,7 +191,9 @@ export default function MoviePlayer(props: MoviePlayerProps) {
                   (langParam &&
                     langParam.includes(`${convertToPathname(episodeOptions)}`) &&
                     episodeParam === episode.slug) ||
-                  (episodeIndex === 0 && !item.server_data.some((ep) => ep.slug === episodeParam))
+                  (episodeParam &&
+                    episodeIndex === 0 &&
+                    !item.server_data.some((ep) => ep.slug === episodeParam))
 
                 return (
                   <Button

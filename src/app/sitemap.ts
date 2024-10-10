@@ -25,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const movieUrls = allMovies.map((movie) => ({
       url: `${baseUrl}/phim/${movie.slug}`,
       lastModified: new Date(movie.modified.time).toISOString(),
+      changeFreq: 'daily',
       priority: 0.8,
     }))
 

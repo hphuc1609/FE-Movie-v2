@@ -92,11 +92,11 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
             className={cn(
               'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
               {
-                'bg-neutral-600 border-neutral-600 cursor-not-allowed text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
+                'bg-neutral-600 border-neutral-600 pointer-events-none text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
                   !detail.trailer_url,
               },
             )}
-            onClick={() => detail.trailer_url && setOpenDialogTrailer(true)}
+            onClick={() => setOpenDialogTrailer(true)}
           >
             <Video
               size={16}

@@ -82,8 +82,7 @@ const CommentBox = () => {
           description: 'Vui lòng đăng nhập để có thể bình luận.',
         })
       } else {
-        console.error(error.message)
-        handleErrorToast()
+        handleErrorToast(error.message)
       }
     },
   })
@@ -97,8 +96,7 @@ const CommentBox = () => {
       setOpenDialogDelete(false)
     },
     onError: (error) => {
-      console.error(error.message)
-      handleErrorToast()
+      handleErrorToast(error.message)
     },
   })
 
@@ -107,8 +105,7 @@ const CommentBox = () => {
     try {
       submitMutation.mutate(data)
     } catch (error: any) {
-      console.error(error.message)
-      handleErrorToast()
+      handleErrorToast(error.message)
     }
   }
 
@@ -116,16 +113,15 @@ const CommentBox = () => {
     try {
       deleteMutation.mutate(id)
     } catch (error: any) {
-      console.error(error.message)
-      handleErrorToast()
+      handleErrorToast(error.message)
     }
   }
 
-  const handleErrorToast = () => {
+  const handleErrorToast = (msg?: string) => {
     return showToast({
       variant: 'error',
-      title: 'Lỗi',
-      description: `Đã xảy ra lỗi vui lòng thử lại sau.`,
+      title: 'Error',
+      description: `${msg}`,
     })
   }
 
