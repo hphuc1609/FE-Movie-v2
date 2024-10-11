@@ -1,6 +1,5 @@
 'use client'
 
-import { convertToPathname } from '@/helpers/cleanString'
 import { cn } from '@/lib/utils'
 import { MovieItem } from '@/models/interfaces/list-movie'
 import { useBanners } from '@/services/query-data'
@@ -66,10 +65,7 @@ const Banner = () => {
   }
 
   const handleNavigate = (item: MovieItem) => {
-    const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
-    const episode = item.type === 'single' ? 'full' : 'tap-01'
-
-    router.push(`/phim/${item.slug}?lang=${lang}&episode=${episode}`)
+    router.push(`/phim/${item.slug}`)
   }
 
   if (isLoadingBanners) {

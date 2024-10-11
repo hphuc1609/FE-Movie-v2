@@ -153,6 +153,13 @@ export default function MoviePlayer(props: MoviePlayerProps) {
             <p className='text-xs text-red-600'>Chọn server khác nếu không xem được</p>
           </div>
         )}
+        <span
+          className={cn('text-lg max-sm:text-base font-semibold sticky top-0 p-2', {
+            hidden: episodeParam,
+          })}
+        >
+          Chọn tập phim
+        </span>
         {dataEpisode.map((item) => (
           <div
             key={item.server_name}

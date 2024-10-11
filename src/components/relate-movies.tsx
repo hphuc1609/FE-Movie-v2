@@ -9,7 +9,6 @@ import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from 'swiper/react'
 import { ImageComponent } from './common/card-image'
 import { Button } from './ui/button'
-import { convertToPathname } from '@/helpers/cleanString'
 
 interface RelateMoviesProps {
   data: MovieCategoryItem
@@ -33,10 +32,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
   }
 
   const handleNavigate = (item: MovieItem) => {
-    const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
-    const episode = item.type === 'single' ? 'full' : 'tap-01'
-
-    return `/phim/${item.slug}?lang=${lang}&episode=${episode}`
+    return `/phim/${item.slug}`
   }
 
   if (!data.items.length) return null

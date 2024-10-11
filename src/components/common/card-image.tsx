@@ -1,6 +1,5 @@
 'use client'
 
-import { convertToPathname } from '@/helpers/cleanString'
 import openRandomAdLink from '@/helpers/handle-ads'
 import useLazyLoadImg from '@/hooks/useLazyImage'
 import { cn } from '@/lib/utils'
@@ -18,14 +17,14 @@ interface CardImageProps {
 export default function CardImage(props: CardImageProps) {
   const { data, itemLength = 8 } = props
 
-  const isSingleType = (movie: MovieItem) =>
-    movie.type === 'single' || movie.episode_current?.toLowerCase() === 'full'
+  // const isSingleType = (movie: MovieItem) =>
+  //   movie.type === 'single' || movie.episode_current?.toLowerCase() === 'full'
 
   const handleNavigate = (item: MovieItem) => {
-    const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
-    const episode = isSingleType(item) ? 'full' : 'tap-01'
+    // const lang = item.lang.includes('Vietsub') ? 'vietsub' : convertToPathname(item.lang)
+    // const episode = isSingleType(item) ? 'full' : 'tap-01'
 
-    return `/phim/${item.slug}?lang=${lang}&episode=${episode}`
+    return `/phim/${item.slug}`
   }
 
   return (

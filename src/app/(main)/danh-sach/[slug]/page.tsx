@@ -21,7 +21,7 @@ export async function generateMetadata({ params, searchParams }: Params) {
         openGraph: {
           title: seoOnPage.titleHead,
           description: seoOnPage.descriptionHead,
-          url: `${myWebsite}/danh-sach/${slug}?page=1`,
+          url: `${myWebsite}/danh-sach/${slug}`,
           images: seoOnPage.og_image.map(
             (image) => `${dataSearch.data.APP_DOMAIN_CDN_IMAGE}/${image}`,
           ),
@@ -41,7 +41,7 @@ export async function generateMetadata({ params, searchParams }: Params) {
       openGraph: {
         title: seoOnPage.titleHead,
         description: seoOnPage.descriptionHead,
-        url: `${myWebsite}/danh-sach/${slug}?page=1`,
+        url: `${myWebsite}/danh-sach/${slug}`,
         images: seoOnPage.og_image.map((image) => `${response.data.APP_DOMAIN_CDN_IMAGE}/${image}`),
       },
     }
