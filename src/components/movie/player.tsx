@@ -9,6 +9,7 @@ import ReactHlsPlayer from 'react-hls-player'
 import PlayButton from '../common/play-button'
 import { Button } from '../ui/button'
 import { convertToPathname } from '@/helpers/cleanString'
+import scrollToSection from '@/helpers/scroll-to-section'
 
 interface MoviePlayerProps {
   dataEpisode: DetailResponse['episodes']
@@ -111,6 +112,14 @@ export default function MoviePlayer(props: MoviePlayerProps) {
         return null
     }
   }
+
+  // Scroll to player section when urlVideo change
+  useEffect(() => {
+    if (!episodeParam) return
+
+    const playerElement = document.getElementById('player')
+    if (playerElement) scrollToSection(playerElement)
+  }, [episodeParam, urlVideo])
 
   const isTrailer = detail.episode_current.toLowerCase().includes('trailer')
   if (isTrailer) return null

@@ -41,10 +41,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
   }, [currentPage, dataPagination])
 
   return (
-    <section
-      id='table-pagination'
-      className='flex flex-col gap-10 pb-5 overflow-hidden'
-    >
+    <div className='flex flex-col gap-10 pb-5 overflow-hidden'>
       <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
         <CardImage
           data={data}
@@ -57,7 +54,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
           dataPagination={dataPagination}
         />
       )}
-    </section>
+    </div>
   )
 }
 

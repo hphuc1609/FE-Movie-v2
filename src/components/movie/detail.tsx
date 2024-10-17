@@ -10,6 +10,7 @@ import { useMediaQuery } from 'react-responsive'
 import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
 import { Button } from '../ui/button'
+import scrollToSection from '@/helpers/scroll-to-section'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
@@ -114,9 +115,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
                   detail.episode_current?.toLowerCase() === 'trailer',
               },
             )}
-            onClick={() =>
-              document.getElementById('player')?.scrollIntoView({ behavior: 'smooth' })
-            }
+            onClick={() => scrollToSection(document.getElementById('player') as HTMLElement)}
           >
             <Play
               size={16}

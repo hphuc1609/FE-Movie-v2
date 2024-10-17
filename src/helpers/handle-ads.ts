@@ -5,7 +5,7 @@ const BASE_URL_RIOKUPON = 'https://t.riokupon.me/s114235'
 
 const AD_LINKS_SHOPEE = AD_PATHS_SHOPEE.map((path) => `${BASE_URL_SHOPEE}/${path}`)
 
-const AD_LINKS = [...AD_LINKS_SHOPEE, BASE_URL_RIOKUPON]
+const AD_LINKS = [BASE_URL_RIOKUPON]
 const AD_INTERVAL = 3600000 / 2 // 30 minutes
 
 const openRandomAdLink = () => {
