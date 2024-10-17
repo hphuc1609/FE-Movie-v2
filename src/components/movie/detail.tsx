@@ -10,6 +10,7 @@ import { useMediaQuery } from 'react-responsive'
 import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
 import { Button } from '../ui/button'
+import scrollToSection from '@/helpers/scroll-to-section'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
@@ -77,7 +78,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
         <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-16 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] max-sm:from-[#1a1a1a] via-[#0d0d0d] to-transparent' />
       </div>
 
-      <div className='relative max-w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>
+      <div className='relative w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>
         <Image
           src={errorImage ? detail.thumb_url : detail.poster_url}
           width={300}
@@ -92,11 +93,11 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
             className={cn(
               'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
               {
-                'bg-neutral-600 border-neutral-600 cursor-not-allowed hover:border-neutral-600 hover:bg-neutral-600 hover:text-white':
+                'bg-neutral-600 border-neutral-600 pointer-events-none text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
                   !detail.trailer_url,
               },
             )}
-            onClick={() => detail.trailer_url && setOpenDialogTrailer(true)}
+            onClick={() => setOpenDialogTrailer(true)}
           >
             <Video
               size={16}
@@ -107,10 +108,14 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
             Trailer
           </Button>
           <Button
-            className='h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit'
-            onClick={() =>
-              document.getElementById('player')?.scrollIntoView({ behavior: 'smooth' })
-            }
+            className={cn(
+              'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
+              {
+                'bg-neutral-600 border-neutral-600 pointer-events-none text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
+                  detail.episode_current?.toLowerCase() === 'trailer',
+              },
+            )}
+            onClick={() => scrollToSection(document.getElementById('player') as HTMLElement)}
           >
             <Play
               size={16}

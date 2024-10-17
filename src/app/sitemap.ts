@@ -25,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const movieUrls = allMovies.map((movie) => ({
       url: `${baseUrl}/phim/${movie.slug}`,
       lastModified: new Date(movie.modified.time).toISOString(),
+      changeFreq: 'daily',
       priority: 0.8,
     }))
 
@@ -34,27 +35,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date().toISOString(),
         priority: 1.0,
       },
+      {
+        url: `${baseUrl}/danh-sach/phim-le`,
+        lastModified: new Date().toISOString(),
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/danh-sach/phim-bo`,
+        lastModified: new Date().toISOString(),
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/danh-sach/hoat-hinh`,
+        lastModified: new Date().toISOString(),
+        priority: 0.8,
+      },
+      {
+        url: `${baseUrl}/danh-sach/tv-shows`,
+        lastModified: new Date().toISOString(),
+        priority: 0.8,
+      },
       ...movieUrls,
-      {
-        url: `${baseUrl}/danh-sach/phim-le?page=1`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/danh-sach/phim-bo?page=1`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/danh-sach/hoat-hinh?page=1`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/danh-sach/tv-shows?page=1`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
     ]
   } catch (error) {
     console.error('Failed to generate sitemap:', error)

@@ -30,7 +30,12 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     if (['/login', '/register'].includes(pathname)) {
       return
     }
-    localStorage.setItem('lastPath', pathname)
+
+    const searchParam = new URLSearchParams(window.location.search)
+    const searchToString = searchParam.toString()
+    const lastPath = `${pathname}${searchToString ? `?${searchToString}` : ''}`
+
+    localStorage.setItem('lastPath', lastPath)
   }, [pathname])
 
   // Check login

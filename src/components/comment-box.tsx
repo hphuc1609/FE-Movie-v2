@@ -82,8 +82,7 @@ const CommentBox = () => {
           description: 'Vui lòng đăng nhập để có thể bình luận.',
         })
       } else {
-        console.error(error.message)
-        handleErrorToast()
+        handleErrorToast(error.message)
       }
     },
   })
@@ -97,8 +96,7 @@ const CommentBox = () => {
       setOpenDialogDelete(false)
     },
     onError: (error) => {
-      console.error(error.message)
-      handleErrorToast()
+      handleErrorToast(error.message)
     },
   })
 
@@ -107,8 +105,7 @@ const CommentBox = () => {
     try {
       submitMutation.mutate(data)
     } catch (error: any) {
-      console.error(error.message)
-      handleErrorToast()
+      handleErrorToast(error.message)
     }
   }
 
@@ -116,23 +113,22 @@ const CommentBox = () => {
     try {
       deleteMutation.mutate(id)
     } catch (error: any) {
-      console.error(error.message)
-      handleErrorToast()
+      handleErrorToast(error.message)
     }
   }
 
-  const handleErrorToast = () => {
+  const handleErrorToast = (msg?: string) => {
     return showToast({
       variant: 'error',
-      title: 'Lỗi',
-      description: `Đã xảy ra lỗi vui lòng thử lại sau.`,
+      title: 'Error',
+      description: `${msg}`,
     })
   }
 
   return (
     <div className='h-fit flex flex-col gap-4 p-6 max-sm:p-4 bg-black/50'>
       <div className='flex items-center justify-between'>
-        <h5 className='text-lg font-bold'>{filteredComments.length} Bình luận</h5>
+        <h4 className='text-lg font-bold'>{filteredComments.length} Bình luận</h4>
         {/* Dropdown Sort */}
         <Select
           onValueChange={(value) => handleSort(value as 'newest' | 'oldest')}
@@ -170,7 +166,7 @@ const CommentBox = () => {
       />
 
       {/* List comment */}
-      <div className={cn('mt-5 grid gap-6', !filteredComments.length && 'hidden')}>
+      <div className={cn('mt-5 grid gap-6', { hidden: !filteredComments.length })}>
         {filteredComments.slice(0, count).map((comment) => (
           <div
             key={comment._id}

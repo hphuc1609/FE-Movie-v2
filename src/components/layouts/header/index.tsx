@@ -24,7 +24,6 @@ import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Drawer from '../drawer'
 import Account from './account'
-import { convertToPathname } from '@/helpers/cleanString'
 
 const Header = () => {
   const pathname = usePathname()
@@ -126,12 +125,12 @@ const HeaderMenubar = React.memo(() => {
     router.push(`/danh-sach/tim-kiem?keyword=${value}`)
   }
 
-  const handleSearchClick = () => {
+  const handleSearchIconClick = () => {
     if (!searchValue) return
 
     setOpenDialogSearch(false)
     setSearchValue('')
-    router.push(`/danh-sach/tim-kiem?keyword=${convertToPathname(searchValue)}`)
+    router.push(`/danh-sach/tim-kiem?keyword=${searchValue}`)
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,7 +259,7 @@ const HeaderMenubar = React.memo(() => {
             <Search
               size={20}
               className='cursor-pointer -ml-8 hover:text-primary-color'
-              onClick={handleSearchClick}
+              onClick={handleSearchIconClick}
             />
           </div>
         }

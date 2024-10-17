@@ -20,17 +20,18 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
   const lastSegment = slug.split('/').pop() || ''
   const keyword = searchParams.keyword || ''
   const currentPage = searchParams.page || 1
+  const moiCapNhatPath = lastSegment.includes('moi-cap-nhat')
 
   const isNotEmpty = (obj: any) => obj && Object.keys(obj).length > 0
 
   const { data: movies, isFetching: isFetchingMovies } = useMoviesByCate({
     category: lastSegment,
     page: currentPage,
-    options: { enabled: !lastSegment.includes('moi-cap-nhat') },
+    options: { enabled: !moiCapNhatPath },
   })
   const { data: newMovies, isFetching: isFetchingNewMovies } = useNewMovies({
-    options: { enabled: lastSegment.includes('moi-cap-nhat') },
     page: currentPage,
+    options: { enabled: moiCapNhatPath },
   })
   const { data: moviesSearch, isLoading: isLoadingSearch } = useMoviesSearch(keyword)
 
@@ -61,7 +62,7 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
         ? movies?.breadCrumb[0]?.name
         : `Phim ${movies?.breadCrumb[0]?.name}`
 
-    if (isNotEmpty(newMovies)) return 'Phim mới cập nhật'
+    if (isNotEmpty(newMovies) && moiCapNhatPath) return 'Phim mới cập nhật'
   }
 
   const getBreadCrumb = () => {
@@ -91,12 +92,13 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
     <>
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
 
-      {hasMovies && !isLoading && (
-        <div className='grid gap-6'>
-          <h1 className='text-3xl max-sm:text-xl font-semibold capitalize'>{renderTitle()}</h1>
+      <section className='grid gap-6'>
+        <h1 className='text-3xl max-sm:text-xl font-semibold capitalize'>{renderTitle()}</h1>
+        {hasMovies && !isLoading && (
           <TablePagination data={(moviesSearch || movies || newMovies) as MovieCategoryItem} />
-        </div>
-      )}
+        )}
+      </section>
+
       {isLoading && (
         <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
           <SkeletonCard itemLength={12} />
