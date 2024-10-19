@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import CardImage from '../common/card-image'
 import SkeletonCard from '../common/skeleton-card'
+import { cn } from '@/lib/utils'
 
 interface CategoryMovieProps {
   category: string
@@ -32,7 +33,7 @@ export default function CategoryMovie(props: CategoryMovieProps) {
       className='flex-1 flex flex-col gap-8 max-lg:gap-6'
     >
       <header className='flex items-center justify-between'>
-        <h2 className={`text-3xl max-sm:text-lg font-semibold uppercase text-secondary-color`}>
+        <h2 className='text-3xl max-sm:text-lg font-semibold uppercase text-primary-color'>
           {title}
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h2>

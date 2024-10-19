@@ -61,7 +61,7 @@ export default function Footer() {
           <div className='text-center lg:text-left'>
             <Link
               href='/'
-              className='text-2xl flex items-baseline justify-center gap-1.5 hover:text-white transition-all duration-300'
+              className='text-2xl flex items-baseline max-md:justify-center gap-1.5 hover:text-white transition-all duration-300'
               style={{ fontFamily: 'Vampiro One, system-ui', fontWeight: 400 }}
             >
               <span className='text-primary-color'>Mephim</span>
@@ -99,8 +99,8 @@ export default function Footer() {
 
         {/* Copyright & Message */}
         <div className='mt-10 text-center lg:text-right'>
-          <span className='block text-sm text-gray-500'>
-            &copy; {new Date().getFullYear()}. All rights reserved.
+          <span className='block text-xs text-gray-500'>
+            &copy; {new Date().getFullYear()} Mephim247. All rights reserved.
           </span>
           <p className='mt-2 text-gray-300'>
             “Mephim247 – Nơi trải nghiệm những bộ phim đỉnh cao. Chúc bạn có những phút giây thư

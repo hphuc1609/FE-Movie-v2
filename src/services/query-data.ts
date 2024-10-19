@@ -2,8 +2,8 @@
 
 import { dataNamPhatHanh } from '@/data/category'
 import isSuccessResponse from '@/helpers/check-response'
+import { showToast } from '@/helpers/toast'
 import useFetchData from '@/hooks/useFetch'
-import { toast } from '@/hooks/useToast'
 import { ICategory } from '@/models/interfaces/category'
 import { ICommentItem } from '@/models/interfaces/comment'
 import { DetailResponse } from '@/models/interfaces/detail'
@@ -22,17 +22,17 @@ const fetchData = async (apiMethod: Promise<any>) => {
   try {
     const res = await apiMethod
     if (!isSuccessResponse(res)) {
-      toast({
-        variant: 'destructive',
+      showToast({
+        variant: 'error',
         title: 'Something went wrong.',
-        description: `Internal Server Error. Please try again later.`,
+        description: `Internal Server Error. ${res.message}`,
       })
       return
     }
     return res.data || res
   } catch (error: any) {
-    toast({
-      variant: 'destructive',
+    showToast({
+      variant: 'error',
       title: 'Something went wrong.',
       description: `There was a problem with your request. ${error.message}`,
     })

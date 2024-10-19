@@ -3,7 +3,7 @@ import generateYearList from '@/helpers/generate-year'
 const movieTypes = [
   { name: 'Phim lẻ', slug: 'phim-le' },
   { name: 'Phim bộ', slug: 'phim-bo' },
-  { name: 'Mới cập nhật', slug: 'phim-moi-cap-nhat' },
+  { name: 'Phim Mới', slug: 'phim-moi-cap-nhat' },
 ]
 
 const dataTheLoai = [

@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <header
       className={cn(
-        'w-full h-16 flex fixed items-center justify-between top-0 z-50 transition duration-300',
+        'w-full h-14 flex fixed items-center justify-between top-0 z-50 transition duration-300',
         !isHomePathname ? 'sticky border-b border-neutral-200 border-opacity-10' : '',
         scrollPosition > 0 ? 'bg-neutral-900/50 backdrop-blur-md' : '',
         isAuthPath ? 'hidden' : '',
@@ -52,6 +52,11 @@ const HeaderMenubar = React.memo(() => {
   const { isLogin } = useContextGlobal()
 
   const [hasToken, setHasToken] = useState(false)
+  const [openDialogSearch, setOpenDialogSearch] = useState(false)
+  const [searchValue, setSearchValue] = useState('')
+  const [openDrawer, setOpenDrawer] = useState(false)
+
+  const { data: countries = [] } = useCountries()
 
   // Check token
   useEffect(() => {
@@ -64,12 +69,6 @@ const HeaderMenubar = React.memo(() => {
     }
     setHasToken(false)
   }, [isLogin])
-
-  const [openDialogSearch, setOpenDialogSearch] = useState(false)
-  const [searchValue, setSearchValue] = useState('')
-  const [openDrawer, setOpenDrawer] = useState(false)
-
-  const { data: countries = [] } = useCountries()
 
   const sizeIcon = 18
   const navbarItems: INavbar[] = [
@@ -122,7 +121,7 @@ const HeaderMenubar = React.memo(() => {
       return
     }
     setOpenDialogSearch(false)
-    router.push(`/danh-sach/tim-kiem?keyword=${value}`)
+    router.push(`/tim-kiem?keyword=${value}`)
   }
 
   const handleSearchIconClick = () => {
@@ -130,7 +129,7 @@ const HeaderMenubar = React.memo(() => {
 
     setOpenDialogSearch(false)
     setSearchValue('')
-    router.push(`/danh-sach/tim-kiem?keyword=${searchValue}`)
+    router.push(`/tim-kiem?keyword=${searchValue}`)
   }
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +143,8 @@ const HeaderMenubar = React.memo(() => {
   const activeLink = (link: string) => pathname.endsWith(link)
 
   const checkUrl = (link: string) => {
-    return link === '/' ? link : `/danh-sach${link.startsWith('/') ? link : `/${link}`}?page=1`
+    const url = link.startsWith('/') ? link : `/${link}`
+    return link === '/' ? link : `/danh-sach${url}?page=1`
   }
 
   return (
@@ -187,7 +187,7 @@ const HeaderMenubar = React.memo(() => {
                     {menuItem.subMenu && (
                       <MenubarContent
                         className={cn(
-                          'min-w-fit px-5 mt-4 grid grid-cols-4 gap-x-5 gap-y-1 bg-neutral-900 z-50 border-none text-current',
+                          'min-w-fit px-5 mt-3 grid grid-cols-4 gap-x-5 gap-y-1 bg-neutral-900 z-50 border-none text-current',
                           { 'grid-cols-2 gap-x-3': menuItem.subMenu.length < 6 },
                         )}
                       >

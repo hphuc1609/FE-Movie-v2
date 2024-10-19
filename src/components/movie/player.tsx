@@ -144,7 +144,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       )}
       <div className='flex flex-col gap-2 p-2 bg-black/50'>
         {langParam && episodeParam && (
-          <div className='flex flex-col items-center gap-2 p-2'>
+          <div className='flex flex-col items-center gap-3 p-2'>
             <div className='flex gap-2'>
               {['server 1', 'server 2'].map((server, index) => (
                 <Button

@@ -1,16 +1,17 @@
 'use client'
 
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
-import TablePagination from '@/components/table-pagination'
 import SkeletonCard from '@/components/common/skeleton-card'
+import TablePagination from '@/components/table-pagination'
+import isNotEmpty from '@/helpers/not-empty'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
-import { useMoviesByCate, useMoviesSearch, useNewMovies } from '@/services/query-data'
+import { useMoviesByCate, useNewMovies } from '@/services/query-data'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
 interface DetailProps {
   slug: string
-  searchParams: { keyword?: string; page?: string }
+  searchParams: { keyword: string; page: string }
 }
 
 const Detail = ({ slug, searchParams }: DetailProps) => {
@@ -18,11 +19,8 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
 
   // Get params
   const lastSegment = slug.split('/').pop() || ''
-  const keyword = searchParams.keyword || ''
   const currentPage = searchParams.page || 1
   const moiCapNhatPath = lastSegment.includes('moi-cap-nhat')
-
-  const isNotEmpty = (obj: any) => obj && Object.keys(obj).length > 0
 
   const { data: movies, isFetching: isFetchingMovies } = useMoviesByCate({
     category: lastSegment,
@@ -33,7 +31,6 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
     page: currentPage,
     options: { enabled: moiCapNhatPath },
   })
-  const { data: moviesSearch, isLoading: isLoadingSearch } = useMoviesSearch(keyword)
 
   // Refetch list movie
   useEffect(() => {
@@ -48,15 +45,6 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
   }, [currentPage, lastSegment, queryClient])
 
   const renderTitle = () => {
-    if (isNotEmpty(moviesSearch)) {
-      if (moviesSearch?.items.length === 0) return
-
-      return `Phim ${moviesSearch?.breadCrumb[0]?.name
-        .replace(/ - Trang 1/g, '')
-        .split(':')
-        .pop()}`
-    }
-
     if (isNotEmpty(movies))
       return movies?.breadCrumb[0]?.name.includes('Phim')
         ? movies?.breadCrumb[0]?.name
@@ -66,10 +54,9 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
   }
 
   const getBreadCrumb = () => {
-    if (isNotEmpty(moviesSearch) || isNotEmpty(movies)) {
-      return moviesSearch?.breadCrumb || movies?.breadCrumb || []
+    if (isNotEmpty(movies)) {
+      return movies?.breadCrumb || []
     }
-
     if (isNotEmpty(newMovies))
       return [
         {
@@ -85,17 +72,19 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
     return '...'
   }
 
-  const hasMovies = isNotEmpty(moviesSearch?.items || movies?.items || newMovies?.items)
-  const isLoading = isLoadingSearch || isFetchingMovies || isFetchingNewMovies
+  const hasMovies = isNotEmpty(movies?.items || newMovies?.items)
+  const isLoading = isFetchingMovies || isFetchingNewMovies
 
   return (
     <>
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
 
       <section className='grid gap-6'>
-        <h1 className='text-3xl max-sm:text-xl font-semibold capitalize'>{renderTitle()}</h1>
+        <h2 className='text-3xl max-sm:text-xl font-semibold capitalize text-primary-color'>
+          {renderTitle()}
+        </h2>
         {hasMovies && !isLoading && (
-          <TablePagination data={(moviesSearch || movies || newMovies) as MovieCategoryItem} />
+          <TablePagination data={(movies || newMovies) as MovieCategoryItem} />
         )}
       </section>
 
@@ -103,10 +92,6 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
         <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
           <SkeletonCard itemLength={12} />
         </div>
-      )}
-
-      {!isLoadingSearch && !hasMovies && keyword && (
-        <p className='text-2xl font-medium'>Không tìm thấy phim: {keyword}</p>
       )}
     </>
   )

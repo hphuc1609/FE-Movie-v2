@@ -9,26 +9,9 @@ interface Params {
 
 export async function generateMetadata({ params, searchParams }: Params) {
   const { slug } = params
-  const { keyword, page } = searchParams
+  const { page } = searchParams
 
   try {
-    if (keyword) {
-      const dataSearch = await movieApi.getMoviesSearch({ keyword })
-      const seoOnPage = dataSearch.data.seoOnPage
-      return {
-        title: seoOnPage.titleHead,
-        description: seoOnPage.descriptionHead,
-        openGraph: {
-          title: seoOnPage.titleHead,
-          description: seoOnPage.descriptionHead,
-          url: `${myWebsite}/danh-sach/${slug}`,
-          images: seoOnPage.og_image.map(
-            (image) => `${dataSearch.data.APP_DOMAIN_CDN_IMAGE}/${image}`,
-          ),
-        },
-      }
-    }
-
     if (slug === 'phim-moi-cap-nhat') return
 
     const newSlug = slug.includes('nam') ? slug.replace('nam-', '') : slug
@@ -55,10 +38,9 @@ export async function generateMetadata({ params, searchParams }: Params) {
 }
 
 export default function ListPage({ params, searchParams }: Params) {
-  const { slug } = params
   return (
     <Detail
-      slug={slug}
+      slug={params.slug}
       searchParams={searchParams}
     />
   )

@@ -14,26 +14,26 @@ const inter = Inter({ subsets: ['vietnamese'] })
 export const metadata: Metadata = {
   metadataBase: new URL(`${myUrl}`),
   title: {
-    default: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
-    template: '%s | Mephim247',
+    default: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | MePhim247',
+    template: '%s | MePhim247',
   },
   description:
-    'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng Full HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+    'Xem phim miễn phí chất lượng cao tại Mê Phim - MePhim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   openGraph: {
-    title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh  hay nhất',
+    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | MePhim247',
     description:
-      'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng Full HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem phim miễn phí chất lượng cao tại Mê Phim - MePhim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
     url: `${myUrl}`,
-    siteName: 'Mephim247',
+    siteName: 'MePhim247',
     images: './icon.png',
     locale: 'vi',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'Mephim247 - Khám phá phim hay, phim bộ vietsub, thuyết minh hay nhất',
+    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | MePhim247',
     description:
-      'Xem trọn bộ phim miễn phí với chất lượng cao tại Mephim247. Cập nhật phim mới vietsub, thuyết minh chất lượng Full HD nhanh nhất. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem phim miễn phí chất lượng cao tại Mê Phim - MePhim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
     images: './icon.png',
   },
   robots: { index: true, follow: true },
