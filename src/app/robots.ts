@@ -7,8 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: ['/', '/danh-sach/*', '/phim/*'],
-      disallow: [],
+      disallow: ['/danh-sach/tim-kiem?keyword=*'],
     },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [`${baseUrl}/sitemap.xml`, `${baseUrl}/danh-sach/sitemap.xml`],
   }
 }

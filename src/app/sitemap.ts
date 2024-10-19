@@ -3,18 +3,17 @@ import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
+  const limit = 64
 
   try {
-    const [newMovies, phimLe, phimBo, hoatHinh, tvShows] = await Promise.all([
-      movieApi.getNewMovies({}),
-      movieApi.getListByCate({ category: 'phim-le' }),
-      movieApi.getListByCate({ category: 'phim-bo' }),
-      movieApi.getListByCate({ category: 'hoat-hinh' }),
-      movieApi.getListByCate({ category: 'tv-shows' }),
+    const [phimLe, phimBo, hoatHinh, tvShows] = await Promise.all([
+      movieApi.getListByCate({ category: 'phim-le', limit }),
+      movieApi.getListByCate({ category: 'phim-bo', limit }),
+      movieApi.getListByCate({ category: 'hoat-hinh', limit }),
+      movieApi.getListByCate({ category: 'tv-shows', limit }),
     ])
 
     const allMovies = [
-      ...newMovies.items,
       ...phimLe.data.items,
       ...phimBo.data.items,
       ...hoatHinh.data.items,
@@ -24,36 +23,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Tạo danh sách URL cho sitemap
     const movieUrls = allMovies.map((movie) => ({
       url: `${baseUrl}/phim/${movie.slug}`,
-      lastModified: new Date(movie.modified.time).toISOString(),
-      changeFreq: 'daily',
-      priority: 0.8,
+      lastModified: new Date(movie.modified.time),
     }))
 
     return [
       {
         url: `${baseUrl}`,
-        lastModified: new Date().toISOString(),
+        lastModified: new Date(),
         priority: 1.0,
-      },
-      {
-        url: `${baseUrl}/danh-sach/phim-le`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/danh-sach/phim-bo`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/danh-sach/hoat-hinh`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
-      },
-      {
-        url: `${baseUrl}/danh-sach/tv-shows`,
-        lastModified: new Date().toISOString(),
-        priority: 0.8,
       },
       ...movieUrls,
     ]
