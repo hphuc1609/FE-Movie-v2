@@ -24,7 +24,7 @@ export default function NewUpdateMovie() {
   }
 
   return (
-    <section className='flex flex-col gap-3 w-[360px] max-sm:w-full max-xl:w-[289px] max-lg:hidden'>
+    <section className='flex flex-col gap-3 w-[360px] max-lg:flex-2 max-[950px]:hidden'>
       <header className='flex items-center justify-between'>
         <h2 className='text-xl uppercase font-semibold line-clamp-1 text-primary-color'>
           Phim đề cử
