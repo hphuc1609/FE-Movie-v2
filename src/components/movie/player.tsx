@@ -204,12 +204,9 @@ export default function MoviePlayer(props: MoviePlayerProps) {
                     : 'Vietsub'
 
                 const isActiveEpisode =
-                  (langParam &&
-                    langParam.includes(`${convertToPathname(episodeOptions)}`) &&
-                    episodeParam === episode.slug) ||
-                  (episodeParam &&
-                    episodeIndex === 0 &&
-                    !item.server_data.some((ep) => ep.slug === episodeParam))
+                  langParam &&
+                  langParam.includes(`${convertToPathname(episodeOptions)}`) &&
+                  episodeParam === episode.slug
 
                 return (
                   <Button
