@@ -11,6 +11,7 @@ import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
 import { Button } from '../ui/button'
 import scrollToSection from '@/helpers/scroll-to-section'
+import { useSearchParams } from 'next/navigation'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
@@ -20,6 +21,9 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
   const [errorBanner, setErrorBanner] = useState(false)
+
+  const params = useSearchParams()
+  const episodeParam = params.get('episode') as string
 
   const mobile = useMediaQuery({ query: '(max-width: 640px)' })
 
@@ -112,7 +116,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
               'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
               {
                 'bg-neutral-600 border-neutral-600 pointer-events-none text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
-                  detail.episode_current?.toLowerCase() === 'trailer',
+                  detail.episode_current?.toLowerCase() === 'trailer' || episodeParam,
               },
             )}
             onClick={() => scrollToSection(document.getElementById('player') as HTMLElement)}
