@@ -3,7 +3,7 @@
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import SkeletonCard from '@/components/common/skeleton-card'
 import TablePagination from '@/components/table-pagination'
-import isNotEmpty from '@/helpers/not-empty'
+import isNotEmpty from '@/helpers/object-empty'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useMoviesByCate, useNewMovies } from '@/services/query-data'
 import { useQueryClient } from '@tanstack/react-query'
@@ -57,7 +57,7 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
     if (isNotEmpty(movies)) {
       return movies?.breadCrumb || []
     }
-    if (isNotEmpty(newMovies))
+    if (isNotEmpty(newMovies) && moiCapNhatPath)
       return [
         {
           isCurrent: false,

@@ -14,26 +14,26 @@ const inter = Inter({ subsets: ['vietnamese'] })
 export const metadata: Metadata = {
   metadataBase: new URL(`${myUrl}`),
   title: {
-    default: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | MePhim247',
-    template: '%s | MePhim247',
+    default: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | Mephim 247',
+    template: '%s | Mephim 247',
   },
   description:
-    'Xem phim miễn phí chất lượng cao tại Mê Phim - MePhim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+    'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim 247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
   openGraph: {
-    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | MePhim247',
+    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | Mephim 247',
     description:
-      'Xem phim miễn phí chất lượng cao tại Mê Phim - MePhim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim 247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
     url: `${myUrl}`,
-    siteName: 'MePhim247',
+    siteName: 'Mephim 247',
     images: './icon.png',
     locale: 'vi',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | MePhim247',
+    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | Mephim 247',
     description:
-      'Xem phim miễn phí chất lượng cao tại Mê Phim - MePhim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim 247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
     images: './icon.png',
   },
   robots: { index: true, follow: true },
@@ -55,7 +55,7 @@ export default function RootLayout({
       <body
         className={cn(
           inter.className,
-          'bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#0d0d0d] text-primary-foreground',
+          'relative bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#0d0d0d] text-primary-foreground',
         )}
       >
         <TanstackProvider>

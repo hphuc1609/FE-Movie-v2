@@ -3,7 +3,7 @@
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import SkeletonCard from '@/components/common/skeleton-card'
 import TablePagination from '@/components/table-pagination'
-import isNotEmpty from '@/helpers/not-empty'
+import isNotEmpty from '@/helpers/object-empty'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useMoviesSearch } from '@/services/query-data'
 

@@ -44,13 +44,13 @@ const FooterSection = ({ title, links }: FooterSectionProps) => (
 
 export default function Footer() {
   const supportLinks = [
-    { href: '#', label: 'Chính sách bảo mật' },
-    { href: '#', label: 'Câu hỏi thường gặp' },
+    { href: 'chinh-sach:;', label: 'Chính sách bảo mật' },
+    { href: 'cau-hoi:;', label: 'Câu hỏi thường gặp' },
   ]
 
   const generalLinks = [
-    { href: '#', label: 'Giới thiệu' },
-    { href: '#', label: 'Liên hệ' },
+    { href: 'gioi-thieu:;', label: 'Giới thiệu' },
+    { href: 'lien-he:;', label: 'Liên hệ' },
   ]
 
   return (
