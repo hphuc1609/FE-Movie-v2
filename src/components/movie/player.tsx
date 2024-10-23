@@ -161,7 +161,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
       {/* Overlay for dark mode */}
       <div
         className={cn('absolute top-0 left-0 w-full h-full z-[-1] transition duration-300', {
-          'bg-black z-50': isDarkMode,
+          'bg-black/95 z-50': isDarkMode,
         })}
       />
 
@@ -256,7 +256,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           {/* Episodes */}
           <span
             className={cn('text-lg max-sm:text-base font-semibold sticky top-0 p-2', {
-              hidden: episodeParam,
+              hidden: detail.episode_current.toLowerCase() === 'full' || episodeParam,
             })}
           >
             Chọn tập phim

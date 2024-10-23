@@ -33,14 +33,14 @@ export default function CategoryMovie(props: CategoryMovieProps) {
       className='flex-1 flex flex-col gap-8 max-lg:gap-6'
     >
       <header className='flex items-center justify-between'>
-        <h2 className='text-3xl max-sm:text-lg font-semibold uppercase text-primary-color'>
+        <h2 className='text-3xl max-sm:text-xl font-bold uppercase bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           {title}
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h2>
         {!isLoadingList && category && (
           <Link
             href={`/danh-sach/${category}?page=1`}
-            className='group text-sm max-sm:text-xs text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
+            className='group text-sm max-sm:text-[11px] text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
           >
             Xem tất cả
             <ChevronRight

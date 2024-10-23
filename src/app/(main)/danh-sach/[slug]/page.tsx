@@ -4,7 +4,7 @@ import Detail from './detail'
 
 interface Params {
   params: { slug: string }
-  searchParams: { keyword: string; page: string }
+  searchParams: { page: string }
 }
 
 export async function generateMetadata({ params, searchParams }: Params) {

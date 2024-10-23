@@ -110,9 +110,7 @@ const Banner = () => {
                 })}
               >
                 <div>
-                  <p className='text-[42px] font-bold line-clamp-2 leading-tight max-sm:text-2xl'>
-                    {item.name}
-                  </p>
+                  <p className='text-[42px] font-bold line-clamp-2 max-sm:text-2xl'>{item.name}</p>
                   <p className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</p>
                 </div>
                 <div className='text-base max-sm:text-xs flex items-center lg:gap-5 gap-3'>

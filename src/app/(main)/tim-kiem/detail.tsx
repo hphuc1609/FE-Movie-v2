@@ -8,7 +8,7 @@ import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useMoviesSearch } from '@/services/query-data'
 
 interface DetailProps {
-  searchParams: { keyword?: string; page?: string }
+  searchParams: { keyword: string }
 }
 
 const Detail = ({ searchParams }: DetailProps) => {
@@ -41,7 +41,7 @@ const Detail = ({ searchParams }: DetailProps) => {
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
 
       <section className='grid gap-6'>
-        <h2 className='text-3xl max-sm:text-xl font-semibold capitalize text-primary-color'>
+        <h2 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           {renderTitle()}
         </h2>
         {hasMovies && !isLoadingSearch && (

@@ -26,8 +26,8 @@ const RelateMovies = (props: RelateMoviesProps) => {
     breakpoints: {
       320: { slidesPerView: 3 },
       560: { slidesPerView: 4 },
-      1024: { slidesPerView: 5 },
-      1320: { slidesPerView: 6 },
+      768: { slidesPerView: 5 },
+      1024: { slidesPerView: 6 },
     },
   }
 

@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 
 interface DetailProps {
   slug: string
-  searchParams: { keyword: string; page: string }
+  searchParams: { page: string }
 }
 
 const Detail = ({ slug, searchParams }: DetailProps) => {
@@ -80,7 +80,7 @@ const Detail = ({ slug, searchParams }: DetailProps) => {
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
 
       <section className='grid gap-6'>
-        <h2 className='text-3xl max-sm:text-xl font-semibold capitalize text-primary-color'>
+        <h2 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-400 via-orange-500 to-orange-500 bg-clip-text text-transparent'>
           {renderTitle()}
         </h2>
         {hasMovies && !isLoading && (

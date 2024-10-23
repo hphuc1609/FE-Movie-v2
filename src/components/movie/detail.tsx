@@ -5,23 +5,24 @@ import { cn } from '@/lib/utils'
 import { DetailResponse } from '@/models/interfaces/detail'
 import { Play, Video } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
 import { Button } from '../ui/button'
-import scrollToSection from '@/helpers/scroll-to-section'
-import { useSearchParams } from 'next/navigation'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
 }
 
 export default function MovieInfo({ detail }: MovieInfoProps) {
+  console.log('🚀 ~ MovieInfo ~ detail:', detail)
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
   const [errorBanner, setErrorBanner] = useState(false)
 
+  const router = useRouter()
   const params = useSearchParams()
   const episodeParam = params.get('episode') as string
 
@@ -63,6 +64,20 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
     [detail, categories, countries, actors],
   )
 
+  const handleWatchMovie = () => {
+    const lang = detail.lang.toLowerCase().includes('vietsub')
+      ? 'vietsub'
+      : detail.lang.toLowerCase()
+    const episode = detail.episode_current.toLowerCase()
+    const slug = detail.slug
+
+    if (detail.episode_current.toLowerCase() === 'full') {
+      router.push(`/phim/${slug}?lang=${lang}&episode=${episode}`)
+    } else {
+      router.push(`/phim/${slug}?lang=${lang}&episode=tap-01`)
+    }
+  }
+
   // ----------------- Render UI -----------------------------
   return (
     <section
@@ -99,6 +114,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
               {
                 'bg-neutral-600 border-neutral-600 pointer-events-none text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
                   !detail.trailer_url,
+                hidden: episodeParam,
               },
             )}
             onClick={() => setOpenDialogTrailer(true)}
@@ -116,10 +132,11 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
               'h-11 rounded-full capitalize text-sm font-semibold bg-black/90 border-2 border-white hover:border-yellow-500 hover:bg-primary-color hover:text-black hover:fill-inherit',
               {
                 'bg-neutral-600 border-neutral-600 pointer-events-none text-neutral-400 hover:border-neutral-600 hover:bg-neutral-600 hover:text-neutral-400':
-                  detail.episode_current?.toLowerCase() === 'trailer' || episodeParam,
+                  detail.episode_current?.toLowerCase() === 'trailer',
+                hidden: episodeParam,
               },
             )}
-            onClick={() => scrollToSection(document.getElementById('player') as HTMLElement)}
+            onClick={handleWatchMovie}
           >
             <Play
               size={16}

@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils'
 import { INavbar } from '@/models/interfaces/navbar'
 import { useCountries } from '@/services/query-data'
 import { getCookie } from 'cookies-next'
-import { Calendar, ChevronDown, Film, Globe, Grid, Menu, Search } from 'lucide-react'
+import { Calendar, ChevronDown, Film, Globe, Grid, Home, Menu, Search } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -73,14 +73,34 @@ const HeaderMenubar = React.memo(() => {
   const sizeIcon = 18
   const navbarItems: INavbar[] = [
     {
-      name: 'Loại phim',
+      name: 'Trang chủ',
+      icon: (
+        <Home
+          size={sizeIcon}
+          strokeWidth={1.5}
+        />
+      ),
+      href: '/',
+    },
+    {
+      name: 'Phim lẻ',
       icon: (
         <Film
           size={sizeIcon}
           strokeWidth={1.5}
         />
       ),
-      subMenu: movieTypes,
+      href: '/phim-le',
+    },
+    {
+      name: 'Phim bộ',
+      icon: (
+        <Film
+          size={sizeIcon}
+          strokeWidth={1.5}
+        />
+      ),
+      href: '/phim-bo',
     },
     {
       name: 'Thể loại',
@@ -165,10 +185,7 @@ const HeaderMenubar = React.memo(() => {
                 {menuItem.href ? (
                   <Link
                     href={checkUrl(menuItem.href)}
-                    className={cn(
-                      'text-base capitalize font-semibold hover:text-primary-color',
-                      activeLink(menuItem.href) && 'text-primary-color',
-                    )}
+                    className={cn('text-base capitalize font-semibold hover:text-primary-color')}
                   >
                     {menuItem.name}
                   </Link>

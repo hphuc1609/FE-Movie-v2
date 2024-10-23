@@ -14,26 +14,26 @@ const inter = Inter({ subsets: ['vietnamese'] })
 export const metadata: Metadata = {
   metadataBase: new URL(`${myUrl}`),
   title: {
-    default: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | Mephim 247',
-    template: '%s | Mephim 247',
+    default: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
+    template: '%s | Mephim247',
   },
   description:
-    'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim 247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+    'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
   openGraph: {
-    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | Mephim 247',
+    title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
     description:
-      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim 247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
     url: `${myUrl}`,
-    siteName: 'Mephim 247',
+    siteName: 'Mephim247',
     images: './icon.png',
     locale: 'vi',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: 'Phim Mới, Phim Bộ Vietsub & Thuyết minh | Mephim 247',
+    title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
     description:
-      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim 247 với phụ đề vietsub - thuyết minh - lồng tiếng. Thưởng thức các bộ phim hấp dẫn với nhiều thể loại khác nhau.',
+      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
     images: './icon.png',
   },
   robots: { index: true, follow: true },

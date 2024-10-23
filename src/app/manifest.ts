@@ -3,12 +3,12 @@ import { MetadataRoute } from 'next'
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Mê Phim 247',
-    short_name: 'MePhim247',
-    description: 'Trang xem phim chất lượng cao, miễn phí',
+    short_name: 'Mephim247',
+    description: 'Trang xem phim chất lượng cao, miễn phí khoong',
     start_url: '/',
     display: 'standalone',
-    background_color: '#eab308',
-    theme_color: '#eab308',
+    background_color: '#1c2833',
+    theme_color: '#1c2833',
     orientation: 'portrait',
     icons: [
       {
