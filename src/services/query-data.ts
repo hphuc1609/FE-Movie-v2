@@ -97,13 +97,18 @@ export const useMoviesByCate = ({
   })
 }
 
-export const useMoviesSearch = (
-  keyword: string,
-  options?: QueryOptions<any>,
-): QueryObserverResult<MovieCategoryResponse['data']> =>
+export const useMoviesSearch = ({
+  keyword,
+  page,
+  options,
+}: {
+  keyword: string
+  page?: string | number
+  options?: QueryOptions<any>
+}): QueryObserverResult<MovieCategoryResponse['data']> =>
   useFetchData({
     queryKey: ['search', { keyword }],
-    queryFn: () => fetchData(movieApi.getMoviesSearch({ keyword })),
+    queryFn: () => fetchData(movieApi.getMoviesSearch({ keyword, page })),
     enabled: !!keyword,
     ...options,
   })

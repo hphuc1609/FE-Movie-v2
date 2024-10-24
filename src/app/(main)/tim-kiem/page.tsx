@@ -2,13 +2,13 @@ import movieApi from '@/services/api-client/movies'
 import Detail from './detail'
 
 interface Params {
-  searchParams: { keyword: string }
+  searchParams: { keyword: string; page: string }
 }
 
 export async function generateMetadata({ searchParams }: Params) {
-  const { keyword } = searchParams
+  const { keyword, page } = searchParams
   try {
-    const response = await movieApi.getMoviesSearch({ keyword })
+    const response = await movieApi.getMoviesSearch({ keyword, page })
     const seoOnPage = response.data.seoOnPage
     return {
       title: `${seoOnPage.titleHead}`,

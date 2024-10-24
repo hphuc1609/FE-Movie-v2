@@ -18,6 +18,7 @@ const PaginationCustom = (props: PaginationProps) => {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentPage = Number(searchParams.get('page')) || 1
+  const keyword = searchParams.get('keyword')
 
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === dataPagination.totalPages
@@ -42,7 +43,7 @@ const PaginationCustom = (props: PaginationProps) => {
             <React.Fragment key={page}>
               {index === 1 && pagesToShow[1] > 2 && <PaginationEllipsis />}
               <Link
-                href={`${pathname}?page=${page}`}
+                href={`${pathname}?${keyword ? `keyword=${keyword}&` : ''}page=${page}`}
                 prefetch={false}
                 className={cn(
                   'bg-white bg-opacity-5 h-9 min-w-10 flex items-center justify-center hover:text-primary-color',

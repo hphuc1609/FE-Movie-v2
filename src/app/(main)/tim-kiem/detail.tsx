@@ -6,22 +6,33 @@ import TablePagination from '@/components/table-pagination'
 import isNotEmpty from '@/helpers/object-empty'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useMoviesSearch } from '@/services/query-data'
+import { useEffect } from 'react'
 
 interface DetailProps {
-  searchParams: { keyword: string }
+  searchParams: { keyword: string; page: string }
 }
 
 const Detail = ({ searchParams }: DetailProps) => {
-  const keyword = searchParams.keyword || ''
+  const keyword = searchParams.keyword
+  const page = searchParams.page
 
-  const { data: moviesSearch, isLoading: isLoadingSearch } = useMoviesSearch(keyword)
+  const {
+    data: moviesSearch,
+    isFetching: isLoadingSearch,
+    refetch: refetchSearch,
+  } = useMoviesSearch({ keyword, page })
+
+  // Refetch list movie
+  useEffect(() => {
+    refetchSearch()
+  }, [keyword, page, refetchSearch])
 
   const renderTitle = () => {
     if (isNotEmpty(moviesSearch)) {
       if (moviesSearch?.items.length === 0) return
 
       return `Phim ${moviesSearch?.breadCrumb[0]?.name
-        .replace(/ - Trang 1/g, '')
+        .replace(/ - Trang \d/g, '')
         .split(':')
         .pop()}`
     }

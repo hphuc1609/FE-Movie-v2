@@ -190,18 +190,10 @@ export default function MoviePlayer(props: MoviePlayerProps) {
           {/* Server */}
           {langParam && episodeParam && (
             <div className='relative flex flex-col items-center gap-3 p-2'>
-              <div
-                className={cn('flex justify-between w-full gap-x-2 gap-y-5', {
-                  'max-sm:flex-col-reverse max-sm:items-center': serverIndex === 'server 2',
-                })}
-              >
+              <div className='flex justify-between w-full gap-x-2 gap-y-5 max-sm:flex-col-reverse max-sm:items-center'>
                 <div className='h-full flex flex-1 max-md:hidden'></div>
                 <div className='flex flex-col flex-1 md:items-center gap-2'>
-                  <div
-                    className={cn('flex justify-center gap-2', {
-                      'max-sm:justify-start': serverIndex === 'server 1',
-                    })}
-                  >
+                  <div className='flex justify-center gap-2'>
                     {['server 1', 'server 2'].map((server, index) => (
                       <Button
                         key={index}
@@ -271,7 +263,7 @@ export default function MoviePlayer(props: MoviePlayerProps) {
               <span className='text-base max-sm:text-base font-semibold sticky top-0 p-2'>
                 # {item.server_name.match(/\((.*?)\)/)?.[1]}
               </span>
-              <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 max-h-[300px] max-sm:h-[200px] overflow-x-hidden overflow-y-auto'>
+              <div className='grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 px-2 pb-3 max-h-[300px] max-sm:max-h-[200px] overflow-x-hidden overflow-y-auto'>
                 {item.server_data.map((episode, episodeIndex) => {
                   const isLastEpisode =
                     episodeIndex > 0 && episodeIndex === Number(detail.episode_total) - 1

@@ -19,6 +19,7 @@ interface GetMoviesParams {
 
 interface GetMovieSearchParams {
   keyword: string
+  page?: string | number
   limit?: string | number
 }
 
@@ -69,10 +70,14 @@ const movieApi = {
     return axiosClient.get<DetailResponse>(url)
   },
 
-  getMoviesSearch: ({ keyword, limit }: GetMovieSearchParams): Promise<MovieCategoryResponse> => {
+  getMoviesSearch: ({
+    keyword,
+    page,
+    limit,
+  }: GetMovieSearchParams): Promise<MovieCategoryResponse> => {
     if (!keyword) throw new Error('Search keyword is required!')
 
-    const url = `${endPoint.search}?keyword=${keyword}&limit=${limit || 20}`
+    const url = `${endPoint.search}?keyword=${keyword}&page=${page}&limit=${limit || 20}`
     return axiosClient.get<MovieCategoryResponse>(url)
   },
 

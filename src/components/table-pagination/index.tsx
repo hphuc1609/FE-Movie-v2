@@ -14,6 +14,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
   const currentPage = searchParams.get('page') || 1
 
   const dataPagination = data.pagination || data.params.pagination
+  console.log('🚀 ~ TablePagination ~ dataPagination:', dataPagination)
 
   // Kiểm tra xem pathname có chứa năm không (dạng yyyy)
   const containsYear = /\b\d{4}\b/.test(data.type_list)
