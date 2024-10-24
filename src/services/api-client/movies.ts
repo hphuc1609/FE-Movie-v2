@@ -47,8 +47,7 @@ const movieApi = {
     const getSlugUrl = (category: string) => {
       if (slugs.danhSach.includes(category)) return `${endPoint.list}/${category}`
       if (slugs.theloai.includes(category)) return `${endPoint.category}/${category}`
-      if (slugs.namPhatHanh.includes(category))
-        return `${endPoint.year}/${category.replace('nam-', '')}`
+      if (slugs.namPhatHanh.includes(category)) return `${endPoint.year}/${category}`
       return `${endPoint.country}/${category}`
     }
 

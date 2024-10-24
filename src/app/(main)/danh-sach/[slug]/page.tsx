@@ -1,21 +1,28 @@
 import { myWebsite } from '@/constants/domain'
 import movieApi from '@/services/api-client/movies'
 import Detail from './detail'
+import { Metadata } from 'next'
+import { dataNamPhatHanh } from '@/data/category'
 
 interface Params {
   params: { slug: string }
   searchParams: { page: string }
 }
 
-export async function generateMetadata({ params, searchParams }: Params) {
+export async function generateMetadata({ params, searchParams }: Params): Promise<Metadata> {
   const { slug } = params
   const { page } = searchParams
 
   try {
-    if (slug === 'phim-moi-cap-nhat') return
+    if (slug === 'phim-moi-cap-nhat') return {}
 
-    const newSlug = slug.includes('nam') ? slug.replace('nam-', '') : slug
-    const response = await movieApi.getListByCate({ category: newSlug, page })
+    // Check is movie year
+    const isMovieYear = dataNamPhatHanh.find((item) => item.slug === slug)?.name
+
+    const response = await movieApi.getListByCate({
+      category: slug,
+      page: !isMovieYear ? page : '',
+    })
     const seoOnPage = response.data.seoOnPage
 
     return {

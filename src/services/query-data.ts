@@ -80,7 +80,7 @@ export const useMoviesByCate = ({
   limit?: string | number
   options?: QueryOptions<any>
 }): QueryObserverResult<MovieCategoryItem> => {
-  const isMovieYear = dataNamPhatHanh.find((item) => item.slug === category)
+  const isMovieYear = dataNamPhatHanh.find((item) => item.slug === category)?.name
 
   return useFetchData({
     queryKey: ['movies', { category }],

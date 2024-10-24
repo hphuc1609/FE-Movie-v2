@@ -13,7 +13,7 @@ function generateYearList(startYear: number): YearItem[] {
   const years: YearItem[] = []
 
   for (let year = startYear; year <= currentYear; year++) {
-    years.push({ name: `${year}`, slug: `nam-${year}` })
+    years.push({ name: `${year}`, slug: `${year}` })
   }
 
   return years

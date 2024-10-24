@@ -1,11 +1,12 @@
 import movieApi from '@/services/api-client/movies'
 import Detail from './detail'
+import { Metadata } from 'next'
 
 interface Params {
   searchParams: { keyword: string; page: string }
 }
 
-export async function generateMetadata({ searchParams }: Params) {
+export async function generateMetadata({ searchParams }: Params): Promise<Metadata> {
   const { keyword, page } = searchParams
   try {
     const response = await movieApi.getMoviesSearch({ keyword, page })

@@ -39,7 +39,7 @@ export default function CategoryMovie(props: CategoryMovieProps) {
         </h2>
         {!isLoadingList && category && (
           <Link
-            href={`/danh-sach/${category}?page=1`}
+            href={`/danh-sach/${category}`}
             className='group text-sm max-sm:text-[11px] text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
           >
             Xem tất cả

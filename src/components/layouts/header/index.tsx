@@ -160,11 +160,11 @@ const HeaderMenubar = React.memo(() => {
     setOpenDrawer(false)
   }
 
-  const activeLink = (link: string) => pathname.endsWith(link)
+  // const activeLink = (link: string) => pathname.endsWith(link)
 
   const checkUrl = (link: string) => {
     const url = link.startsWith('/') ? link : `/${link}`
-    return link === '/' ? link : `/danh-sach${url}?page=1`
+    return link === '/' ? link : `/danh-sach${url}`
   }
 
   return (
