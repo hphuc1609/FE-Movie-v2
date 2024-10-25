@@ -1,8 +1,8 @@
+import { myWebsite } from '@/constants/domain'
 import movieApi from '@/services/api-client/movies'
 import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_MY_WEBSITE
   const limit = 64
 
   try {
@@ -22,13 +22,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     // Tạo danh sách URL cho sitemap
     const movieUrls = allMovies.map((movie) => ({
-      url: `${baseUrl}/phim/${movie.slug}`,
+      url: `${myWebsite}/phim/${movie.slug}`,
       lastModified: new Date(movie.modified.time),
     }))
 
     return [
       {
-        url: `${baseUrl}`,
+        url: `${myWebsite}`,
         lastModified: new Date(),
         priority: 1.0,
       },

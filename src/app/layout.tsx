@@ -7,12 +7,12 @@ import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
-import { googleKey, myUrl } from '@/constants/domain'
+import { googleKey, myWebsite } from '@/constants/domain'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`${myUrl}`),
+  metadataBase: new URL(`${myWebsite}`),
   title: {
     default: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
     template: '%s | Mephim247',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
     description:
       'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
-    url: `${myUrl}`,
+    url: `${myWebsite}`,
     siteName: 'Mephim247',
     images: './icon.png',
     locale: 'vi',
