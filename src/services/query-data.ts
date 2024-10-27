@@ -39,20 +39,18 @@ const fetchData = async (apiMethod: Promise<any>) => {
   }
 }
 
-const itemsToShow = 24 // 24 items per page
+const itemsToShow = 36 // Items per page
 
 export const useBanners = ({
   category,
-  limit,
   options,
 }: {
   category: string
-  limit?: string | number
   options?: QueryOptions<any>
 }): QueryObserverResult<MovieCategoryItem> =>
   useFetchData({
     queryKey: ['banners', { category }],
-    queryFn: () => fetchData(movieApi.getListByCate({ category, limit: limit || itemsToShow })),
+    queryFn: () => fetchData(movieApi.getListByCate({ category, limit: itemsToShow })),
     ...options,
   })
 
@@ -72,24 +70,20 @@ export const useNewMovies = ({
 export const useMoviesByCate = ({
   category,
   page,
-  limit,
   options,
 }: {
   category: string
   page?: string | number
-  limit?: string | number
   options?: QueryOptions<any>
 }): QueryObserverResult<MovieCategoryItem> => {
-  const isMovieYear = dataNamPhatHanh.find((item) => item.slug === category)?.name
-
   return useFetchData({
     queryKey: ['movies', { category }],
     queryFn: () =>
       fetchData(
         movieApi.getListByCate({
           category,
-          page: isMovieYear ? '' : page,
-          limit: limit || isMovieYear ? 64 : itemsToShow,
+          page,
+          limit: itemsToShow,
         }),
       ),
     enabled: !!category,
@@ -108,7 +102,7 @@ export const useMoviesSearch = ({
 }): QueryObserverResult<MovieCategoryResponse['data']> =>
   useFetchData({
     queryKey: ['search', { keyword }],
-    queryFn: () => fetchData(movieApi.getMoviesSearch({ keyword, page })),
+    queryFn: () => fetchData(movieApi.getMoviesSearch({ keyword, page, limit: itemsToShow })),
     enabled: !!keyword,
     ...options,
   })

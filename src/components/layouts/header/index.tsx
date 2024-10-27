@@ -12,7 +12,7 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar'
 import { Separator } from '@/components/ui/separator'
-import { dataNamPhatHanh, dataTheLoai, movieTypes } from '@/data/category'
+import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
 import useScrollPosition from '@/hooks/useScroll'
 import { cn } from '@/lib/utils'
 import { INavbar } from '@/models/interfaces/navbar'
@@ -47,7 +47,6 @@ const Header = () => {
 }
 
 const HeaderMenubar = React.memo(() => {
-  const pathname = usePathname()
   const router = useRouter()
   const { isLogin } = useContextGlobal()
 
@@ -159,8 +158,6 @@ const HeaderMenubar = React.memo(() => {
   const handleCloseDrawer = () => {
     setOpenDrawer(false)
   }
-
-  // const activeLink = (link: string) => pathname.endsWith(link)
 
   const checkUrl = (link: string) => {
     const url = link.startsWith('/') ? link : `/${link}`

@@ -4,7 +4,7 @@ import { NewMovieItem } from '@/models/interfaces/new-movie'
 import { useNewMovies } from '@/services/query-data'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Skeleton } from '../ui/skeleton'
 
@@ -12,7 +12,15 @@ export default function NewUpdateMovie() {
   const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
-  const { data: newMovies, isLoading: isLoadingMovies } = useNewMovies({})
+  const {
+    data: newMovies,
+    isLoading: isLoadingNewMovies,
+    refetch: refetchNewMovies,
+  } = useNewMovies({})
+
+  useEffect(() => {
+    refetchNewMovies()
+  }, [refetchNewMovies])
 
   const imageUrl = (item: NewMovieItem, index: number) => {
     const hasError = errorImage[index]
@@ -33,7 +41,7 @@ export default function NewUpdateMovie() {
       <article
         className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3`}
       >
-        {isLoadingMovies
+        {isLoadingNewMovies
           ? Array.from({ length: 8 }).map((_, index) => <SkeletonList key={index} />)
           : newMovies?.items.map((item, index) => (
               <Link

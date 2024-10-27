@@ -17,16 +17,18 @@ interface RelateMoviesProps {
 
 const RelateMovies = (props: RelateMoviesProps) => {
   const { data, title } = props
+
   const nextBtnRef = useRef<HTMLButtonElement>(null)
   const prevBtnRef = useRef<HTMLButtonElement>(null)
   const swiperRef = useRef<SwiperRef>(null)
-  const mobile = useMediaQuery({ maxWidth: 600 })
+
+  const mobile = useMediaQuery({ maxWidth: 750 })
 
   const swiperConfig: SwiperProps = {
     breakpoints: {
       320: { slidesPerView: 3 },
       560: { slidesPerView: 4 },
-      768: { slidesPerView: 5 },
+      900: { slidesPerView: 5 },
       1024: { slidesPerView: 6 },
     },
   }
@@ -35,7 +37,7 @@ const RelateMovies = (props: RelateMoviesProps) => {
     return `/phim/${item.slug}`
   }
 
-  if (!data.items.length) return null
+  if (!data || !data.items.length) return null
 
   return (
     <section

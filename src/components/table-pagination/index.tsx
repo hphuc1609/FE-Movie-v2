@@ -1,4 +1,5 @@
 'use client'
+
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
@@ -14,10 +15,6 @@ const TablePagination = ({ data }: TablePaginationProps) => {
   const currentPage = searchParams.get('page') || 1
 
   const dataPagination = data.pagination || data.params.pagination
-  console.log('🚀 ~ TablePagination ~ dataPagination:', dataPagination)
-
-  // Kiểm tra xem pathname có chứa năm không (dạng yyyy)
-  const containsYear = /\b\d{4}\b/.test(data.type_list)
 
   // Memoize the list of pages to prevent unnecessary re-renders
   const pagesToShow = useMemo(() => {
@@ -50,7 +47,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
           itemLength={dataPagination.totalItemsPerPage}
         />
       </div>
-      {pagesToShow.length > 1 && !containsYear && (
+      {pagesToShow.length > 1 && (
         <PaginationCustom
           pagesToShow={pagesToShow}
           dataPagination={dataPagination}

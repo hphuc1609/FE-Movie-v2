@@ -24,6 +24,14 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
   }
 }
 
-export default function ListPage({ searchParams }: Params) {
-  return <Detail searchParams={searchParams} />
+export default async function ListPage({ searchParams }: Params) {
+  const { keyword, page } = searchParams
+  const response = await movieApi.getMoviesSearch({ keyword, page })
+
+  return (
+    <Detail
+      data={response.data}
+      keyword={keyword}
+    />
+  )
 }

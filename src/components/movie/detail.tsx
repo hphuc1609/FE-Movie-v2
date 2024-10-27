@@ -1,6 +1,6 @@
 'use client'
 
-import { cleanString } from '@/helpers/cleanString'
+import { cleanString, convertToPathname } from '@/helpers/cleanString'
 import { cn } from '@/lib/utils'
 import { DetailResponse } from '@/models/interfaces/detail'
 import { Play, Video } from 'lucide-react'
@@ -17,7 +17,6 @@ interface MovieInfoProps {
 }
 
 export default function MovieInfo({ detail }: MovieInfoProps) {
-  console.log('🚀 ~ MovieInfo ~ detail:', detail)
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
   const [errorBanner, setErrorBanner] = useState(false)
@@ -26,7 +25,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
   const params = useSearchParams()
   const episodeParam = params.get('episode') as string
 
-  const mobile = useMediaQuery({ query: '(max-width: 640px)' })
+  const mobile = useMediaQuery({ maxWidth: 640 })
 
   // ----------------- Get Details -----------------------------
   const categories = useMemo(
@@ -53,8 +52,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       ...(Number(detail.episode_total) > 1
         ? [{ label: 'Số tập', value: detail.episode_total + ' tập' }]
         : []),
-      { label: 'Trạng thái', value: detail.episode_current },
-      { label: 'Phụ đề', value: detail.lang },
+      { label: 'Trạng thái', value: `${detail.quality} ${detail.lang}` },
       { label: 'Thể loại', value: categories },
       { label: 'Quốc gia', value: countries },
       { label: 'Diễn viên', value: actors },
@@ -67,7 +65,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
   const handleWatchMovie = () => {
     const lang = detail.lang.toLowerCase().includes('vietsub')
       ? 'vietsub'
-      : detail.lang.toLowerCase()
+      : convertToPathname(detail.lang.toLowerCase())
     const episode = detail.episode_current.toLowerCase()
     const slug = detail.slug
 
@@ -170,9 +168,11 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
                   key={item.label}
                   className='text-sm capitalize flex gap-6'
                 >
-                  <span className='opacity-70 min-w-[130px] font-semibold'>{item.label}:</span>
+                  <span className='min-w-[130px] font-semibold'>{item.label}:</span>
                   <span
-                    className={`flex-1 line-clamp-2 ${item.label.includes('Phụ đề') && 'text-red-600 font-semibold'}`}
+                    className={cn('flex-1 line-clamp-2 text-white/85', {
+                      'text-[#FF0000]': item.label.includes('Trạng thái'),
+                    })}
                   >
                     {item.value}
                   </span>

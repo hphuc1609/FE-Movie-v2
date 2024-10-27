@@ -17,16 +17,14 @@ interface DetailProps {
 }
 
 const Detail = ({ detail }: DetailProps) => {
-  // Lấy thể loại của phim
-  const slugCate = detail?.movie?.category?.[0]?.slug
+  const slugCate = detail?.movie?.category?.[0]?.slug // Lấy thể loại của phim
 
-  const { data: moviesType, isLoading: isLoadingMovies } = useMoviesByCate({
+  const { data: moviesType } = useMoviesByCate({
     category: slugCate?.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
-    limit: 64,
   })
 
-  const { data: phimLe } = useMoviesByCate({ category: 'phim-le', limit: 64 })
-  const { data: phimBo } = useMoviesByCate({ category: 'phim-bo', limit: 64 })
+  const { data: phimLe } = useMoviesByCate({ category: 'phim-le' })
+  const { data: phimBo } = useMoviesByCate({ category: 'phim-bo' })
 
   const allMovies = useMemo(() => {
     return {
@@ -53,28 +51,24 @@ const Detail = ({ detail }: DetailProps) => {
   return (
     <>
       <BreadcrumbCustom breadCrumb={detail.movie.name} />
-      {isLoadingMovies ? (
-        <SkeletonDetail />
-      ) : (
-        <div className='flex flex-col gap-20 max-sm:gap-10'>
-          <MovieInfo detail={detail.movie} />
-          <div className='flex flex-col gap-10'>
-            <MoviePlayer
-              detail={detail.movie}
-              dataEpisode={detail.episodes}
-            />
-            <CommentBox />
-            <RelateMovies
-              title='Có thể bạn muốn xem'
-              data={moviesType as MovieCategoryItem}
-            />
-            <RelateMovies
-              title='Phim mới đề cử'
-              data={filteredNewMovies as MovieCategoryItem}
-            />
-          </div>
+      <div className='flex flex-col gap-20 max-sm:gap-10'>
+        <MovieInfo detail={detail.movie} />
+        <div className='flex flex-col gap-10'>
+          <MoviePlayer
+            detail={detail.movie}
+            dataEpisode={detail.episodes}
+          />
+          <CommentBox />
+          <RelateMovies
+            title='Có thể bạn muốn xem'
+            data={moviesType as MovieCategoryItem}
+          />
+          <RelateMovies
+            title='Phim mới đề cử'
+            data={filteredNewMovies as MovieCategoryItem}
+          />
         </div>
-      )}
+      </div>
     </>
   )
 }

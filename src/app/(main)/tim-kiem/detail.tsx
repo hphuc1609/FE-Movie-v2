@@ -2,36 +2,25 @@
 
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import SkeletonCard from '@/components/common/skeleton-card'
+import Loader from '@/components/loader'
 import TablePagination from '@/components/table-pagination'
 import isNotEmpty from '@/helpers/object-empty'
+import { cn } from '@/lib/utils'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import { useMoviesSearch } from '@/services/query-data'
 import { useEffect } from 'react'
 
 interface DetailProps {
-  searchParams: { keyword: string; page: string }
+  data: MovieCategoryItem
+  keyword: string
 }
 
-const Detail = ({ searchParams }: DetailProps) => {
-  const keyword = searchParams.keyword
-  const page = searchParams.page
-
-  const {
-    data: moviesSearch,
-    isFetching: isLoadingSearch,
-    refetch: refetchSearch,
-  } = useMoviesSearch({ keyword, page })
-
-  // Refetch list movie
-  useEffect(() => {
-    refetchSearch()
-  }, [keyword, page, refetchSearch])
-
+const Detail = ({ data, keyword }: DetailProps) => {
   const renderTitle = () => {
-    if (isNotEmpty(moviesSearch)) {
-      if (moviesSearch?.items.length === 0) return
+    if (isNotEmpty(data)) {
+      if (data.items.length === 0) return
 
-      return `Phim ${moviesSearch?.breadCrumb[0]?.name
+      return `Phim ${data.breadCrumb[0]?.name
         .replace(/ - Trang \d/g, '')
         .split(':')
         .pop()}`
@@ -39,36 +28,28 @@ const Detail = ({ searchParams }: DetailProps) => {
   }
 
   const getBreadCrumb = () => {
-    if (isNotEmpty(moviesSearch)) {
-      return moviesSearch?.breadCrumb || []
+    if (isNotEmpty(data)) {
+      return data.breadCrumb
     }
     return '...'
   }
 
-  const hasMovies = isNotEmpty(moviesSearch?.items)
-
   return (
     <>
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
-
       <section className='grid gap-6'>
         <h2 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           {renderTitle()}
         </h2>
-        {hasMovies && !isLoadingSearch && (
-          <TablePagination data={moviesSearch as MovieCategoryItem} />
-        )}
+        <TablePagination data={data} />
+        <p
+          className={cn('text-2xl font-medium hidden', {
+            block: !isNotEmpty(data),
+          })}
+        >
+          Không tìm thấy phim: {keyword}
+        </p>
       </section>
-
-      {isLoadingSearch && (
-        <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
-          <SkeletonCard itemLength={12} />
-        </div>
-      )}
-
-      {!isLoadingSearch && !hasMovies && keyword && (
-        <p className='text-2xl font-medium'>Không tìm thấy phim: {keyword}</p>
-      )}
     </>
   )
 }

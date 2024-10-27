@@ -1,8 +1,8 @@
 import { myWebsite } from '@/constants/domain'
+import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 import movieApi from '@/services/api-client/movies'
-import Detail from './detail'
 import { Metadata } from 'next'
-import { dataNamPhatHanh } from '@/data/category'
+import Detail from './detail'
 
 interface Params {
   params: { slug: string }
@@ -16,15 +16,8 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
   try {
     if (slug === 'phim-moi-cap-nhat') return {}
 
-    // Check is movie year
-    const isMovieYear = dataNamPhatHanh.find((item) => item.slug === slug)?.name
-
-    const response = await movieApi.getListByCate({
-      category: slug,
-      page: !isMovieYear ? page : '',
-    })
+    const response = await movieApi.getListByCate({ category: slug, page: page })
     const seoOnPage = response.data.seoOnPage
-
     return {
       title: seoOnPage.titleHead,
       description: seoOnPage.descriptionHead,
@@ -44,11 +37,22 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
   }
 }
 
-export default function ListPage({ params, searchParams }: Params) {
+export default async function ListPage({ params, searchParams }: Params) {
+  const { slug } = params
+  const { page } = searchParams
+
+  let response
+  if (slug === 'phim-moi-cap-nhat') {
+    response = await movieApi.getNewMovies({ page })
+  } else {
+    response = (await movieApi.getListByCate({ category: slug, page, limit: 36 }))?.data
+  }
+
   return (
     <Detail
+      data={response as MovieCategoryItem}
       slug={params.slug}
-      searchParams={searchParams}
+      page={page}
     />
   )
 }

@@ -76,7 +76,13 @@ const movieApi = {
   }: GetMovieSearchParams): Promise<MovieCategoryResponse> => {
     if (!keyword) throw new Error('Search keyword is required!')
 
-    const url = `${endPoint.search}?keyword=${keyword}&page=${page}&limit=${limit || 20}`
+    const queryParams = new URLSearchParams({
+      ...(keyword && { keyword }),
+      ...(page && { page: page.toString() }),
+      ...(limit && { limit: limit.toString() }),
+    })
+
+    const url = `${endPoint.search}?${queryParams}`
     return axiosClient.get<MovieCategoryResponse>(url)
   },
 

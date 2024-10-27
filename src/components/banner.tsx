@@ -1,8 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { MovieItem } from '@/models/interfaces/list-movie'
-import { useBanners } from '@/services/query-data'
+import { MovieCategoryItem, MovieItem } from '@/models/interfaces/list-movie'
 import { CalendarDays, ChevronLeft, ChevronRight, Clock4, Play } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -11,7 +10,6 @@ import { Autoplay, EffectFade, Pagination } from 'swiper/modules'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import { Swiper as SwiperType } from 'swiper/types'
 import { Button } from './ui/button'
-import { Skeleton } from './ui/skeleton'
 
 import 'swiper/css'
 import 'swiper/css/effect-fade'
@@ -19,7 +17,11 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import '../css/banner.css'
 
-const Banner = () => {
+interface BannerProps {
+  data: MovieCategoryItem
+}
+
+const Banner = ({ data }: BannerProps) => {
   const nextBtnRef = useRef<HTMLButtonElement>(null)
   const prevBtnRef = useRef<HTMLButtonElement>(null)
   const swiperRef = useRef<SwiperRef>(null)
@@ -28,26 +30,21 @@ const Banner = () => {
   const [activeSlide, setActiveSlide] = useState(0)
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
-  const { data: banners, isLoading: isLoadingBanners } = useBanners({
-    category: 'phim-le',
-    limit: 64,
-  })
-
-  const filteredNewMovies = useMemo(() => {
+  const moviesBanner = useMemo(() => {
     const currentYear = new Date().getFullYear()
     const yearsToCheck = Array.from({ length: currentYear + 1 }, (_, i) => currentYear - i)
 
     return yearsToCheck.reduce((movies, year) => {
       if (movies.length === 0) {
         return (
-          banners?.items.filter(
+          data?.items.filter(
             (movie) => movie.year === year && !movie.category.some((cat) => cat.slug === 'phim-18'),
           ) || []
         )
       }
       return movies
     }, [] as MovieItem[])
-  }, [banners?.items])
+  }, [data?.items])
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex)
@@ -59,17 +56,13 @@ const Banner = () => {
 
   const imageUrl = (item: MovieItem, imageIndex: number) => {
     const hasError = errorImage[imageIndex]
-    return !hasError && banners?.APP_DOMAIN_CDN_IMAGE
-      ? `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
-      : `${banners?.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
+    return !hasError && data?.APP_DOMAIN_CDN_IMAGE
+      ? `${data?.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`
+      : `${data?.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`
   }
 
   const handleNavigate = (item: MovieItem) => {
     router.push(`/phim/${item.slug}`)
-  }
-
-  if (isLoadingBanners) {
-    return <Skeleton className='w-full h-[650px] max-sm:h-[350px] bg-neutral-400/15' />
   }
 
   return (
@@ -82,7 +75,7 @@ const Banner = () => {
       slidesPerView={1}
       effect='fade'
       fadeEffect={{ crossFade: true }}
-      loop={filteredNewMovies.length > 1}
+      loop={moviesBanner.length > 1}
       speed={1500}
       autoplay={{ delay: 7000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, EffectFade]}
@@ -90,7 +83,7 @@ const Banner = () => {
     >
       <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#0d0d0d] max-sm:from-[#0d0d0d] via-[#1a1a1a] z-10' />
 
-      {filteredNewMovies.slice(0, 5).map((item, index) => {
+      {moviesBanner.slice(0, 5).map((item, index) => {
         return (
           <SwiperSlide key={item._id}>
             <Image
@@ -152,7 +145,7 @@ const Banner = () => {
         )
       })}
 
-      {filteredNewMovies.length > 0 && (
+      {moviesBanner.length > 0 && (
         <div className='absolute z-50 bottom-[73px] max-md:bottom-5 right-0 lg:pr-20 pr-[25px] flex items-center gap-2.5'>
           <Button
             ref={prevBtnRef}

@@ -128,7 +128,9 @@ const CommentBox = () => {
   return (
     <div className='h-fit flex flex-col gap-4 p-6 max-sm:p-4 bg-black/50'>
       <div className='flex items-center justify-between'>
-        <h4 className='text-lg font-bold'>{filteredComments.length} Bình luận</h4>
+        <h4 className='text-lg max-sm:text-[15px] font-bold'>
+          {filteredComments.length} Bình luận
+        </h4>
         {/* Dropdown Sort */}
         <Select
           onValueChange={(value) => handleSort(value as 'newest' | 'oldest')}

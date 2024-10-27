@@ -8,6 +8,7 @@ import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import PlayButton from './play-button'
+import SkeletonCard from './skeleton-card'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
@@ -92,6 +93,7 @@ interface ImageComponentProps {
 
 export const ImageComponent = React.memo((props: ImageComponentProps) => {
   const { index, item } = props
+
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
   const imgRef = useRef<HTMLImageElement>(null)
