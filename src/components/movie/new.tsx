@@ -1,26 +1,21 @@
 'use client'
 
-import { NewMovieItem } from '@/models/interfaces/new-movie'
-import { useNewMovies } from '@/services/query-data'
+import { NewMovieItem, NewMovieResponse } from '@/models/interfaces/new-movie'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { Skeleton } from '../ui/skeleton'
+import isNotEmpty from '@/helpers/object-empty'
+import { cn } from '@/lib/utils'
 
-export default function NewUpdateMovie() {
-  const isMobile = useMediaQuery({ query: '(max-width: 640px)' })
+interface NewUpdateMoviesProps {
+  data: NewMovieResponse
+}
+
+const NewUpdateMovies = ({ data }: NewUpdateMoviesProps) => {
+  const isMobile = useMediaQuery({ maxWidth: 750 })
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
-
-  const {
-    data: newMovies,
-    isLoading: isLoadingNewMovies,
-    refetch: refetchNewMovies,
-  } = useNewMovies({})
-
-  useEffect(() => {
-    refetchNewMovies()
-  }, [refetchNewMovies])
 
   const imageUrl = (item: NewMovieItem, index: number) => {
     const hasError = errorImage[index]
@@ -34,16 +29,18 @@ export default function NewUpdateMovie() {
   return (
     <section className='flex flex-col gap-3 w-[360px] max-lg:flex-2 max-[950px]:hidden'>
       <header className='flex items-center justify-between'>
-        <h2 className='text-xl uppercase font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
+        <h3 className='text-xl uppercase font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           Phim đề cử
-        </h2>
+        </h3>
       </header>
       <article
-        className={`${isMobile && 'max-h-[450px]'} rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3`}
+        className={cn(`rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3`, {
+          'max-h-[450px]': isMobile,
+        })}
       >
-        {isLoadingNewMovies
+        {!isNotEmpty(data)
           ? Array.from({ length: 8 }).map((_, index) => <SkeletonList key={index} />)
-          : newMovies?.items.map((item, index) => (
+          : data.items.map((item, index) => (
               <Link
                 key={item._id}
                 href={`/phim/${item.slug}`}
@@ -89,3 +86,5 @@ const SkeletonList = () => {
     </div>
   )
 }
+
+export default NewUpdateMovies

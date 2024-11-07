@@ -1,14 +1,10 @@
 'use client'
 
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
-import SkeletonCard from '@/components/common/skeleton-card'
-import Loader from '@/components/loader'
 import TablePagination from '@/components/table-pagination'
 import isNotEmpty from '@/helpers/object-empty'
 import { cn } from '@/lib/utils'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
-import { useMoviesSearch } from '@/services/query-data'
-import { useEffect } from 'react'
 
 interface DetailProps {
   data: MovieCategoryItem
@@ -38,13 +34,13 @@ const Detail = ({ data, keyword }: DetailProps) => {
     <>
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
       <section className='grid gap-6'>
-        <h2 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
+        <h1 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           {renderTitle()}
-        </h2>
-        <TablePagination data={data} />
+        </h1>
+        {isNotEmpty(data.items) && <TablePagination data={data} />}
         <p
           className={cn('text-2xl font-medium hidden', {
-            block: !isNotEmpty(data),
+            block: !isNotEmpty(data.items),
           })}
         >
           Không tìm thấy phim: {keyword}

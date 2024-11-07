@@ -6,11 +6,12 @@ export const endPoint = {
   year: '/v1/api/nam',
   search: '/v1/api/tim-kiem',
   detail: '/phim',
-  comment: '/comments',
+  comment: '/api/comments',
+  favourite: '/api/favourites',
 }
 
 export const authEndPoint = {
-  login: '/auth/login',
-  register: '/auth/register',
-  logout: '/auth/logout',
+  login: '/api/auth/login',
+  register: '/api/auth/register',
+  logout: '/api/auth/logout',
 }

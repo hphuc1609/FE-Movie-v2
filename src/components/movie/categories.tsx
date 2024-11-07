@@ -1,38 +1,29 @@
 'use client'
 
+import isNotEmpty from '@/helpers/object-empty'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
-import { useMoviesByCate } from '@/services/query-data'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import CardImage from '../common/card-image'
 import SkeletonCard from '../common/skeleton-card'
 
-interface CategoryMovieProps {
+interface MovieByTypesProps {
+  data: MovieCategoryItem
   category: string
   title?: string
 }
 
-export default function CategoryMovie(props: CategoryMovieProps) {
-  const { category, title } = props
+const MovieByTypes = (props: MovieByTypesProps) => {
+  const { category, title, data } = props
   const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase() as string)
 
-  const {
-    data: movies,
-    isLoading: isLoadingMovies,
-    refetch: refetchMovies,
-  } = useMoviesByCate({ category })
-
-  useEffect(() => {
-    refetchMovies()
-  }, [category, refetchMovies])
-
   const filteredMovies = useMemo(() => {
-    const items = movies?.items?.filter(
+    const items = data.items.filter(
       (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
     )
-    return { ...movies, items }
-  }, [movies])
+    return { ...data, items }
+  }, [data])
 
   return (
     <section
@@ -44,21 +35,19 @@ export default function CategoryMovie(props: CategoryMovieProps) {
           {title}
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h2>
-        {!isLoadingMovies && category && (
-          <Link
-            href={`/danh-sach/${category}`}
-            className='group text-sm max-sm:text-[11px] text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
-          >
-            Xem tất cả
-            <ChevronRight
-              size={16}
-              className='group-hover:animate-spin group-hover:translate-x-0.5'
-            />
-          </Link>
-        )}
+        <Link
+          href={`/danh-sach/${category}`}
+          className='group text-sm max-sm:text-[11px] text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
+        >
+          Xem tất cả
+          <ChevronRight
+            size={16}
+            className='group-hover:animate-spin group-hover:translate-x-0.5'
+          />
+        </Link>
       </header>
       <div className='grid grid-cols-4 max-sm:grid-cols-3 gap-x-6 gap-y-7 max-sm:gap-x-3 '>
-        {isLoadingMovies ? (
+        {!isNotEmpty(filteredMovies) ? (
           <SkeletonCard />
         ) : (
           <CardImage data={filteredMovies as MovieCategoryItem} />
@@ -67,3 +56,5 @@ export default function CategoryMovie(props: CategoryMovieProps) {
     </section>
   )
 }
+
+export default MovieByTypes

@@ -14,7 +14,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
   const searchParams = useSearchParams()
   const currentPage = searchParams.get('page') || 1
 
-  const dataPagination = data.pagination || data.params.pagination
+  const dataPagination = data.pagination || data.params?.pagination
 
   // Memoize the list of pages to prevent unnecessary re-renders
   const pagesToShow = useMemo(() => {
@@ -44,7 +44,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
       <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
         <CardImage
           data={data}
-          itemLength={dataPagination.totalItemsPerPage}
+          itemLength={dataPagination?.totalItemsPerPage}
         />
       </div>
       {pagesToShow.length > 1 && (
