@@ -45,9 +45,11 @@ const LoginForm = () => {
       const res = await authApi.login(data)
 
       if (isSuccessResponse(res)) {
-        setCookie('userVerify', res.data, { maxAge: 60 * 60 * 24 }) // 1 day
+        setCookie('userVerify', res.data, {
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+        })
         context.setLogin(true)
-        showToast({ variant: 'success', title: 'Thành công', description: 'Đăng nhập thành công!' })
+        showToast({ variant: 'success', description: 'Đăng nhập thành công!' })
 
         // Save username if "Remember Me" is checked
         if (rememberMe) {
@@ -62,9 +64,9 @@ const LoginForm = () => {
         router.push(lastPath || '/')
         return
       }
-      showToast({ variant: 'error', title: 'Something went wrong.', description: res.message })
+      showToast({ variant: 'error', description: res.message })
     } catch (error: any) {
-      showToast({ variant: 'error', title: 'Something went wrong.', description: error.message })
+      showToast({ variant: 'error', title: 'Something went wrong.', description: `${error}` })
     } finally {
       setLoading(false)
     }
@@ -75,18 +77,14 @@ const LoginForm = () => {
       <h1 className='text-3xl font-extrabold'>Đăng nhập</h1>
       <InputText
         name='username'
-        label='Tên đăng nhập'
         control={control}
-        placeholder='Nhập tên đăng nhập'
-        InputCustomProps={{ autoComplete: 'username' }}
+        placeholder='Email hoặc tên đăng nhập'
       />
       <InputText
         name='password'
-        label='Mật khẩu'
         control={control}
-        placeholder='Nhập mật khẩu'
+        placeholder='Mật khẩu'
         type='password'
-        InputCustomProps={{ autoComplete: 'current-password' }}
       />
       <Button
         className={cn(
@@ -95,6 +93,7 @@ const LoginForm = () => {
         )}
         onClick={handleSubmit(onSubmit)}
         disabled={loading}
+        autoFocus
       >
         {loading && (
           <Loader
@@ -115,7 +114,7 @@ const LoginForm = () => {
           <p className='text-[15px] font-medium'>Nhớ đăng nhập</p>
         </div>
         <Link
-          href='#'
+          href='forgot-password:;'
           className='text-[15px] text-gray-300 hover:underline'
         >
           Quên mật khẩu?

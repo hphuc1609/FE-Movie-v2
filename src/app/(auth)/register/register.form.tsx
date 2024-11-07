@@ -20,7 +20,7 @@ const RegisterForm = () => {
 
   const { control, handleSubmit } = useForm({
     resolver: zodResolver(RegisterSchema),
-    defaultValues: { username: '', password: '', confirmPassword: '' },
+    defaultValues: { username: '', fullname: '', email: '', password: '', confirmPassword: '' },
   })
 
   const onSubmit = async (data: RegisterData) => {
@@ -44,23 +44,30 @@ const RegisterForm = () => {
     <>
       <h1 className='text-3xl font-extrabold'>Đăng ký</h1>
       <InputCustom
-        name='username'
-        label='Tên đăng nhập'
+        name='fullname'
         control={control}
-        placeholder='Nhập tên đăng nhập'
+        placeholder='Họ tên'
+      />
+      <InputCustom
+        name='username'
+        control={control}
+        placeholder='Tên đăng nhập'
+      />
+      <InputCustom
+        name='email'
+        control={control}
+        placeholder='Email'
       />
       <InputCustom
         name='password'
-        label='Mật khẩu'
         control={control}
-        placeholder='Nhập mật khẩu'
+        placeholder='Mật khẩu'
         type='password'
       />
       <InputCustom
         name='confirmPassword'
-        label='Xác nhận mật khẩu'
         control={control}
-        placeholder='Nhập lại mật khẩu'
+        placeholder='Xác nhận mật khẩu'
         type='password'
       />
       <Button
@@ -70,6 +77,7 @@ const RegisterForm = () => {
         )}
         onClick={handleSubmit(onSubmit)}
         disabled={loading}
+        autoFocus
       >
         {loading && (
           <Loader

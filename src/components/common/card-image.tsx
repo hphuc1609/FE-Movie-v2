@@ -8,14 +8,13 @@ import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import PlayButton from './play-button'
-import SkeletonCard from './skeleton-card'
 
 interface CardImageProps {
   data: MovieCategoryResponse['data']
   itemLength?: number
 }
 
-export default function CardImage(props: CardImageProps) {
+const CardImage = (props: CardImageProps) => {
   const { data, itemLength = 8 } = props
 
   const handleNavigate = (item: MovieItem) => {
@@ -24,14 +23,14 @@ export default function CardImage(props: CardImageProps) {
 
   return (
     <>
-      {data.items?.slice(0, itemLength).map((item, index) => (
+      {(data?.items || data)?.slice(0, itemLength).map((item, index) => (
         <div
           key={item._id}
           className='h-fit flex flex-col gap-3'
         >
           <Link
             href={handleNavigate(item)}
-            className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden'
+            className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden shadow-black/50 shadow-md'
             onClick={openRandomAdLink}
           >
             <ImageComponent
@@ -132,3 +131,5 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
 })
 
 ImageComponent.displayName = 'ImageComponent'
+
+export default CardImage

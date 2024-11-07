@@ -1,4 +1,4 @@
-export interface ICommentResponse {
+export interface IComment {
   message?: string
   status: string
   data: ICommentItem[]

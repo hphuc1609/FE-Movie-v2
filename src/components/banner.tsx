@@ -103,8 +103,10 @@ const Banner = ({ data }: BannerProps) => {
                 })}
               >
                 <div>
-                  <p className='text-[42px] font-bold line-clamp-2 max-sm:text-2xl'>{item.name}</p>
-                  <p className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</p>
+                  <h1 className='text-[42px] font-bold line-clamp-2 max-sm:text-2xl'>
+                    {item.name}
+                  </h1>
+                  <h2 className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</h2>
                 </div>
                 <div className='text-base max-sm:text-xs flex items-center lg:gap-5 gap-3'>
                   <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>

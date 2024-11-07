@@ -3,6 +3,8 @@ import isSuccessResponse from '@/helpers/check-response'
 import movieApi from '@/services/api-client/movies'
 import { Metadata } from 'next'
 import Detail from './detail'
+import { fetchServer } from '@/helpers/fetch-server'
+import { endPoint } from '@/constants/end-point'
 
 interface Params {
   params: { slug: string }
@@ -49,7 +51,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function InfoPage({ params }: Params) {
   const { slug } = params
-  const movieInfo = await movieApi.getDetail(slug)
+  const movieInfo = await fetchServer({ endpoint: `${endPoint.detail}/${slug}`, tags: [slug] })
 
   return <Detail detail={movieInfo} />
 }

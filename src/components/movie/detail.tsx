@@ -1,31 +1,63 @@
 'use client'
 
 import { cleanString, convertToPathname } from '@/helpers/cleanString'
+import { showToast } from '@/helpers/toast'
 import { cn } from '@/lib/utils'
 import { DetailResponse } from '@/models/interfaces/detail'
-import { Play, Video } from 'lucide-react'
+import { IFavouriteItem } from '@/models/interfaces/favourite'
+import favouriteApi from '@/services/api-client/favourite'
+import { useFavourites } from '@/services/query-data'
+import { useMutation } from '@tanstack/react-query'
+import { getCookie } from 'cookies-next'
+import { Heart, Play, Video } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
 import { Button } from '../ui/button'
+import { useContextGlobal } from '../context-provider'
 
 interface MovieInfoProps {
   detail: DetailResponse['movie']
 }
 
-export default function MovieInfo({ detail }: MovieInfoProps) {
+const MovieInfo = ({ detail }: MovieInfoProps) => {
   const [openDialogTrailer, setOpenDialogTrailer] = useState(false)
   const [errorImage, setErrorImage] = useState(false)
   const [errorBanner, setErrorBanner] = useState(false)
+  const [isFavourite, setIsFavourite] = useState(false)
+  const [username, setUsername] = useState('')
 
+  const { isLogin } = useContextGlobal()
   const router = useRouter()
   const params = useSearchParams()
   const episodeParam = params.get('episode') as string
 
   const mobile = useMediaQuery({ maxWidth: 640 })
+
+  const { data: favourites = [] } = useFavourites({ options: { staleTime: 0 } })
+
+  // Check movie in favourite list
+  const foundMovie = favourites.find(
+    (item) => item.username === username && item.movieId === detail._id,
+  )
+
+  // Set isFavourite
+  useEffect(() => {
+    const userInfo = getCookie('userVerify')
+    const username = userInfo ? JSON.parse(userInfo).username : null
+
+    setUsername(username)
+
+    if (!username) {
+      setIsFavourite(false)
+      return
+    }
+
+    setIsFavourite(foundMovie !== undefined)
+  }, [foundMovie, isLogin])
 
   // ----------------- Get Details -----------------------------
   const categories = useMemo(
@@ -62,6 +94,7 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
     [detail, categories, countries, actors],
   )
 
+  // ----------------- Handle Actions -----------------------------
   const handleWatchMovie = () => {
     const lang = detail.lang.toLowerCase().includes('vietsub')
       ? 'vietsub'
@@ -69,10 +102,69 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
     const episode = detail.episode_current.toLowerCase()
     const slug = detail.slug
 
-    if (detail.episode_current.toLowerCase() === 'full') {
-      router.push(`/phim/${slug}?lang=${lang}&episode=${episode}`)
-    } else {
-      router.push(`/phim/${slug}?lang=${lang}&episode=tap-01`)
+    router.push(`/phim/${slug}?lang=${lang}&episode=${episode !== 'full' ? 'tap-01' : episode}`)
+  }
+
+  const handleErrorToast = (msg?: string) => {
+    return showToast({
+      variant: 'error',
+      title: 'Error',
+      description: `${msg}`,
+    })
+  }
+
+  const submitMutation = useMutation({
+    mutationFn: async (data: IFavouriteItem) => {
+      if (!username) {
+        throw new Error('please login')
+      }
+      return await favouriteApi.add(data)
+    },
+    onSuccess: () => {
+      setIsFavourite(true)
+    },
+    onError: (error) => {
+      if (error.message === 'please login') {
+        showToast({ variant: 'info', description: 'Vui lòng đăng nhập!' })
+      } else {
+        handleErrorToast(error.message)
+      }
+    },
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      return await favouriteApi.delete(id)
+    },
+    onSuccess: () => {
+      setIsFavourite(false)
+    },
+    onError: (error) => {
+      handleErrorToast(error.message)
+    },
+  })
+
+  const handleFavourite = () => {
+    const payload = {
+      username,
+      titleVN: detail.name,
+      titleEN: detail.origin_name,
+      slug: detail.slug,
+      year: detail.year,
+      movieId: detail._id,
+      posterUrl: detail.poster_url,
+    }
+
+    try {
+      if (isFavourite) {
+        if (foundMovie) {
+          deleteMutation.mutate(foundMovie?._id as string)
+          return
+        }
+      }
+      submitMutation.mutate(payload)
+    } catch (error: any) {
+      handleErrorToast(error.message)
     }
   }
 
@@ -148,17 +240,44 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
       </div>
 
       {/* Information */}
-      <div className='flex flex-1 flex-col gap-6'>
-        <div className='flex flex-col gap-1 max-sm:gap-2'>
-          <h1 className='text-3xl font-semibold text-primary-color'>{detail.name}</h1>
-          <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
-          <Ratings
-            rating={detail.tmdb.vote_average}
-            ratingCount={detail.tmdb.vote_count}
-            variant='yellow'
-            totalStars={10}
-          />
+      <div className='relative flex flex-1 flex-col gap-6'>
+        <div className='flex sm:justify-between sm:gap-5 max-sm:flex-col'>
+          <div className='flex flex-col gap-1 max-sm:gap-2'>
+            <h1 className='text-3xl font-semibold text-primary-color'>{detail.name}</h1>
+            <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
+            <Ratings
+              rating={detail.tmdb.vote_average}
+              ratingCount={detail.tmdb.vote_count}
+              variant='yellow'
+              totalStars={10}
+            />
+          </div>
+
+          {/* Favourite button */}
+          <Button
+            variant='ghost'
+            className='hover:bg-transparent hover:text-current'
+            onClick={handleFavourite}
+          >
+            {isFavourite ? (
+              <Heart
+                size={18}
+                strokeWidth={1}
+                className='mr-2'
+                color='red'
+                fill='red'
+              />
+            ) : (
+              <Heart
+                size={18}
+                strokeWidth={1.5}
+                className='mr-2'
+              />
+            )}
+            Yêu Thích
+          </Button>
         </div>
+
         <p className='md:max-h-[130px] max-sm:max-h-[200px] overflow-auto text-sm'>{content}</p>
         <div className='flex flex-col gap-2'>
           {details.map(
@@ -202,3 +321,5 @@ export default function MovieInfo({ detail }: MovieInfoProps) {
     </section>
   )
 }
+
+export default MovieInfo

@@ -1,15 +1,15 @@
 import { endPoint } from '@/constants/end-point'
 import axiosHeaders from '@/lib/axios-headers'
-import { ICommentResponse } from '@/models/interfaces/comment'
+import { IComment } from '@/models/interfaces/comment'
 
 const commentApi = {
-  getAll: (): Promise<ICommentResponse[]> => {
+  getAll: (): Promise<IComment[]> => {
     return axiosHeaders.get(endPoint.comment)
   },
-  create: (data: any): Promise<ICommentResponse> => {
+  create: (data: any): Promise<IComment> => {
     return axiosHeaders.post(endPoint.comment, data)
   },
-  update: (id: string, data: any): Promise<ICommentResponse> => {
+  update: (id: string, data: any): Promise<IComment> => {
     return axiosHeaders.put(`${endPoint.comment}/${id}`, data)
   },
   delete: (id: string) => {

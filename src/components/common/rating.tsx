@@ -52,7 +52,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
 
   return (
     <div
-      className={cn('flex items-center max-sm:flex-col max-sm:items-start gap-3')}
+      className={cn('flex items-center max-lg:flex-col max-lg:items-start gap-3')}
       {...props}
     >
       <div className='flex items-center gap-1'>
@@ -72,7 +72,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
           }),
         )}
       </div>
-      <span className='text-primary-foreground text-sm'>
+      <span className='text-primary-foreground text-sm line-clamp-1'>
         {rating > 1 ? `${rating.toFixed(1)}đ / ${ratingCount}` : 0} đánh giá
       </span>
     </div>

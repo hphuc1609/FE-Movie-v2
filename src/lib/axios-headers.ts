@@ -10,10 +10,7 @@ class HttpError extends Error {
 }
 
 const axiosInstance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:5000/api'
-      : process.env.NEXT_PUBLIC_BACKEND_DOMAIN,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_DOMAIN,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -21,8 +18,8 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const userInfo = getCookie('userVerify') as string
-    const token = typeof userInfo !== 'undefined' ? JSON.parse(userInfo).token : null
+    const userInfo = getCookie('userVerify')
+    const token = userInfo ? JSON.parse(userInfo).token : null
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`

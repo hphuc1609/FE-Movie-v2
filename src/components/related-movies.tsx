@@ -10,12 +10,12 @@ import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from 'swiper/react'
 import { ImageComponent } from './common/card-image'
 import { Button } from './ui/button'
 
-interface RelateMoviesProps {
+interface RelatedMoviesProps {
   data: MovieCategoryItem
   title: string
 }
 
-const RelateMovies = (props: RelateMoviesProps) => {
+const RelatedMovies = (props: RelatedMoviesProps) => {
   const { data, title } = props
 
   const nextBtnRef = useRef<HTMLButtonElement>(null)
@@ -119,4 +119,4 @@ const RelateMovies = (props: RelateMoviesProps) => {
   )
 }
 
-export default RelateMovies
+export default RelatedMovies

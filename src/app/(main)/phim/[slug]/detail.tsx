@@ -3,13 +3,13 @@
 import CommentBox from '@/components/comment-box'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import ErrorMessage from '@/components/common/error-message'
-import RelateMovies from '@/components/relate-movies'
 import MovieInfo from '@/components/movie/detail'
 import MoviePlayer from '@/components/movie/player'
+import RelatedMovies from '@/components/related-movies'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DetailResponse } from '@/models/interfaces/detail'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
-import { useMoviesByCate } from '@/services/query-data'
+import { useFavourites, useMovieType } from '@/services/query-data'
 import { useMemo } from 'react'
 
 interface DetailProps {
@@ -19,12 +19,12 @@ interface DetailProps {
 const Detail = ({ detail }: DetailProps) => {
   const slugCate = detail?.movie?.category?.[0]?.slug // Lấy thể loại của phim
 
-  const { data: moviesType } = useMoviesByCate({
+  const { data: moviesType } = useMovieType({
     category: slugCate?.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
   })
 
-  const { data: phimLe } = useMoviesByCate({ category: 'phim-le' })
-  const { data: phimBo } = useMoviesByCate({ category: 'phim-bo' })
+  const { data: phimLe } = useMovieType({ category: 'phim-le' })
+  const { data: phimBo } = useMovieType({ category: 'phim-bo' })
 
   const allMovies = useMemo(() => {
     return {
@@ -59,11 +59,11 @@ const Detail = ({ detail }: DetailProps) => {
             dataEpisode={detail.episodes}
           />
           <CommentBox />
-          <RelateMovies
+          <RelatedMovies
             title='Có thể bạn muốn xem'
             data={moviesType as MovieCategoryItem}
           />
-          <RelateMovies
+          <RelatedMovies
             title='Phim mới đề cử'
             data={filteredNewMovies as MovieCategoryItem}
           />

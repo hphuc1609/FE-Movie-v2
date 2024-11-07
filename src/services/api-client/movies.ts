@@ -38,16 +38,16 @@ const movieApi = {
   getListByCate: ({ category, page, limit }: GetMoviesParams): Promise<MovieCategoryResponse> => {
     if (!category) throw new Error('Category is required!')
 
-    const slugs = {
+    const slug = {
       danhSach: ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows'],
       theloai: dataTheLoai.map((item) => item.slug),
       namPhatHanh: dataNamPhatHanh.map((item) => item.slug),
     }
 
     const getSlugUrl = (category: string) => {
-      if (slugs.danhSach.includes(category)) return `${endPoint.list}/${category}`
-      if (slugs.theloai.includes(category)) return `${endPoint.category}/${category}`
-      if (slugs.namPhatHanh.includes(category)) return `${endPoint.year}/${category}`
+      if (slug.danhSach.includes(category)) return `${endPoint.list}/${category}`
+      if (slug.theloai.includes(category)) return `${endPoint.category}/${category}`
+      if (slug.namPhatHanh.includes(category)) return `${endPoint.year}/${category}`
       return `${endPoint.country}/${category}`
     }
 

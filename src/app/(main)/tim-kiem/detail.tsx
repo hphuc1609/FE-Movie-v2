@@ -39,9 +39,8 @@ const Detail = ({ data, keyword }: DetailProps) => {
         </h1>
         {isNotEmpty(data.items) && <TablePagination data={data} />}
         <p
-          className={cn('text-2xl font-medium hidden', {
-            block: !isNotEmpty(data.items),
-          })}
+          className='text-2xl font-medium'
+          hidden={isNotEmpty(data.items)}
         >
           Không tìm thấy phim: {keyword}
         </p>

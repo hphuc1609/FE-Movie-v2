@@ -55,12 +55,12 @@ const HeaderMenubar = React.memo(() => {
   const [searchValue, setSearchValue] = useState('')
   const [openDrawer, setOpenDrawer] = useState(false)
 
-  const { data: countries = [] } = useCountries()
+  const { data: countries = [] } = useCountries({})
 
   // Check token
   useEffect(() => {
-    const userInfo = getCookie('userVerify') as string
-    const token = typeof userInfo !== 'undefined' ? JSON.parse(userInfo)?.token : null
+    const userInfo = getCookie('userVerify')
+    const token = userInfo ? JSON.parse(userInfo).token : null
 
     if (token) {
       setHasToken(true)

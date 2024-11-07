@@ -7,7 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className='w-full min-h-full max-xl:min-h-screen xl:h-screen relative px-4 py-10 sm:p-20 flex items-center justify-center'>
+    <div className='w-full min-h-full max-xl:min-h-screen xl:min-h-screen relative px-4 py-10 sm:p-20 flex items-center justify-center'>
       <Image
         fill
         src={authBackground}

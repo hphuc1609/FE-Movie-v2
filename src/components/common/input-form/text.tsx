@@ -9,7 +9,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react'
 interface InputCustomProps {
   name: string
   control: Control<any>
-  label: string
+  label?: string
   placeholder?: string
   type?: 'text' | 'password'
   InputCustomProps?: InputProps
@@ -32,6 +32,7 @@ const InputCustom = (props: InputCustomProps) => {
           <Label
             htmlFor={name}
             className='text-base'
+            hidden={!label}
           >
             {label}
           </Label>

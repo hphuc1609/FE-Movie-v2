@@ -1,16 +1,17 @@
 'use client'
 
-import { dataNamPhatHanh } from '@/data/category'
 import isSuccessResponse from '@/helpers/check-response'
 import { showToast } from '@/helpers/toast'
 import useFetchData from '@/hooks/useFetch'
 import { ICategory } from '@/models/interfaces/category'
 import { ICommentItem } from '@/models/interfaces/comment'
 import { DetailResponse } from '@/models/interfaces/detail'
+import { IFavourite } from '@/models/interfaces/favourite'
 import { MovieCategoryItem, MovieCategoryResponse } from '@/models/interfaces/list-movie'
 import { NewMovieResponse } from '@/models/interfaces/new-movie'
 import { QueryKey, QueryObserverResult, UseQueryOptions } from '@tanstack/react-query'
 import commentApi from './api-client/comments'
+import favouriteApi from './api-client/favourite'
 import movieApi from './api-client/movies'
 
 type QueryOptions<TData> = Omit<
@@ -67,7 +68,7 @@ export const useNewMovies = ({
     ...options,
   })
 
-export const useMoviesByCate = ({
+export const useMovieType = ({
   category,
   page,
   options,
@@ -91,7 +92,7 @@ export const useMoviesByCate = ({
   })
 }
 
-export const useMoviesSearch = ({
+export const useSearch = ({
   keyword,
   page,
   options,
@@ -107,10 +108,13 @@ export const useMoviesSearch = ({
     ...options,
   })
 
-export const useMovieInfo = (
-  slug: string,
-  options?: QueryOptions<any>,
-): QueryObserverResult<DetailResponse> =>
+export const useDetail = ({
+  slug,
+  options,
+}: {
+  slug: string
+  options?: QueryOptions<any>
+}): QueryObserverResult<DetailResponse> =>
   useFetchData({
     queryKey: ['detail', { slug }],
     queryFn: () => fetchData(movieApi.getDetail(slug)),
@@ -132,23 +136,46 @@ export const useMovieInfo = (
 //     ...options,
 //   })
 
-export const useComments = (options?: QueryOptions<any>): QueryObserverResult<ICommentItem[]> =>
+export const useComments = ({
+  options,
+}: {
+  options?: QueryOptions<any>
+}): QueryObserverResult<ICommentItem[]> =>
   useFetchData({
     queryKey: ['comments'],
     queryFn: () => fetchData(commentApi.getAll()),
     ...options,
   })
 
-export const useCategories = (options?: QueryOptions<any>): QueryObserverResult<ICategory[]> =>
+export const useCategories = ({
+  options,
+}: {
+  options?: QueryOptions<any>
+}): QueryObserverResult<ICategory[]> =>
   useFetchData({
     queryKey: ['categories'],
     queryFn: () => fetchData(movieApi.getCategories()),
     ...options,
   })
 
-export const useCountries = (options?: QueryOptions<any>): QueryObserverResult<ICategory[]> =>
+export const useCountries = ({
+  options,
+}: {
+  options?: QueryOptions<any>
+}): QueryObserverResult<ICategory[]> =>
   useFetchData({
     queryKey: ['countries'],
     queryFn: () => fetchData(movieApi.getCountries()),
+    ...options,
+  })
+
+export const useFavourites = ({
+  options,
+}: {
+  options?: QueryOptions<any>
+}): QueryObserverResult<IFavourite['data']> =>
+  useFetchData({
+    queryKey: ['favourites'],
+    queryFn: () => fetchData(favouriteApi.getAll()),
     ...options,
   })

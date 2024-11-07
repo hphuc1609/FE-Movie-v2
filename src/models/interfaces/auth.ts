@@ -2,7 +2,9 @@ export interface ILoginResponse {
   status: boolean | number
   message: string
   data: {
+    fullname: string
     username: string
+    email: string
     token: string
   }
 }
