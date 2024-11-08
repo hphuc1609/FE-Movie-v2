@@ -7,9 +7,10 @@ import { fetchServer } from '@/helpers/fetch-server'
 export default async function Home() {
   const categories = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
   const titles = ['Phim lẻ', 'Phim bộ', 'Phim hoạt hình', 'TV Shows']
+  const currentYear = new Date().getFullYear()
 
   const [dataBanner, dataNewMovie, ...dataMovieByType] = await Promise.all([
-    fetchServer({ endpoint: `${endPoint.list}/phim-le`, tags: ['banner'] }),
+    fetchServer({ endpoint: `${endPoint.year}/${currentYear}`, tags: ['banner'] }),
     fetchServer({ endpoint: endPoint.newMovies, tags: ['new-movie'] }),
     ...categories.map((category) =>
       fetchServer({ endpoint: `${endPoint.list}/${category}`, tags: [category] }),

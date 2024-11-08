@@ -2,7 +2,7 @@ import { movieDomain } from '@/constants/domain'
 
 type FetchServerParams = {
   endpoint: string
-  tags: string[]
+  tags?: string[]
   params?: { [key: string]: string | number | undefined | null }
 }
 
@@ -29,7 +29,7 @@ export async function fetchServer({ endpoint, tags, params }: FetchServerParams)
 
   try {
     const res = await fetch(url, {
-      next: { tags, revalidate: 60 },
+      next: { tags, revalidate: 30 },
     })
 
     if (!res.ok) {
