@@ -79,7 +79,7 @@ const Banner = ({ data }: BannerProps) => {
       speed={1500}
       autoplay={{ delay: 7000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, EffectFade]}
-      className='relative max-w-screen-2xl h-[610px] max-sm:h-[550px]'
+      className='relative max-w-screen-2xl h-[610px] max-sm:h-[300px]'
     >
       <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#0d0d0d] max-sm:from-[#0d0d0d] via-[#1a1a1a] z-10' />
 
