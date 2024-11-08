@@ -40,9 +40,9 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
   const { data: favourites = [] } = useFavourites({ options: { staleTime: 0 } })
 
   // Check movie in favourite list
-  const foundMovie = favourites.find(
-    (item) => item.username === username && item.movieId === detail._id,
-  )
+  const movieFavour = favourites
+    .find((item) => item.username === username)
+    ?.favourites.find((favourite) => favourite.movieId === detail._id)
 
   // Set isFavourite
   useEffect(() => {
@@ -56,8 +56,8 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
       return
     }
 
-    setIsFavourite(foundMovie !== undefined)
-  }, [foundMovie, isLogin])
+    setIsFavourite(movieFavour !== undefined)
+  }, [movieFavour, isLogin])
 
   // ----------------- Get Details -----------------------------
   const categories = useMemo(
@@ -157,8 +157,8 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
 
     try {
       if (isFavourite) {
-        if (foundMovie) {
-          deleteMutation.mutate(foundMovie?._id as string)
+        if (movieFavour) {
+          deleteMutation.mutate(movieFavour?._id as string)
           return
         }
       }
