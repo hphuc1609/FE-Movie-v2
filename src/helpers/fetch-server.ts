@@ -2,9 +2,8 @@ import { movieDomain } from '@/constants/domain'
 
 type FetchServerParams = {
   endpoint: string
-  tags?: string[]
   params?: { [key: string]: string | number | undefined | null }
-  nextOptions?: NextFetchRequestConfig
+  nextOptions?: RequestInit
 }
 
 /**
@@ -13,14 +12,12 @@ type FetchServerParams = {
  * @param {FetchServerParams} params - The parameters for the fetch operation.
  * @param {string} params.endpoint - The API endpoint to fetch data from.
  * @param {Object} [params.params] - An optional object containing query parameters as key-value pairs.
- * @param {string[]} [params.tags] - Optional tags for additional request configuration.
- * @param {NextFetchRequestConfig} [params.nextOptions] - Optional Next.js request configuration.
+ * @param {RequestInit} [params.nextOptions] - An optional object containing additional options for the fetch operation.
  * @returns {Promise<any>} - A promise that resolves to the fetched data.
  * @throws {Error} - Throws an error if the fetch operation fails.
  */
 export async function fetchServer({
   endpoint,
-  tags,
   params,
   nextOptions,
 }: FetchServerParams): Promise<any> {
@@ -31,13 +28,10 @@ export async function fetchServer({
     }, new URLSearchParams()),
   )
 
-  // Tạo URL đầy đủ
-  const url = new URL(`${movieDomain}${endpoint}?${queryParams.toString()}`)
+  const url = new URL(`${movieDomain}${endpoint}${queryParams ? `?${queryParams}` : ''}`)
 
   try {
-    const res = await fetch(url, {
-      next: { tags, revalidate: 0, ...nextOptions },
-    })
+    const res = await fetch(url, { cache: 'no-store', ...nextOptions })
 
     if (!res.ok) {
       throw new Error(`Error fetching data: ${res.status} ${res.statusText}`)
