@@ -33,7 +33,6 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
 
     const response: MovieCategoryResponse = await fetchServer({
       endpoint: `${getUrl(slug)}/${slug}`,
-      tags: [slug],
       params: { page, limit: 36 },
     })
     const seoOnPage = response.data.seoOnPage
@@ -65,13 +64,11 @@ export default async function ListPage({ params, searchParams }: Params) {
   if (slug === 'phim-moi-cap-nhat') {
     response = await fetchServer({
       endpoint: endPoint.newMovies,
-      tags: ['phim-moi-cap-nhat'],
       params: { page, limit: 36 },
     })
   } else {
     response = await fetchServer({
       endpoint: `${getUrl(slug)}/${slug}`,
-      tags: [slug],
       params: { page, limit: 36 },
     })
     response = response.data

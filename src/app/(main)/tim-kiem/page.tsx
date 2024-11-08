@@ -13,7 +13,6 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
     const response = await fetchServer({
       endpoint: endPoint.search,
       params: { keyword, page },
-      tags: ['search'],
     })
     const seoOnPage = response.data.seoOnPage
 
@@ -35,7 +34,6 @@ export default async function ListSearchPage({ searchParams }: Params) {
   const response = await fetchServer({
     endpoint: endPoint.search,
     params: { keyword, page },
-    tags: ['search'],
   })
 
   return (

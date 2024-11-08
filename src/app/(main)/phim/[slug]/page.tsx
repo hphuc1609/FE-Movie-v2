@@ -51,7 +51,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function InfoPage({ params }: Params) {
   const { slug } = params
-  const movieInfo = await fetchServer({ endpoint: `${endPoint.detail}/${slug}`, tags: [slug] })
+  const movieInfo = await fetchServer({
+    endpoint: `${endPoint.detail}/${slug}`,
+    nextOptions: { cache: 'force-cache', next: { revalidate: 60 } },
+  })
 
   return <Detail detail={movieInfo} />
 }

@@ -96,6 +96,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
                     className={cn(
                       `text-sm h-fit min-w-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
                       { 'bg-primary-color text-black': isActiveEpisode },
+                      { 'min-w-[100px]': dataEpisode[0].server_data.length <= 2 },
                     )}
                     onClick={() =>
                       handleEpisodeClick(

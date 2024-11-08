@@ -1,13 +1,14 @@
+import ContextProvider from '@/components/context-provider'
 import Footer from '@/components/layouts/footer'
 import Header from '@/components/layouts/header'
-import ContextProvider from '@/components/context-provider'
+import QRCodeButton from '@/components/qrcode'
 import TanstackProvider from '@/components/tanstack-provider'
+import { Toaster } from '@/components/ui/toaster'
+import { googleKey, myWebsite } from '@/constants/domain'
 import { cn } from '@/lib/utils'
 import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { Toaster } from '@/components/ui/toaster'
-import { googleKey, myWebsite } from '@/constants/domain'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 
@@ -65,6 +66,8 @@ export default function RootLayout({
             <Footer />
           </ContextProvider>
         </TanstackProvider>
+
+        <QRCodeButton />
         <Toaster />
       </body>
     </html>

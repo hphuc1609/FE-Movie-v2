@@ -10,11 +10,9 @@ export default async function Home() {
   const currentYear = new Date().getFullYear()
 
   const [dataBanner, dataNewMovie, ...dataMovieByType] = await Promise.all([
-    fetchServer({ endpoint: `${endPoint.year}/${currentYear}`, tags: ['banner'] }),
-    fetchServer({ endpoint: endPoint.newMovies, tags: ['new-movie'] }),
-    ...categories.map((category) =>
-      fetchServer({ endpoint: `${endPoint.list}/${category}`, tags: [category] }),
-    ),
+    fetchServer({ endpoint: `${endPoint.year}/${currentYear}` }),
+    fetchServer({ endpoint: endPoint.newMovies }),
+    ...categories.map((category) => fetchServer({ endpoint: `${endPoint.list}/${category}` })),
   ])
 
   return (
