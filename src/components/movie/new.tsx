@@ -52,7 +52,8 @@ const NewUpdateMovies = ({ data }: NewUpdateMoviesProps) => {
                     alt={`Poster của phim ${item.name}`}
                     width={80}
                     height={90}
-                    priority
+                    loading='lazy'
+                    quality={80}
                     onError={() => handleErrorImage(index)}
                     className='object-cover h-full w-full'
                   />

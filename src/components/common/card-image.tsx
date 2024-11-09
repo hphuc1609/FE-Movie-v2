@@ -120,7 +120,8 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
       alt={item.name}
       width={270}
       height={180}
-      priority
+      loading='lazy'
+      quality={80}
       onError={() => handleErrorImage(index)}
       className={cn(
         'object-cover group-hover:scale-110 aspect-[2/3] w-full transition-all duration-500',
