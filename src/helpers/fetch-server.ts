@@ -31,7 +31,11 @@ export async function fetchServer({
   const url = new URL(`${movieDomain}${endpoint}${queryParams ? `?${queryParams}` : ''}`)
 
   try {
-    const res = await fetch(url, { cache: 'no-store', ...nextOptions })
+    const res = await fetch(url, {
+      cache: 'no-cache',
+      headers: { 'Cache-Control': 'no-cache' },
+      ...nextOptions,
+    })
 
     if (!res.ok) {
       throw new Error(`Error fetching data: ${res.status} ${res.statusText}`)
