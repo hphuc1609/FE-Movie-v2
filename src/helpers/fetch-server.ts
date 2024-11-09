@@ -28,12 +28,15 @@ export async function fetchServer({
     }, new URLSearchParams()),
   )
 
-  const url = new URL(`${movieDomain}${endpoint}${queryParams ? `?${queryParams}` : ''}`)
+  const url = new URL(`${movieDomain}${endpoint}`)
+  if (queryParams.toString()) {
+    url.search = queryParams.toString()
+  }
 
   try {
     const res = await fetch(url, {
-      cache: 'no-cache',
-      headers: { 'Cache-Control': 'no-cache' },
+      cache: 'no-store',
+      headers: { 'Cache-Control': 'no-store' },
       ...nextOptions,
     })
 

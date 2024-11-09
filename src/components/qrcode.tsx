@@ -17,19 +17,19 @@ const QRCodeButton = () => {
 
   return (
     <>
-      <Button
-        title='QR Code Mephim247'
-        size={'icon'}
-        onClick={handleToggleQRCode}
-        className='fixed h-[50px] w-[50px] bottom-10 right-10 bg-neutral-800 hover:text-yellow-300 hover:bg-neutral-800 text-white p-3 rounded-[50%] z-50'
-        hidden={isMobile}
-      >
-        <QrCode size={24} />
-      </Button>
-
+      {!isMobile && (
+        <Button
+          title='QR Code Mephim247'
+          size={'icon'}
+          onClick={handleToggleQRCode}
+          className='fixed h-[50px] w-[50px] bottom-10 right-10 bg-neutral-800 hover:text-yellow-300 hover:bg-neutral-800 text-white p-3 rounded-[50%] z-50'
+        >
+          <QrCode size={24} />
+        </Button>
+      )}
       {showQRCode && (
         <div
-          className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center flex-col transition-all duration-300 z-50'
+          className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 flex justify-center items-center flex-col transition-all duration-300 z-50'
           onClick={handleToggleQRCode}
         >
           <X
@@ -41,7 +41,7 @@ const QRCodeButton = () => {
             }}
           />
           <div
-            className='bg-white p-5 rounded-md'
+            className='bg-white p-5 rounded-md wave-ripple'
             onClick={(e) => e.stopPropagation()}
           >
             <QRCodeSVG
