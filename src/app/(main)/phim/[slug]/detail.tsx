@@ -46,11 +46,23 @@ const Detail = ({ detail }: DetailProps) => {
     }
   }, [allMovies?.items])
 
+  const breadCrumb = [
+    {
+      isCurrent: false,
+      name: `Phim ${detail.movie.category[0].name}`,
+      slug: `/danh-sach/${detail.movie.category[0].slug}`,
+    },
+    {
+      isCurrent: true,
+      name: detail.movie.name,
+    },
+  ]
+
   if (!detail?.status || typeof detail !== 'object') return <ErrorMessage message={detail?.msg} />
 
   return (
     <>
-      <BreadcrumbCustom breadCrumb={detail.movie.name} />
+      <BreadcrumbCustom breadCrumb={breadCrumb} />
       <div className='flex flex-col gap-20 max-sm:gap-10'>
         <MovieInfo detail={detail.movie} />
         <div className='flex flex-col gap-10'>

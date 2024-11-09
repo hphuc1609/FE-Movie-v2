@@ -109,7 +109,7 @@ export default function Drawer(props: DrawerProps) {
                           )}
                           onClick={handleClose}
                         >
-                          {menuItem.name.includes('Năm') ? `Phim ${item.name}` : item.name}
+                          {menuItem.name.includes('Năm') ? `Năm ${item.name}` : item.name}
                         </Link>
                       ))}
                     </div>

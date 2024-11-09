@@ -81,9 +81,9 @@ const Banner = ({ data }: BannerProps) => {
       modules={[Pagination, Autoplay, EffectFade]}
       className='relative max-w-screen-2xl h-[610px] max-sm:h-[300px]'
     >
-      <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#0d0d0d] max-sm:from-[#0d0d0d] via-[#1a1a1a] z-10' />
+      <div className='absolute -bottom-6 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#101010] max-sm:from-[#101010] via-[#101010] z-10' />
 
-      {moviesBanner.slice(0, 5).map((item, index) => {
+      {moviesBanner.slice(0, 8).map((item, index) => {
         return (
           <SwiperSlide key={item._id}>
             <Image
@@ -108,7 +108,7 @@ const Banner = ({ data }: BannerProps) => {
                   </h1>
                   <h2 className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</h2>
                 </div>
-                <div className='text-base max-sm:text-xs flex items-center lg:gap-5 gap-3'>
+                <div className='text-base max-sm:text-xs flex items-center lg:gap-5 gap-3 max-sm:gap-2'>
                   <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>
                   <span className='line-clamp-1'>
                     {item.category
@@ -148,29 +148,33 @@ const Banner = ({ data }: BannerProps) => {
       })}
 
       {moviesBanner.length > 0 && (
-        <div className='absolute z-50 bottom-[73px] max-md:bottom-5 right-0 lg:pr-20 pr-[25px] flex items-center gap-2.5'>
+        <div className='absolute z-50 bottom-[50px] max-md:bottom-0 right-0 lg:pr-20 pr-[25px] flex items-center gap-2'>
           <Button
             ref={prevBtnRef}
+            title='Previous'
             size={'icon'}
             variant={'outline'}
-            className='w-10 h-10 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
+            className='w-10 h-10 max-sm:h-8 max-sm:w-8 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
             onClick={() => swiperRef.current?.swiper.slidePrev()}
           >
             <ChevronLeft
               size={30}
               strokeWidth={1.5}
+              className='max-sm:h-6 max-sm:w-6'
             />
           </Button>
           <Button
             ref={nextBtnRef}
             size={'icon'}
+            title='Next'
             variant={'outline'}
-            className='w-10 h-10 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
+            className='w-10 h-10 max-sm:h-8 max-sm:w-8 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
             onClick={() => swiperRef.current?.swiper.slideNext()}
           >
             <ChevronRight
               size={30}
               strokeWidth={1.5}
+              className='max-sm:h-6 max-sm:w-6'
             />
           </Button>
         </div>
