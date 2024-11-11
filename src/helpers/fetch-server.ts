@@ -36,7 +36,6 @@ export async function fetchServer({
   try {
     const res = await fetch(url, {
       cache: 'no-store',
-      headers: { 'Cache-Control': 'no-store' },
       ...nextOptions,
     })
 

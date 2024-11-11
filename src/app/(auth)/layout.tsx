@@ -12,6 +12,7 @@ export default function AuthLayout({
         fill
         src={authBackground}
         alt='Background'
+        priority
         className='object-cover h-full'
       />
       <div className='absolute top-0 left-0 w-full min-h-full xl:h-screen bg-black/50'></div>
