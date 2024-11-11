@@ -1,14 +1,12 @@
 'use client'
 
+import { myWebsite } from '@/constants/domain'
+import { QrCode, X } from 'lucide-react'
 import { QRCodeSVG } from 'qrcode.react'
 import { useState } from 'react'
 import { Button } from './ui/button'
-import { myWebsite } from '@/constants/domain'
-import { QrCode, X } from 'lucide-react'
-import { useMediaQuery } from 'react-responsive'
 
 const QRCodeButton = () => {
-  const isMobile = useMediaQuery({ maxWidth: 750 })
   const [showQRCode, setShowQRCode] = useState(false)
 
   const handleToggleQRCode = () => {
@@ -17,16 +15,15 @@ const QRCodeButton = () => {
 
   return (
     <>
-      {!isMobile && (
-        <Button
-          title='QR Code Mephim247'
-          size={'icon'}
-          onClick={handleToggleQRCode}
-          className='fixed h-[50px] w-[50px] bottom-10 right-10 bg-neutral-800 hover:text-yellow-300 hover:bg-neutral-800 text-white p-3 rounded-[50%] z-50'
-        >
-          <QrCode size={24} />
-        </Button>
-      )}
+      <Button
+        title='QR Code Mephim247'
+        size={'icon'}
+        onClick={handleToggleQRCode}
+        className='fixed h-[50px] w-[50px] bottom-10 right-10 bg-neutral-800 hover:text-yellow-300 hover:bg-neutral-800 text-white p-3 rounded-[50%] z-50 max-sm:hidden'
+      >
+        <QrCode size={24} />
+      </Button>
+
       {showQRCode && (
         <div
           className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 flex justify-center items-center flex-col transition-all duration-300 z-50'
