@@ -50,6 +50,7 @@ const CardImage = (props: CardImageProps) => {
           </Link>
           {/* Movie name */}
           <Link
+            title={item.name}
             href={handleNavigate(item)}
             className='text-sm max-[400px]:text-xs grid gap-1'
           >

@@ -159,9 +159,22 @@ const HeaderMenubar = React.memo(() => {
     setOpenDrawer(false)
   }
 
-  const checkUrl = (link: string) => {
+  const getUrl = (link: string) => {
     const url = link.startsWith('/') ? link : `/${link}`
-    return link === '/' ? link : `/danh-sach${url}`
+    const menuName = navbarItems.find((item) =>
+      item.subMenu?.find((subItem) => subItem.slug === link),
+    )?.name
+
+    switch (menuName?.toLowerCase()) {
+      case 'thể loại':
+        return `/the-loai${url}`
+      case 'quốc gia':
+        return `/quoc-gia${url}`
+      case 'năm':
+        return `/nam${url}`
+      default:
+        return url
+    }
   }
 
   return (
@@ -181,7 +194,7 @@ const HeaderMenubar = React.memo(() => {
               <React.Fragment key={menuItem.name}>
                 {menuItem.href ? (
                   <Link
-                    href={checkUrl(menuItem.href)}
+                    href={getUrl(menuItem.href)}
                     className={cn('text-base capitalize font-semibold hover:text-primary-color')}
                   >
                     {menuItem.name}
@@ -208,7 +221,7 @@ const HeaderMenubar = React.memo(() => {
                         {menuItem.subMenu.map((subItem) => (
                           <Link
                             key={subItem.slug}
-                            href={checkUrl(subItem.slug)}
+                            href={getUrl(subItem.slug)}
                           >
                             <MenubarItem className='cursor-pointer capitalize block text-center hover:!bg-inherit hover:!text-yellow-400'>
                               {subItem.name}

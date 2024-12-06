@@ -79,7 +79,7 @@ const Banner = ({ data }: BannerProps) => {
       speed={1500}
       autoplay={{ delay: 7000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, EffectFade]}
-      className='relative max-w-screen-2xl h-[610px] max-sm:h-[300px]'
+      className='relative max-w-screen-2xl h-[635px] max-sm:h-[300px]'
     >
       <div className='absolute -bottom-6 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#101010] max-sm:from-[#101010] via-[#101010] z-10' />
 
@@ -89,7 +89,6 @@ const Banner = ({ data }: BannerProps) => {
             <Image
               src={imageUrl(item, index)}
               alt={item.origin_name}
-              quality={100}
               priority
               fill
               onError={() => handleErrorImage(index)}
@@ -148,13 +147,13 @@ const Banner = ({ data }: BannerProps) => {
       })}
 
       {moviesBanner.length > 0 && (
-        <div className='absolute z-50 bottom-[50px] max-md:bottom-0 right-0 lg:pr-20 pr-[25px] flex items-center gap-2'>
+        <div className='absolute z-50 bottom-[53px] max-md:bottom-0 right-0 lg:pr-20 pr-[25px] flex items-center gap-2'>
           <Button
             ref={prevBtnRef}
             title='Previous'
             size={'icon'}
             variant={'outline'}
-            className='w-10 h-10 max-sm:h-8 max-sm:w-8 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
+            className='w-9 h-9 max-sm:h-8 max-sm:w-8 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
             onClick={() => swiperRef.current?.swiper.slidePrev()}
           >
             <ChevronLeft
@@ -168,7 +167,7 @@ const Banner = ({ data }: BannerProps) => {
             size={'icon'}
             title='Next'
             variant={'outline'}
-            className='w-10 h-10 max-sm:h-8 max-sm:w-8 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
+            className='w-9 h-9 max-sm:h-8 max-sm:w-8 bg-transparent text-primary-foreground hover:text-primary-foreground rounded-full hover:bg-white hover:bg-opacity-30'
             onClick={() => swiperRef.current?.swiper.slideNext()}
           >
             <ChevronRight
