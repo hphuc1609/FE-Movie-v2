@@ -1,3 +1,4 @@
+'use server'
 import { movieDomain } from '@/constants/domain'
 
 type FetchServerParams = {
@@ -34,10 +35,7 @@ export async function fetchServer({
   }
 
   try {
-    const res = await fetch(url, {
-      cache: 'no-store',
-      ...nextOptions,
-    })
+    const res = await fetch(url, nextOptions)
 
     if (!res.ok) {
       throw new Error(`Error fetching data: ${res.status} ${res.statusText}`)
@@ -47,6 +45,6 @@ export async function fetchServer({
     return data
   } catch (error) {
     console.error('Fetch error:', error)
-    throw error
+    return null
   }
 }

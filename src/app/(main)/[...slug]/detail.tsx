@@ -8,13 +8,13 @@ import { useMemo } from 'react'
 
 interface DetailProps {
   data: MovieCategoryItem
-  slug: string
+  slug: string[]
   page: string
 }
 
 const Detail = ({ data, slug, page }: DetailProps) => {
   // Get params
-  const lastSegment = slug.split('/').pop() || ''
+  const lastSegment = slug.pop() || ''
   const isPhimMoiCapNhat = lastSegment.includes('moi-cap-nhat')
 
   const filteredMovies = useMemo(() => {

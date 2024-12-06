@@ -5,6 +5,7 @@ import { Metadata } from 'next'
 import Detail from './detail'
 import { fetchServer } from '@/helpers/fetch-server'
 import { endPoint } from '@/constants/end-point'
+import { notFound } from 'next/navigation'
 
 interface Params {
   params: { slug: string }
@@ -25,8 +26,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     const seoOnPage = res.movie
 
     // Meta data
-    const metaTitle = `Phim ${seoOnPage.name}`
-    const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} chất lượng Full HD tại Mephim247. ${seoOnPage.content}`
+    const metaTitle = `Phim ${seoOnPage.name} | ${seoOnPage.origin_name} (${seoOnPage.year})`
+    const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} (${seoOnPage.year}). ${seoOnPage.content}`
     const metaUrl = `${myWebsite}/phim/${seoOnPage.slug}`
     const metaImage = seoOnPage.poster_url || seoOnPage.thumb_url
 
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         title: metaTitle,
         description: metaDescription,
         url: metaUrl,
-        images: metaImage,
+        images: { url: metaImage, alt: seoOnPage.name },
       },
     }
   } catch (error: any) {
@@ -51,13 +52,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function InfoPage({ params }: Params) {
   const { slug } = params
-  const movieInfo = await fetchServer({
+  const response = await fetchServer({
     endpoint: `${endPoint.detail}/${slug}`,
-    nextOptions: {
-      cache: 'default',
-      next: { revalidate: 60 },
-    },
+    nextOptions: { next: { revalidate: 60 } },
   })
 
-  return <Detail detail={movieInfo} />
+  if (!isSuccessResponse(response)) notFound()
+
+  return <Detail detail={response} />
 }

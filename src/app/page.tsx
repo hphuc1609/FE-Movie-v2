@@ -4,28 +4,52 @@ import NewUpdateMovie from '@/components/movie/new'
 import { endPoint } from '@/constants/end-point'
 import { fetchServer } from '@/helpers/fetch-server'
 
+export const dynamic = 'force-dynamic'
 export default async function Home() {
-  const categories = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
-  const titles = ['Phim lẻ', 'Phim bộ', 'Phim hoạt hình', 'TV Shows']
+  const config = [
+    { category: 'phim-le', title: 'Phim lẻ' },
+    { category: 'phim-bo', title: 'Phim bộ' },
+    { category: 'hoat-hinh', title: 'Phim hoạt hình' },
+    { category: 'tv-shows', title: 'TV Shows' },
+  ]
   const currentYear = new Date().getFullYear()
 
-  const [dataBanner, dataNewMovie, ...dataMovieByType] = await Promise.all([
-    fetchServer({ endpoint: `${endPoint.year}/${currentYear}` }),
-    fetchServer({ endpoint: endPoint.newMovies }),
-    ...categories.map((category) => fetchServer({ endpoint: `${endPoint.list}/${category}` })),
-  ])
+  const defaultOptions: RequestInit = {
+    headers: {
+      'Cache-Control': 'no-store',
+      Pragma: 'no-cache',
+    },
+    cache: 'no-store',
+  }
+
+  const requests = [
+    fetchServer({ endpoint: `${endPoint.year}/${currentYear}`, nextOptions: defaultOptions }),
+    fetchServer({ endpoint: endPoint.newMovies, nextOptions: defaultOptions }),
+    ...config.map((item) =>
+      fetchServer({ endpoint: `${endPoint.list}/${item.category}`, nextOptions: defaultOptions }),
+    ),
+  ]
+  const results = await Promise.allSettled(requests)
+
+  // Lọc và xử lý kết quả
+  const [bannerResult, newMovieResult, ...movieResults] = results
+  const dataBanner = bannerResult.status === 'fulfilled' ? bannerResult.value?.data : []
+  const dataNewMovie = newMovieResult.status === 'fulfilled' ? newMovieResult.value : []
+  const dataMovieByType = movieResults.map((result) =>
+    result.status === 'fulfilled' ? result.value?.data : [],
+  )
 
   return (
     <>
-      <Banner data={dataBanner.data} />
-      <div className='max-w-screen-xl m-auto px-10 py-10 max-lg:px-[25px] flex gap-9'>
+      <Banner data={dataBanner} />
+      <div className='max-w-screen-xl m-auto px-10 pt-6 pb-10 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-14'>
-          {categories.map((item, index) => (
+          {config.map((item, index) => (
             <MovieByTypes
-              key={item}
-              data={dataMovieByType[index].data}
-              category={item}
-              title={titles[index]}
+              key={item.category}
+              data={dataMovieByType[index]}
+              category={item.category}
+              title={item.title}
             />
           ))}
         </div>

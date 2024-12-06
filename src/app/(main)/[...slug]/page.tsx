@@ -1,39 +1,46 @@
 import { myWebsite } from '@/constants/domain'
 import { endPoint } from '@/constants/end-point'
-import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
 import { fetchServer } from '@/helpers/fetch-server'
 import { MovieCategoryItem, MovieCategoryResponse } from '@/models/interfaces/list-movie'
 import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
 import Detail from './detail'
+import isSuccessResponse from '@/helpers/check-response'
+import { dataNamPhatHanh, dataQuocGia, dataTheLoai } from '@/data/category'
 
 interface Params {
-  params: { slug: string }
+  params: { slug: string[] }
   searchParams: { page: string }
 }
 
 const lastSegment = {
-  danhSach: ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows'],
   theloai: dataTheLoai.map((item) => item.slug),
   namPhatHanh: dataNamPhatHanh.map((item) => item.slug),
+  quocGia: dataQuocGia.map((item) => item.slug),
 }
 
 const getUrl = (slug: string) => {
-  if (lastSegment.danhSach.includes(slug)) return `${endPoint.list}`
+  const segments = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
+
+  if (segments.includes(slug)) return `${endPoint.list}`
   if (lastSegment.theloai.includes(slug)) return `${endPoint.category}`
   if (lastSegment.namPhatHanh.includes(slug)) return `${endPoint.year}`
-  return `${endPoint.country}`
+  if (lastSegment.quocGia.includes(slug)) return `${endPoint.country}`
+  return null
 }
 
 export async function generateMetadata({ params, searchParams }: Params): Promise<Metadata> {
   const { slug } = params
   const { page } = searchParams
 
+  const lastSegment = slug[slug.length - 1]
+
   try {
-    if (slug === 'phim-moi-cap-nhat') return {}
+    if (slug.includes('phim-moi-cap-nhat')) return {}
 
     const response: MovieCategoryResponse = await fetchServer({
-      endpoint: `${getUrl(slug)}/${slug}`,
-      params: { page, limit: 36 },
+      endpoint: `${getUrl(lastSegment)}/${lastSegment}`,
+      params: { page },
     })
     const seoOnPage = response.data.seoOnPage
 
@@ -43,8 +50,11 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
       openGraph: {
         title: seoOnPage.titleHead,
         description: seoOnPage.descriptionHead,
-        url: `${myWebsite}/danh-sach/${slug}`,
-        images: seoOnPage.og_image.map((image) => `${response.data.APP_DOMAIN_CDN_IMAGE}/${image}`),
+        url: `${myWebsite}/${slug.join('/')}`,
+        images: seoOnPage.og_image.map((image) => ({
+          url: `${response.data?.APP_DOMAIN_CDN_IMAGE}/${image}`,
+          alt: '',
+        })),
       },
     }
   } catch (error: any) {
@@ -56,23 +66,27 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
   }
 }
 
-export default async function ListPage({ params, searchParams }: Params) {
+export default async function slugPage({ params, searchParams }: Params) {
   const { slug } = params
   const { page } = searchParams
 
-  let response
-  if (slug === 'phim-moi-cap-nhat') {
+  const lastSegment = slug[slug.length - 1]
+  let response = null
+
+  if (slug.includes('phim-moi-cap-nhat')) {
     response = await fetchServer({
       endpoint: endPoint.newMovies,
       params: { page, limit: 36 },
     })
   } else {
     response = await fetchServer({
-      endpoint: `${getUrl(slug)}/${slug}`,
+      endpoint: `${getUrl(lastSegment)}/${lastSegment}`,
       params: { page, limit: 36 },
     })
-    response = response.data
+    response = response?.data
   }
+
+  if (!isSuccessResponse(response)) notFound()
 
   return (
     <Detail

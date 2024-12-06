@@ -2,6 +2,8 @@ import { endPoint } from '@/constants/end-point'
 import { fetchServer } from '@/helpers/fetch-server'
 import { Metadata } from 'next'
 import Detail from './detail'
+import movieApi from '@/services/api-client/movies'
+import { notFound } from 'next/navigation'
 
 interface Params {
   searchParams: { keyword: string; page: string }
@@ -10,10 +12,7 @@ interface Params {
 export async function generateMetadata({ searchParams }: Params): Promise<Metadata> {
   const { keyword, page } = searchParams
   try {
-    const response = await fetchServer({
-      endpoint: endPoint.search,
-      params: { keyword, page },
-    })
+    const response = await movieApi.getMoviesSearch({ keyword, page })
     const seoOnPage = response.data.seoOnPage
 
     return {
@@ -31,10 +30,7 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
 
 export default async function ListSearchPage({ searchParams }: Params) {
   const { keyword, page } = searchParams
-  const response = await fetchServer({
-    endpoint: endPoint.search,
-    params: { keyword, page },
-  })
+  const response = await fetchServer({ endpoint: endPoint.search, params: { keyword, page } })
 
   return (
     <Detail

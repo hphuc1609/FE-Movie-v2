@@ -9,7 +9,7 @@ import RelatedMovies from '@/components/related-movies'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DetailResponse } from '@/models/interfaces/detail'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
-import { useFavourites, useMovieType } from '@/services/query-data'
+import { useMovieType } from '@/services/query-data'
 import { useMemo } from 'react'
 
 interface DetailProps {
@@ -49,8 +49,8 @@ const Detail = ({ detail }: DetailProps) => {
   const breadCrumb = [
     {
       isCurrent: false,
-      name: `Phim ${detail.movie.category[0].name}`,
-      slug: `/danh-sach/${detail.movie.category[0].slug}`,
+      name: detail.movie && `Phim ${detail.movie.category[0].name}`,
+      slug: detail.movie && `${detail.movie.category[0].slug}`,
     },
     {
       isCurrent: true,
