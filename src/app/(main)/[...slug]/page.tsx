@@ -55,6 +55,7 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
           url: `${response.data?.APP_DOMAIN_CDN_IMAGE}/${image}`,
           alt: '',
         })),
+        type: seoOnPage.og_type as 'website',
       },
     }
   } catch (error: any) {
@@ -70,6 +71,11 @@ export default async function slugPage({ params, searchParams }: Params) {
   const { slug } = params
   const { page } = searchParams
 
+  const defaultOptions: RequestInit = {
+    headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache' },
+    cache: 'no-store',
+  }
+
   const lastSegment = slug[slug.length - 1]
   let response = null
 
@@ -77,11 +83,13 @@ export default async function slugPage({ params, searchParams }: Params) {
     response = await fetchServer({
       endpoint: endPoint.newMovies,
       params: { page, limit: 36 },
+      nextOptions: defaultOptions,
     })
   } else {
     response = await fetchServer({
       endpoint: `${getUrl(lastSegment)}/${lastSegment}`,
       params: { page, limit: 36 },
+      nextOptions: defaultOptions,
     })
     response = response?.data
   }

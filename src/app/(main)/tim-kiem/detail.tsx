@@ -3,7 +3,6 @@
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/table-pagination'
 import isNotEmpty from '@/helpers/object-empty'
-import { cn } from '@/lib/utils'
 import { MovieCategoryItem } from '@/models/interfaces/list-movie'
 
 interface DetailProps {

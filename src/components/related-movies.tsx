@@ -105,10 +105,16 @@ const RelatedMovies = (props: RelatedMoviesProps) => {
               href={handleNavigate(item)}
               className='text-sm max-sm:text-xs grid gap-1'
             >
-              <p className='hover:text-primary-color font-semibold line-clamp-2'>
+              <p
+                title={item.name}
+                className='hover:text-primary-color font-semibold line-clamp-2'
+              >
                 {item.name} ({item.year})
               </p>
-              <span className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'>
+              <span
+                title={item.origin_name}
+                className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'
+              >
                 {item.origin_name}
               </span>
             </Link>

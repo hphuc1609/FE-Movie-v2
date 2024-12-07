@@ -39,6 +39,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         description: metaDescription,
         url: metaUrl,
         images: { url: metaImage, alt: seoOnPage.name },
+        type: 'video.movie',
       },
     }
   } catch (error: any) {

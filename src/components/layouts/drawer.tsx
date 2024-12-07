@@ -8,18 +8,32 @@ import { useState } from 'react'
 interface DrawerProps {
   open: boolean
   onClose: () => void
-  data: INavbar[]
+  dataMenu: INavbar[]
 }
 
 export default function Drawer(props: DrawerProps) {
-  const { open, onClose, data } = props
+  const { open, onClose, dataMenu } = props
   const pathname = usePathname()
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(null)
 
   const activeLink = (link: string) => pathname.endsWith(link)
 
-  const checkUrl = (link: string) => {
-    return link === '/' ? link : `/danh-sach${link.startsWith('/') ? link : `/${link}`}?page=1`
+  const getUrl = (link: string) => {
+    const url = link.startsWith('/') ? link : `/${link}`
+    const menuName = dataMenu.find((item) =>
+      item.subMenu?.find((subItem) => subItem.slug === link),
+    )?.name
+
+    switch (menuName?.toLowerCase()) {
+      case 'thể loại':
+        return `/the-loai${url}`
+      case 'quốc gia':
+        return `/quoc-gia${url}`
+      case 'năm':
+        return `/nam${url}`
+      default:
+        return url
+    }
   }
 
   const handleClose = () => {
@@ -50,14 +64,14 @@ export default function Drawer(props: DrawerProps) {
         />
 
         {/* Menu chính và sub-menu */}
-        {data.map((menuItem) => (
+        {dataMenu.map((menuItem) => (
           <div
             key={menuItem.name}
             className='flex flex-col text-lg font-semibold capitalize border-b border-neutral-800'
           >
             {menuItem.href ? (
               <Link
-                href={checkUrl(menuItem.href)}
+                href={getUrl(menuItem.href)}
                 className={cn(
                   'hover:text-primary-color py-2 px-5 transition-all duration-300 rounded-md flex items-center gap-2',
                   activeLink(menuItem.href) ? 'text-primary-color' : 'text-gray-100',
@@ -102,7 +116,7 @@ export default function Drawer(props: DrawerProps) {
                       {menuItem.subMenu.map((item) => (
                         <Link
                           key={item.slug}
-                          href={checkUrl(item.slug)}
+                          href={getUrl(item.slug)}
                           className={cn(
                             'hover:text-primary-color py-2',
                             activeLink(item.slug) ? 'text-primary-color' : 'text-gray-100',

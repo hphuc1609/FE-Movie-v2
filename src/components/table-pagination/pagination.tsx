@@ -1,10 +1,11 @@
 'use client'
+
 import { Pagination, PaginationContent, PaginationEllipsis } from '@/components/ui/pagination'
 import { cn } from '@/lib/utils'
 import { MoviePagination } from '@/models/interfaces/list-movie'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
 interface PaginationProps {
@@ -15,20 +16,20 @@ interface PaginationProps {
 const PaginationCustom = (props: PaginationProps) => {
   const { pagesToShow, dataPagination } = props
 
-  const pathname = usePathname()
   const searchParams = useSearchParams()
   const currentPage = Number(searchParams.get('page')) || 1
-  const keyword = searchParams.get('keyword')
+  const keyword = searchParams.get('keyword') || ''
 
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === dataPagination.totalPages
+  const paramKeyword = keyword ? `&keyword=${keyword}` : ''
 
   return (
     <Pagination className='text-base'>
       <PaginationContent>
         <div className='flex gap-1'>
           <Link
-            href={`${pathname}?page=${currentPage - 1}`}
+            href={`?${paramKeyword}page=${currentPage - 1}`}
             prefetch={false}
             className={cn(
               'cursor-pointer h-9 min-w-10 px-2 flex items-center justify-center bg-white bg-opacity-5 hover:text-primary-color !hover:bg-transparent',
@@ -43,7 +44,7 @@ const PaginationCustom = (props: PaginationProps) => {
             <React.Fragment key={page}>
               {index === 1 && pagesToShow[1] > 2 && <PaginationEllipsis />}
               <Link
-                href={`${pathname}?${keyword ? `keyword=${keyword}&` : ''}page=${page}`}
+                href={`?${paramKeyword}page=${page}`}
                 prefetch={false}
                 className={cn(
                   'bg-white bg-opacity-5 h-9 min-w-10 flex items-center justify-center hover:text-primary-color',
@@ -59,7 +60,7 @@ const PaginationCustom = (props: PaginationProps) => {
           ))}
 
           <Link
-            href={`${pathname}?page=${currentPage + 1}`}
+            href={`?${paramKeyword}page=${currentPage + 1}`}
             prefetch={false}
             className={cn(
               'cursor-pointer h-9 min-w-10 px-2 flex items-center justify-center bg-white bg-opacity-5 hover:text-primary-color',

@@ -50,25 +50,30 @@ const CardImage = (props: CardImageProps) => {
           </Link>
           {/* Movie name */}
           <Link
-            title={item.name}
             href={handleNavigate(item)}
             className='text-sm max-[400px]:text-xs grid gap-1'
           >
-            <p className='hover:text-primary-color font-semibold line-clamp-2'>
+            <p
+              title={item.name}
+              className='hover:text-primary-color font-semibold line-clamp-2'
+            >
               {item.name} ({item.year})
             </p>
-            <span className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'>
+            <span
+              title={item.origin_name}
+              className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'
+            >
               {item.origin_name}
             </span>
           </Link>
-          {/* Categories */}
+          {/* Category tags */}
           <div className='flex items-center gap-1 max-sm:hidden'>
             {item.category?.slice(0, 2).map(
               (cate) =>
                 cate.name && (
                   <Link
                     key={cate.id}
-                    href={`/danh-sach/${cate.slug}?page=1`}
+                    href={`/the-loai/${cate.slug}`}
                     className={cn(
                       'text-[10px] font-medium rounded-xl bg-slate-100/5 hover:text-primary-color px-2 py-1 text-nowrap',
                       cate.slug?.toLowerCase() === 'dang-cap-nhat' && 'pointer-events-none',

@@ -39,7 +39,7 @@ const Detail = ({ data, slug, page }: DetailProps) => {
         {
           isCurrent: false,
           name: 'Phim mới cập nhật',
-          slug: '/danh-sach/phim-moi-cap-nhat',
+          slug: '/phim-moi-cap-nhat',
         },
         {
           isCurrent: true,

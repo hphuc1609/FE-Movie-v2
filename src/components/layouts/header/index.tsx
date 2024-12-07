@@ -266,7 +266,7 @@ const HeaderMenubar = React.memo(() => {
 
       {/* Mobile menu */}
       <Drawer
-        data={navbarItems}
+        dataMenu={navbarItems}
         open={openDrawer}
         onClose={handleCloseDrawer}
       />

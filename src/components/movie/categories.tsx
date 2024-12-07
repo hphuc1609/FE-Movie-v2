@@ -36,7 +36,7 @@ const MovieByTypes = (props: MovieByTypesProps) => {
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h3>
         <Link
-          href={`/danh-sach/${category}`}
+          href={isPhimLeOrPhimBo ? `/${category}` : `/the-loai/${category}`}
           className='group text-sm max-sm:text-[11px] text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
         >
           Xem tất cả
