@@ -81,7 +81,7 @@ const Banner = ({ data }: BannerProps) => {
       modules={[Pagination, Autoplay, EffectFade]}
       className='relative max-w-screen-2xl h-[635px] max-sm:h-[300px]'
     >
-      <div className='absolute -bottom-6 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#101010] max-sm:from-[#101010] via-[#101010] z-10' />
+      <div className='absolute -bottom-6 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a] z-10' />
 
       {moviesBanner.slice(0, 8).map((item, index) => {
         return (
@@ -95,17 +95,15 @@ const Banner = ({ data }: BannerProps) => {
               className='w-full h-full object-cover'
             />
             <div className='absolute top-0 w-full h-full bg-black/55' />
-            <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[650px] flex flex-col gap-4 lg:px-20 px-[25px]'>
+            <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[650px] flex flex-col gap-4 md:px-20 px-[25px]'>
               <div
                 className={cn('transition-all opacity-100 grid gap-y-7 max-sm:gap-y-5', {
                   'opacity-0 ': index !== activeSlide,
                 })}
               >
                 <div>
-                  <h1 className='text-[42px] font-bold line-clamp-2 max-sm:text-2xl'>
-                    {item.name}
-                  </h1>
-                  <h2 className='line-clamp-1 text-lg md:text-2xl'>{item.origin_name}</h2>
+                  <h1 className='text-[36px] font-bold line-clamp-2 max-sm:text-xl'>{item.name}</h1>
+                  <h2 className='line-clamp-1 text-lg md:text-xl'>{item.origin_name}</h2>
                 </div>
                 <div className='text-base max-sm:text-xs flex items-center lg:gap-5 gap-3 max-sm:gap-2'>
                   <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>

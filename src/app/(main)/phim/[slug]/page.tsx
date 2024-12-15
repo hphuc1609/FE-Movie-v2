@@ -55,7 +55,9 @@ export default async function InfoPage({ params }: Params) {
   const { slug } = params
   const response = await fetchServer({
     endpoint: `${endPoint.detail}/${slug}`,
-    nextOptions: { next: { revalidate: 60 } },
+    nextOptions: {
+      next: { revalidate: 60, tags: [slug] },
+    },
   })
 
   if (!isSuccessResponse(response)) notFound()

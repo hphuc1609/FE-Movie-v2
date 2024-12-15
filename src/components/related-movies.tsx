@@ -89,7 +89,7 @@ const RelatedMovies = (props: RelatedMoviesProps) => {
           >
             <Link
               href={handleNavigate(item)}
-              className='relative group bg-skeleton flex items-center justify-center overflow-hidden'
+              className='relative group bg-skeleton flex items-center justify-center overflow-hidden shadow-black/50 shadow-lg'
             >
               <ImageComponent
                 index={index}

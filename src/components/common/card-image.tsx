@@ -30,7 +30,7 @@ const CardImage = (props: CardImageProps) => {
         >
           <Link
             href={handleNavigate(item)}
-            className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden shadow-black/50 shadow-md'
+            className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden shadow-black/50 shadow-lg'
             onClick={openRandomAdLink}
           >
             <ImageComponent

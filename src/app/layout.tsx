@@ -53,12 +53,7 @@ export default function RootLayout({
       lang='vi'
       suppressHydrationWarning
     >
-      <body
-        className={cn(
-          inter.className,
-          'relative bg-gradient-to-b from-[#0d0d0d] via-[#1a1a1a] to-[#0d0d0d] text-primary-foreground',
-        )}
-      >
+      <body className={cn(inter.className, 'relative bg-[#1a1a1a] text-primary-foreground')}>
         <TanstackProvider>
           <ContextProvider>
             <Header />

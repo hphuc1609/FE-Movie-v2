@@ -26,7 +26,11 @@ export default async function Home() {
     fetchServer({ endpoint: `${endPoint.year}/${currentYear}`, nextOptions: defaultOptions }),
     fetchServer({ endpoint: endPoint.newMovies, nextOptions: defaultOptions }),
     ...config.map((item) =>
-      fetchServer({ endpoint: `${endPoint.list}/${item.category}`, nextOptions: defaultOptions }),
+      fetchServer({
+        endpoint: `${endPoint.list}/${item.category}`,
+        nextOptions: defaultOptions,
+        params: { limit: 36 },
+      }),
     ),
   ]
   const results = await Promise.allSettled(requests)

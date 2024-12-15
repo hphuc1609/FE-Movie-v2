@@ -195,13 +195,13 @@ const HeaderMenubar = React.memo(() => {
                 {menuItem.href ? (
                   <Link
                     href={getUrl(menuItem.href)}
-                    className={cn('text-base capitalize font-semibold hover:text-primary-color')}
+                    className={cn('text-base font-semibold hover:text-primary-color')}
                   >
                     {menuItem.name}
                   </Link>
                 ) : (
                   <MenubarMenu>
-                    <MenubarTrigger className='p-0 !bg-transparent text-base capitalize font-semibold data-[state=open]:text-primary-color data-[state=closed]:!text-white'>
+                    <MenubarTrigger className='p-0 !bg-transparent text-base font-semibold data-[state=open]:text-primary-color data-[state=closed]:!text-white'>
                       <div className='cursor-pointer flex items-center hover:text-primary-color'>
                         {menuItem.name}
                         <ChevronDown
@@ -223,7 +223,7 @@ const HeaderMenubar = React.memo(() => {
                             key={subItem.slug}
                             href={getUrl(subItem.slug)}
                           >
-                            <MenubarItem className='cursor-pointer capitalize block text-center hover:!bg-inherit hover:!text-yellow-400'>
+                            <MenubarItem className='cursor-pointer capitalize block hover:!bg-inherit hover:!text-yellow-400'>
                               {subItem.name}
                             </MenubarItem>
                           </Link>

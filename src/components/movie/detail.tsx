@@ -184,7 +184,7 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
           className='w-full object-cover'
         />
         <div className='absolute top-0 left-0 w-full h-full bg-black/80' />
-        <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-16 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] max-sm:from-[#1a1a1a] via-[#0d0d0d] to-transparent' />
+        <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-16 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a] to-transparent' />
       </div>
 
       <div className='relative w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>

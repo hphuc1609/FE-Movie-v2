@@ -22,7 +22,7 @@ const MovieByTypes = (props: MovieByTypesProps) => {
     const items = data.items.filter(
       (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
     )
-    return { ...data, items }
+    return { ...data, items: items.filter((movie) => movie.year === new Date().getFullYear()) }
   }, [data])
 
   return (
@@ -50,7 +50,10 @@ const MovieByTypes = (props: MovieByTypesProps) => {
         {!isNotEmpty(filteredMovies) ? (
           <SkeletonCard />
         ) : (
-          <CardImage data={filteredMovies as MovieCategoryItem} />
+          <CardImage
+            data={filteredMovies as MovieCategoryItem}
+            itemLength={12}
+          />
         )}
       </div>
     </section>
