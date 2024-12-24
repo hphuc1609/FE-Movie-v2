@@ -29,8 +29,8 @@ type FooterSectionProps = {
 
 const FooterSection = ({ title, links }: FooterSectionProps) => (
   <div>
-    <h4 className='text-lg font-semibold mb-3'>{title}</h4>
-    <ul className='space-y-3'>
+    <h4 className='text-lg font-semibold mb-3 sm:text-left'>{title}</h4>
+    <ul className='flex gap-4 items-center justify-center sm:flex-col sm:items-start sm:gap-3'>
       {links.map((link, index) => (
         <FooterLink
           key={index}
@@ -70,7 +70,7 @@ export default function Footer() {
 
           {/* Navigation Links */}
           <div className='flex flex-col md:flex-row md:space-x-10 text-center md:text-left mt-6 lg:mt-0'>
-            <div className='grid grid-cols-3 gap-x-8 gap-y-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4'>
               <FooterSection
                 title='Liên kết'
                 links={generalLinks}
