@@ -24,6 +24,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import Drawer from '../drawer'
 import Account from './account'
+import MyLogo from '@/components/common/logo'
 
 const Header = () => {
   const pathname = usePathname()
@@ -180,20 +181,14 @@ const HeaderMenubar = React.memo(() => {
   return (
     <div className='mx-auto max-w-screen-xl w-full px-[25px] lg:px-10 flex justify-between items-center gap-8'>
       <div className='flex gap-8 h-full items-center'>
-        <Link
-          href='/'
-          className='relative flex items-baseline gap-1.5 text-2xl text-nowrap'
-          style={{ fontFamily: 'Vampiro One, system-ui', fontWeight: 400 }}
-        >
-          <span className='text-primary-color'>Mephim</span>
-          <span className='text-xl'>247</span>
-        </Link>
+        <MyLogo />
         <nav className='flex items-center gap-5 h-full max-w-screen-lg max-md:hidden text-white'>
           <Menubar className='flex gap-3 bg-transparent border-none p-0'>
             {navbarItems.map((menuItem) => (
               <React.Fragment key={menuItem.name}>
                 {menuItem.href ? (
                   <Link
+                    role='link'
                     href={getUrl(menuItem.href)}
                     className={cn('text-base font-semibold hover:text-primary-color')}
                   >
@@ -220,6 +215,7 @@ const HeaderMenubar = React.memo(() => {
                       >
                         {menuItem.subMenu.map((subItem) => (
                           <Link
+                            role='link'
                             key={subItem.slug}
                             href={getUrl(subItem.slug)}
                           >

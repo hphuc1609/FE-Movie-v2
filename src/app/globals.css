@@ -68,6 +68,11 @@
   }
 }
 
+body img {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 @layer base {
   * {
     @apply border-border;
