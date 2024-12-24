@@ -2,7 +2,7 @@
 
 import { Pagination, PaginationContent, PaginationEllipsis } from '@/components/ui/pagination'
 import { cn } from '@/lib/utils'
-import { MoviePagination } from '@/models/interfaces/list-movie'
+import { MoviePagination } from '@/models/interfaces/list'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'

@@ -4,44 +4,20 @@ import Header from '@/components/layouts/header'
 import QRCodeButton from '@/components/qrcode'
 import TanstackProvider from '@/components/tanstack-provider'
 import { Toaster } from '@/components/ui/toaster'
-import { googleKey, myWebsite } from '@/constants/domain'
+import { googleKey } from '@/constants/domain'
+import { useMetadata } from '@/hooks'
 import { cn } from '@/lib/utils'
-import { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 
 const inter = Inter({ subsets: ['vietnamese'] })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(`${myWebsite}`),
-  title: {
-    default: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
-    template: '%s | Mephim247',
-  },
+export const metadata = useMetadata({
+  title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh',
   description:
-    'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
-  openGraph: {
-    title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
-    description:
-      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
-    url: `${myWebsite}`,
-    siteName: 'Mephim247',
-    images: './icon.png',
-    locale: 'vi',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh | Mephim247',
-    description:
-      'Xem phim miễn phí chất lượng cao tại Mê Phim - Mephim247 với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
-    images: './icon.png',
-  },
-  robots: { index: true, follow: true },
-  icons: { shortcut: '/favicon.ico' },
+    'Website cung cấp phim miễn phí chất lượng cao với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
   verification: { google: googleKey },
-  referrer: 'origin-when-cross-origin',
-}
+})
 
 export default function RootLayout({
   children,
@@ -61,7 +37,6 @@ export default function RootLayout({
             <Footer />
           </ContextProvider>
         </TanstackProvider>
-
         <QRCodeButton />
         <Toaster />
       </body>

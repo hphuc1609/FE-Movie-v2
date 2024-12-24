@@ -8,29 +8,41 @@ https://mephim247.vercel.app
 
 ## Technology
 
+Frontend:
+
 - Next 14
-- TailwindCSS
-- Shadcn
+- Tailwind
+- Shadcn/ui
 - Swiper
 - Axios
 - Tanstack Query
-- React Hook Form + Zod
+- React Hook Form
+- Zod
+
+Backend:
+
+- Nodejs
+- Express
+- MongoDB
+- JWT
 
 ## Features
 
-- Fully responsive
+- Responsive design
 - Login / Register
-- Movie by category
-- Comments
-- Support vietsub,...
+- Filtering
+- Comment
+- QR code
+- Support vietsub and more
 
 ## Preview
 
 ![Register](public/demo/register.png)
 ![Login](public/demo/login.png)
-![Home](public/demo/home-1.png)
-![Home](public/demo/home-2.png)
-![List](public/demo/list.png)
+![Home_1](public/demo/home-1.png)
+![Home_2](public/demo/home-2.png)
+![Qrcode](public/demo/qrcode.png)
+![List](public/demo/listing.png)
 ![Detail](public/demo/detail.png)
 ![Player](public/demo/player.png)
 

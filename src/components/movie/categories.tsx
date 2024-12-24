@@ -1,33 +1,34 @@
 'use client'
 
 import isNotEmpty from '@/helpers/object-empty'
-import { MovieCategoryItem } from '@/models/interfaces/list-movie'
+import { MovieCategoryItem } from '@/models/interfaces/list'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import CardImage from '../common/card-image'
 import SkeletonCard from '../common/skeleton-card'
 
-interface MovieByTypesProps {
+interface MovieCategoryProps {
   data: MovieCategoryItem
-  category: string
-  title?: string
+  slug: string
+  title: string
 }
 
-const MovieByTypes = (props: MovieByTypesProps) => {
-  const { category, title, data } = props
-  const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase() as string)
+const MovieCategory = (props: MovieCategoryProps) => {
+  const { title, data, slug } = props
+  const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title.toLowerCase())
 
   const filteredMovies = useMemo(() => {
     const items = data.items.filter(
       (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
     )
-    return { ...data, items: items.filter((movie) => movie.year === new Date().getFullYear()) }
+    const itemsCurrentYear = items.filter((movie) => movie.year === new Date().getFullYear())
+    return { ...data, items: itemsCurrentYear }
   }, [data])
 
   return (
     <section
-      id={category}
+      id={slug}
       className='flex-1 flex flex-col gap-8 max-lg:gap-6'
     >
       <header className='flex items-center justify-between'>
@@ -36,7 +37,7 @@ const MovieByTypes = (props: MovieByTypesProps) => {
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
         </h3>
         <Link
-          href={isPhimLeOrPhimBo ? `/${category}` : `/the-loai/${category}`}
+          href={isPhimLeOrPhimBo ? `/${slug}` : `/the-loai/${slug}`}
           className='group text-sm max-sm:text-[11px] text-white text-opacity-80 hover:text-primary-color text-nowrap flex items-center space-x-1'
         >
           Xem tất cả
@@ -60,4 +61,4 @@ const MovieByTypes = (props: MovieByTypesProps) => {
   )
 }
 
-export default MovieByTypes
+export default MovieCategory

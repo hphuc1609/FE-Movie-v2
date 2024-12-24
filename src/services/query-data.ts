@@ -1,13 +1,15 @@
-'use client'
-
 import isSuccessResponse from '@/helpers/check-response'
 import { showToast } from '@/helpers/toast'
-import useFetchData from '@/hooks/useFetch'
-import { ICategory } from '@/models/interfaces/category'
+import useQueryData from '@/hooks/useQueryData'
 import { ICommentItem } from '@/models/interfaces/comment'
-import { DetailResponse } from '@/models/interfaces/detail'
+import { MovieDetailResponse } from '@/models/interfaces/detail'
 import { IFavourite } from '@/models/interfaces/favourite'
-import { MovieCategoryItem, MovieCategoryResponse } from '@/models/interfaces/list-movie'
+import {
+  MovieCategory,
+  MovieCategoryItem,
+  MovieCategoryResponse,
+  MovieCountry,
+} from '@/models/interfaces/list'
 import { NewMovieResponse } from '@/models/interfaces/new-movie'
 import { QueryKey, QueryObserverResult, UseQueryOptions } from '@tanstack/react-query'
 import commentApi from './api-client/comments'
@@ -49,7 +51,7 @@ export const useBanners = ({
   category: string
   options?: QueryOptions<any>
 }): QueryObserverResult<MovieCategoryItem> =>
-  useFetchData({
+  useQueryData({
     queryKey: ['banners', { category }],
     queryFn: () => fetchData(movieApi.getListByCate({ category, limit: itemsToShow })),
     ...options,
@@ -62,7 +64,7 @@ export const useNewMovies = ({
   page?: string | number
   options?: QueryOptions<any>
 }): QueryObserverResult<NewMovieResponse> =>
-  useFetchData({
+  useQueryData({
     queryKey: ['newMovies'],
     queryFn: () => fetchData(movieApi.getNewMovies({ page })),
     ...options,
@@ -77,7 +79,7 @@ export const useMovieType = ({
   page?: string | number
   options?: QueryOptions<any>
 }): QueryObserverResult<MovieCategoryItem> => {
-  return useFetchData({
+  return useQueryData({
     queryKey: ['movies', { category }],
     queryFn: () =>
       fetchData(
@@ -101,7 +103,7 @@ export const useSearch = ({
   page?: string | number
   options?: QueryOptions<any>
 }): QueryObserverResult<MovieCategoryResponse['data']> =>
-  useFetchData({
+  useQueryData({
     queryKey: ['search', { keyword }],
     queryFn: () => fetchData(movieApi.getMoviesSearch({ keyword, page, limit: itemsToShow })),
     enabled: !!keyword,
@@ -114,8 +116,8 @@ export const useDetail = ({
 }: {
   slug: string
   options?: QueryOptions<any>
-}): QueryObserverResult<DetailResponse> =>
-  useFetchData({
+}): QueryObserverResult<MovieDetailResponse> =>
+  useQueryData({
     queryKey: ['detail', { slug }],
     queryFn: () => fetchData(movieApi.getDetail(slug)),
     enabled: !!slug,
@@ -128,8 +130,8 @@ export const useDetail = ({
 // }: {
 //   slug: string
 //   options?: QueryOptions<any>
-// }): QueryObserverResult<DetailResponse['episodes']> =>
-//   useFetchData({
+// }): QueryObserverResult<MovieDetailResponse['episodes']> =>
+//   useQueryData({
 //     queryKey: ['video'],
 //     queryFn: () => fetchData(movieApi.getMovieInfo(slug)),
 //     enabled: !!slug,
@@ -141,7 +143,7 @@ export const useComments = ({
 }: {
   options?: QueryOptions<any>
 }): QueryObserverResult<ICommentItem[]> =>
-  useFetchData({
+  useQueryData({
     queryKey: ['comments'],
     queryFn: () => fetchData(commentApi.getAll()),
     ...options,
@@ -151,8 +153,8 @@ export const useCategories = ({
   options,
 }: {
   options?: QueryOptions<any>
-}): QueryObserverResult<ICategory[]> =>
-  useFetchData({
+}): QueryObserverResult<MovieCountry[]> =>
+  useQueryData({
     queryKey: ['categories'],
     queryFn: () => fetchData(movieApi.getCategories()),
     ...options,
@@ -162,8 +164,8 @@ export const useCountries = ({
   options,
 }: {
   options?: QueryOptions<any>
-}): QueryObserverResult<ICategory[]> =>
-  useFetchData({
+}): QueryObserverResult<MovieCategory[]> =>
+  useQueryData({
     queryKey: ['countries'],
     queryFn: () => fetchData(movieApi.getCountries()),
     ...options,
@@ -174,7 +176,7 @@ export const useFavourites = ({
 }: {
   options?: QueryOptions<any>
 }): QueryObserverResult<IFavourite['data']> =>
-  useFetchData({
+  useQueryData({
     queryKey: ['favourites'],
     queryFn: () => fetchData(favouriteApi.getAll()),
     ...options,

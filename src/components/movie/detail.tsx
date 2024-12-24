@@ -3,7 +3,7 @@
 import { cleanString, convertToPathname } from '@/helpers/cleanString'
 import { showToast } from '@/helpers/toast'
 import { cn } from '@/lib/utils'
-import { DetailResponse } from '@/models/interfaces/detail'
+import { MovieDetail } from '@/models/interfaces/detail'
 import { IFavouriteItem } from '@/models/interfaces/favourite'
 import favouriteApi from '@/services/api-client/favourite'
 import { useFavourites } from '@/services/query-data'
@@ -16,11 +16,11 @@ import { useEffect, useMemo, useState } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
-import { Button } from '../ui/button'
 import { useContextGlobal } from '../context-provider'
+import { Button } from '../ui/button'
 
 interface MovieInfoProps {
-  detail: DetailResponse['movie']
+  detail: MovieDetail
 }
 
 const MovieInfo = ({ detail }: MovieInfoProps) => {

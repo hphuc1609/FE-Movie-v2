@@ -14,7 +14,7 @@ export interface Country {
   slug: string
 }
 
-export interface Movie {
+export interface MovieDetail {
   created: Timestamps
   modified: Timestamps
   _id: string
@@ -76,9 +76,9 @@ export interface Episode {
   items: ItemData[]
 }
 
-export interface DetailResponse {
+export interface MovieDetailResponse {
   status: boolean
   msg: string
-  movie: Movie
+  movie: MovieDetail
   episodes: Episode[]
 }

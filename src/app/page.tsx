@@ -1,58 +1,41 @@
 import Banner from '@/components/banner'
-import MovieByTypes from '@/components/movie/categories'
+import MovieCategory from '@/components/movie/categories'
 import NewUpdateMovie from '@/components/movie/new'
 import { endPoint } from '@/constants/end-point'
-import { fetchServer } from '@/helpers/fetch-server'
+import { useFetch } from '@/hooks'
 
-export const dynamic = 'force-dynamic'
 export default async function Home() {
-  const config = [
-    { category: 'phim-le', title: 'Phim lẻ' },
-    { category: 'phim-bo', title: 'Phim bộ' },
-    { category: 'hoat-hinh', title: 'Phim hoạt hình' },
-    { category: 'tv-shows', title: 'TV Shows' },
-  ]
   const currentYear = new Date().getFullYear()
+  const LIMIT = 36
 
-  const defaultOptions: RequestInit = {
-    headers: {
-      'Cache-Control': 'no-store',
-      Pragma: 'no-cache',
-    },
-    cache: 'no-store',
-  }
-
-  const requests = [
-    fetchServer({ endpoint: `${endPoint.year}/${currentYear}`, nextOptions: defaultOptions }),
-    fetchServer({ endpoint: endPoint.newMovies, nextOptions: defaultOptions }),
-    ...config.map((item) =>
-      fetchServer({
-        endpoint: `${endPoint.list}/${item.category}`,
-        nextOptions: defaultOptions,
-        params: { limit: 36 },
-      }),
-    ),
+  const categories = [
+    { slug: 'phim-le', title: 'Phim lẻ' },
+    { slug: 'phim-bo', title: 'Phim bộ' },
+    { slug: 'hoat-hinh', title: 'Phim hoạt hình' },
+    { slug: 'tv-shows', title: 'TV Shows' },
   ]
-  const results = await Promise.allSettled(requests)
 
-  // Lọc và xử lý kết quả
-  const [bannerResult, newMovieResult, ...movieResults] = results
-  const dataBanner = bannerResult.status === 'fulfilled' ? bannerResult.value?.data : []
-  const dataNewMovie = newMovieResult.status === 'fulfilled' ? newMovieResult.value : []
-  const dataMovieByType = movieResults.map((result) =>
-    result.status === 'fulfilled' ? result.value?.data : [],
-  )
+  const movies = await Promise.all([
+    useFetch({ endpoint: `${endPoint.year}/${currentYear}` }),
+    useFetch({ endpoint: endPoint.newMovies }),
+    useFetch({ endpoint: `${endPoint.list}/phim-le?limit=${LIMIT}` }),
+    useFetch({ endpoint: `${endPoint.list}/phim-bo?limit=${LIMIT}` }),
+    useFetch({ endpoint: `${endPoint.list}/hoat-hinh?limit=${LIMIT}` }),
+    useFetch({ endpoint: `${endPoint.list}/tv-shows?limit=${LIMIT}` }),
+  ])
+
+  const [dataBanner, dataNewMovie, ...dataMovieByType] = movies
 
   return (
     <>
       <Banner data={dataBanner} />
       <div className='max-w-screen-xl m-auto px-10 pt-6 pb-10 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-14'>
-          {config.map((item, index) => (
-            <MovieByTypes
-              key={item.category}
+          {categories.map((item, index) => (
+            <MovieCategory
+              key={item.slug}
               data={dataMovieByType[index]}
-              category={item.category}
+              slug={item.slug}
               title={item.title}
             />
           ))}

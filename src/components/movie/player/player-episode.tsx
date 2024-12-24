@@ -1,14 +1,14 @@
 import { Button } from '@/components/ui/button'
 import { convertToPathname } from '@/helpers/cleanString'
 import { cn } from '@/lib/utils'
-import { DetailResponse } from '@/models/interfaces/detail'
+import { MovieDetail, MovieDetailResponse } from '@/models/interfaces/detail'
 import { Database } from 'lucide-react'
 import { useSearchParams } from 'next/navigation'
 import React from 'react'
 
 interface PlayerEpisodeProps {
-  dataEpisode: DetailResponse['episodes']
-  detail: DetailResponse['movie']
+  dataEpisode: MovieDetail['episodes']
+  detail: MovieDetail
   normalizeEpisodeSlug: (slug: string) => string
   handleEpisodeClick: (episode: string, lang: string) => void
 }
@@ -20,7 +20,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
   const episodeParam = searchParams.get('episode') as string
   const langParam = searchParams.get('lang') as string
 
-  const getServerName = (data: DetailResponse['episodes'][0]): string =>
+  const getServerName = (data: MovieDetail['episodes'][0]): string =>
     data.server_name.match(/\((.*?)\)/)?.[1] || ''
 
   return (

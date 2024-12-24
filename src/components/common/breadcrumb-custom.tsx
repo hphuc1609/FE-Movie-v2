@@ -5,7 +5,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb'
-import { BreadCrumb } from '@/models/interfaces/list-movie'
+import { BreadCrumb } from '@/models/interfaces/list'
 import Link from 'next/link'
 import React from 'react'
 

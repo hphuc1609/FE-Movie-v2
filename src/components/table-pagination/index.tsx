@@ -1,6 +1,6 @@
 'use client'
 
-import { MovieCategoryItem } from '@/models/interfaces/list-movie'
+import { MovieCategoryItem } from '@/models/interfaces/list'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import CardImage from '../common/card-image'

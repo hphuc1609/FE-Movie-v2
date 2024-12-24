@@ -37,6 +37,7 @@ export interface MovieItem {
   name: string
   slug: string
   origin_name: string
+  content: string
   type: string
   poster_url: string
   thumb_url: string

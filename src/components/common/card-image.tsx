@@ -3,7 +3,7 @@
 import openRandomAdLink from '@/helpers/handle-ads'
 import useLazyLoadImg from '@/hooks/useLazyImage'
 import { cn } from '@/lib/utils'
-import { MovieCategoryResponse, MovieItem } from '@/models/interfaces/list-movie'
+import { MovieCategoryResponse, MovieItem } from '@/models/interfaces/list'
 import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
@@ -42,7 +42,7 @@ const CardImage = (props: CardImageProps) => {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-all duration-300'
             />
-            {item.episode_current && (
+            {!!item.episode_current && (
               <p className='absolute top-1 left-1 right-1 w-fit text-xs max-sm:text-[8px] font-medium bg-gradient-to-r from-orange-600 to-yellow-500 px-2 py-[3px] max-sm:px-1 max-sm:py-[2px] rounded-[2px] line-clamp-1'>
                 {item.episode_current.includes('Full') ? item.lang : item.episode_current}
               </p>

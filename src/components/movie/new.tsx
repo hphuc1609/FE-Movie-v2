@@ -10,7 +10,7 @@ import isNotEmpty from '@/helpers/object-empty'
 import { cn } from '@/lib/utils'
 
 interface NewUpdateMoviesProps {
-  data: NewMovieResponse
+  data: NewMovieItem[]
 }
 
 const NewUpdateMovies = ({ data }: NewUpdateMoviesProps) => {
@@ -40,7 +40,7 @@ const NewUpdateMovies = ({ data }: NewUpdateMoviesProps) => {
       >
         {!isNotEmpty(data)
           ? Array.from({ length: 8 }).map((_, index) => <SkeletonList key={index} />)
-          : data.items.map((item, index) => (
+          : data.map((item, index) => (
               <Link
                 key={item._id}
                 href={`/phim/${item.slug}`}

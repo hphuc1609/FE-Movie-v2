@@ -1,8 +1,9 @@
 import { endPoint } from '@/constants/end-point'
-import { fetchServer } from '@/helpers/fetch-server'
-import movieApi from '@/services/api-client/movies'
+import { useFetch, useMetadata } from '@/hooks'
+import { MovieCategoryItem } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import Detail from './detail'
+import isSuccessResponse from '@/helpers/check-response'
 
 interface Params {
   searchParams: { keyword: string; page: string }
@@ -10,18 +11,34 @@ interface Params {
 
 export async function generateMetadata({ searchParams }: Params): Promise<Metadata> {
   const { keyword, page } = searchParams
-  try {
-    const response = await movieApi.getMoviesSearch({ keyword, page })
-    const seoOnPage = response.data.seoOnPage
 
-    return {
-      title: `${seoOnPage.titleHead}`,
-      description: `${seoOnPage.descriptionHead}`,
+  const queryParams = new URLSearchParams({
+    ...(keyword && { keyword }),
+    ...(page && { page: page.toString() }),
+  })
+
+  try {
+    const data = await useFetch({
+      endpoint: `${endPoint.search}?${queryParams}`,
+    })
+
+    if (!isSuccessResponse(data)) {
+      return useMetadata({
+        title: 'Not Found',
+        description: 'The page you are looking for does not exist',
+      })
     }
+
+    const { titleHead, descriptionHead } = data.seoOnPage as MovieCategoryItem['seoOnPage']
+
+    return useMetadata({
+      title: titleHead,
+      description: descriptionHead,
+      urlPath: `/tim-kiem?${queryParams}`,
+    })
   } catch (error: any) {
-    console.error(error.message)
     return {
-      title: 'Page Not Found',
+      title: 'Not Found',
       description: 'The page you are looking for does not exist',
     }
   }
@@ -30,14 +47,16 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
 export default async function ListSearchPage({ searchParams }: Params) {
   const { keyword, page } = searchParams
 
-  const response = await fetchServer({
-    endpoint: endPoint.search,
-    params: { keyword, page },
+  const queryParams = new URLSearchParams({
+    ...(keyword && { keyword }),
+    ...(page && { page: page.toString() }),
   })
+
+  const data = await useFetch({ endpoint: `${endPoint.search}?${queryParams}` })
 
   return (
     <Detail
-      data={response.data}
+      data={data}
       keyword={keyword}
     />
   )

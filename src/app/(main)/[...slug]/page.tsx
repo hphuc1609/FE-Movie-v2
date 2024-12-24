@@ -1,12 +1,11 @@
-import { myWebsite } from '@/constants/domain'
 import { endPoint } from '@/constants/end-point'
-import { fetchServer } from '@/helpers/fetch-server'
-import { MovieCategoryItem, MovieCategoryResponse } from '@/models/interfaces/list-movie'
+import { dataNamPhatHanh, dataQuocGia, dataTheLoai } from '@/data/category'
+import isSuccessResponse from '@/helpers/check-response'
+import { useFetch, useMetadata } from '@/hooks'
+import { MovieCategoryItem } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Detail from './detail'
-import isSuccessResponse from '@/helpers/check-response'
-import { dataNamPhatHanh, dataQuocGia, dataTheLoai } from '@/data/category'
 
 interface Params {
   params: { slug: string[] }
@@ -32,66 +31,69 @@ const getUrl = (slug: string) => {
 export async function generateMetadata({ params, searchParams }: Params): Promise<Metadata> {
   const { slug } = params
   const { page } = searchParams
-
   const lastSegment = slug[slug.length - 1]
 
+  const queryParams = new URLSearchParams({
+    ...(page && { page: page.toString() }),
+  })
+
   try {
-    if (slug.includes('phim-moi-cap-nhat')) return {}
+    if (slug.includes('phim-moi-cap-nhat'))
+      return useMetadata({
+        title: 'Phim mới cập nhật | Mephim247',
+        description: 'Phim mới cập nhật Mephim247.',
+        urlPath: '/phim-moi-cap-nhat',
+      })
 
-    const response: MovieCategoryResponse = await fetchServer({
-      endpoint: `${getUrl(lastSegment)}/${lastSegment}`,
-      params: { page },
+    const data = await useFetch({
+      endpoint: `${getUrl(lastSegment)}/${lastSegment}?${queryParams}`,
     })
-    const seoOnPage = response.data.seoOnPage
 
-    return {
-      title: seoOnPage.titleHead,
-      description: seoOnPage.descriptionHead,
-      openGraph: {
-        title: seoOnPage.titleHead,
-        description: seoOnPage.descriptionHead,
-        url: `${myWebsite}/${slug.join('/')}`,
-        images: seoOnPage.og_image.map((image) => ({
-          url: `${response.data?.APP_DOMAIN_CDN_IMAGE}/${image}`,
-          alt: '',
-        })),
-        type: seoOnPage.og_type as 'website',
-      },
-    }
+    if (!isSuccessResponse(data))
+      return useMetadata({
+        title: 'Not Found',
+        description: 'The page is not found.',
+        urlPath: `/${slug.join('/')}`,
+      })
+
+    const { titleHead, descriptionHead, og_image } =
+      data.seoOnPage as MovieCategoryItem['seoOnPage']
+
+    return useMetadata({
+      title: titleHead,
+      description: descriptionHead,
+      urlPath: `/${slug.join('/')}`,
+      images: og_image.map((image) => `${data?.APP_DOMAIN_CDN_IMAGE}/${image}`),
+    })
   } catch (error: any) {
-    console.error(error.message)
     return {
-      title: 'Page Not Found',
-      description: 'The page you are looking for does not exist',
+      title: 'Not Found',
+      description: 'The page is not found.',
     }
   }
 }
 
-export default async function slugPage({ params, searchParams }: Params) {
+export default async function ListingPage({ params, searchParams }: Params) {
   const { slug } = params
   const { page } = searchParams
 
-  const defaultOptions: RequestInit = {
-    headers: { 'Cache-Control': 'no-store', Pragma: 'no-cache' },
-    cache: 'no-store',
-  }
-
   const lastSegment = slug[slug.length - 1]
+  const LIMIT = 36
   let response = null
 
+  const queryParams = new URLSearchParams({
+    ...(page && { page: page.toString() }),
+    ...(LIMIT && { limit: LIMIT.toString() }),
+  })
+
   if (slug.includes('phim-moi-cap-nhat')) {
-    response = await fetchServer({
-      endpoint: endPoint.newMovies,
-      params: { page, limit: 36 },
-      nextOptions: defaultOptions,
+    response = await useFetch({
+      endpoint: `${endPoint.newMovies}?${queryParams}`,
     })
   } else {
-    response = await fetchServer({
-      endpoint: `${getUrl(lastSegment)}/${lastSegment}`,
-      params: { page, limit: 36 },
-      nextOptions: defaultOptions,
+    response = await useFetch({
+      endpoint: `${getUrl(lastSegment)}/${lastSegment}?${queryParams}`,
     })
-    response = response?.data
   }
 
   if (!isSuccessResponse(response)) notFound()

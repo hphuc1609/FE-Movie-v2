@@ -1,18 +1,12 @@
 import { Metadata } from 'next'
 import Detail from './detail'
+import { useMetadata } from '@/hooks'
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    return {
-      title: `Phim Yêu Thích`,
-    }
-  } catch (error: any) {
-    console.error(error.message)
-    return {
-      title: 'Page Not Found',
-      description: 'The page you are looking for does not exist',
-    }
-  }
+  return useMetadata({
+    title: 'Phim Yêu Thích',
+    description: 'Phim yêu thích của tôi.',
+  })
 }
 
 export default async function ListFavouritePage() {

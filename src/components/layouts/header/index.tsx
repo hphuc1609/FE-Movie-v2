@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/menubar'
 import { Separator } from '@/components/ui/separator'
 import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
-import useScrollPosition from '@/hooks/useScroll'
+import useScroll from '@/hooks/useScroll'
 import { cn } from '@/lib/utils'
 import { INavbar } from '@/models/interfaces/navbar'
 import { useCountries } from '@/services/query-data'
@@ -27,7 +27,7 @@ import Account from './account'
 
 const Header = () => {
   const pathname = usePathname()
-  const scrollPosition = useScrollPosition()
+  const scrollPosition = useScroll()
 
   const isHomePathname = pathname === '/'
   const isAuthPath = pathname === '/login' || pathname === '/register'

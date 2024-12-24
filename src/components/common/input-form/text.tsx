@@ -57,6 +57,7 @@ const InputCustom = (props: InputCustomProps) => {
                 size='sm'
                 className='absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent hover:text-neutral-500 focus:ring-offset-transparent focus:!ring-offset-0 focus:!ring-0'
                 onClick={handleTogglePassword}
+                tabIndex={-1}
               >
                 {showPassword ? (
                   <EyeIcon

@@ -26,7 +26,7 @@ const QRCodeButton = () => {
 
       {showQRCode && (
         <div
-          className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-60 flex justify-center items-center flex-col transition-all duration-300 z-50'
+          className='fixed top-0 left-0 w-full h-full bg-black/80 flex justify-center items-center flex-col transition-all duration-300 z-50'
           onClick={handleToggleQRCode}
         >
           <X

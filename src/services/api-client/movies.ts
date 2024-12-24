@@ -1,9 +1,8 @@
 import { endPoint } from '@/constants/end-point'
 import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
 import axiosClient from '@/lib/axios-client'
-import { ICategory } from '@/models/interfaces/category'
-import { DetailResponse } from '@/models/interfaces/detail'
-import { MovieCategoryResponse } from '@/models/interfaces/list-movie'
+import { MovieDetailResponse } from '@/models/interfaces/detail'
+import { MovieCategory, MovieCategoryResponse, MovieCountry } from '@/models/interfaces/list'
 import { NewMovieResponse } from '@/models/interfaces/new-movie'
 import axios from 'axios'
 
@@ -62,11 +61,11 @@ const movieApi = {
     return axiosClient.get<MovieCategoryResponse>(url)
   },
 
-  getDetail: (name: string): Promise<DetailResponse> => {
+  getDetail: (name: string): Promise<MovieDetailResponse> => {
     if (!name) throw new Error('Movie name is required!')
 
     const url = `${endPoint.detail}/${name}`
-    return axiosClient.get<DetailResponse>(url)
+    return axiosClient.get<MovieDetailResponse>(url)
   },
 
   getMoviesSearch: ({
@@ -87,21 +86,21 @@ const movieApi = {
   },
 
   // Thể loại
-  getCategories: (): Promise<ICategory[]> => {
-    return axiosClient.get<ICategory[]>('/the-loai')
+  getCategories: (): Promise<MovieCategory[]> => {
+    return axiosClient.get<MovieCategory[]>('/the-loai')
   },
 
   // Quốc gia
-  getCountries: (): Promise<ICategory[]> => {
-    return axiosClient.get<ICategory[]>('/quoc-gia')
+  getCountries: (): Promise<MovieCountry[]> => {
+    return axiosClient.get<MovieCountry[]>('/quoc-gia')
   },
 
   // ==================== API Nguonc ===============================
-  getMovieInfo: async (slug: string): Promise<DetailResponse> => {
+  getMovieInfo: async (slug: string): Promise<MovieDetailResponse> => {
     if (!slug) throw new Error('Movie slug is required!')
 
     const url = `${nguoncDomain}/api/film/${slug}`
-    const { data } = await axios.get<DetailResponse>(url)
+    const { data } = await axios.get<MovieDetailResponse>(url)
     return data
   },
 }

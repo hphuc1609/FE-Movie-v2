@@ -8,7 +8,7 @@ import { convertToPathname } from '@/helpers/cleanString'
 import openRandomAdLink from '@/helpers/handle-ads'
 import scrollToSection from '@/helpers/scroll-to-section'
 import { cn } from '@/lib/utils'
-import { DetailResponse } from '@/models/interfaces/detail'
+import { MovieDetail } from '@/models/interfaces/detail'
 import { Lightbulb, LightbulbOff } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
@@ -16,8 +16,8 @@ import ReactHlsPlayer from 'react-hls-player'
 import PlayerEpisode from './player-episode'
 
 interface MoviePlayerProps {
-  dataEpisode: DetailResponse['episodes']
-  detail: DetailResponse['movie']
+  dataEpisode: MovieDetail['episodes']
+  detail: MovieDetail
 }
 
 const MoviePlayer = (props: MoviePlayerProps) => {

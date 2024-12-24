@@ -7,13 +7,13 @@ import MovieInfo from '@/components/movie/detail'
 import MoviePlayer from '@/components/movie/player'
 import RelatedMovies from '@/components/related-movies'
 import { Skeleton } from '@/components/ui/skeleton'
-import { DetailResponse } from '@/models/interfaces/detail'
-import { MovieCategoryItem } from '@/models/interfaces/list-movie'
+import { MovieDetailResponse } from '@/models/interfaces/detail'
+import { MovieCategoryItem } from '@/models/interfaces/list'
 import { useMovieType } from '@/services/query-data'
 import { useMemo } from 'react'
 
 interface DetailProps {
-  detail: DetailResponse
+  detail: MovieDetailResponse
 }
 
 const Detail = ({ detail }: DetailProps) => {

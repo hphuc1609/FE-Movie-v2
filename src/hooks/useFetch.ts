@@ -1,19 +1,26 @@
-import { QueryKey, useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { movieDomain } from '@/constants/domain'
 
-interface FetchDataOptions<T>
-  extends Omit<UseQueryOptions<T, Error, T, QueryKey>, 'queryKey' | 'queryFn'> {
-  queryKey: QueryKey
-  queryFn: () => Promise<T>
+type FetchParams = {
+  endpoint: string
+  options?: RequestInit
 }
 
-const useFetchData = <T>({ queryKey, queryFn, ...options }: FetchDataOptions<T>) => {
-  return useQuery({
-    queryKey,
-    queryFn,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    ...options,
-  })
+const useFetch = async ({ endpoint, options }: FetchParams) => {
+  try {
+    const res = await fetch(movieDomain + endpoint, {
+      next: { revalidate: 0 },
+      ...options,
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to fetch data')
+    }
+
+    const { data, items, ...rest } = await res.json()
+    return data || items || rest
+  } catch (error) {
+    return null
+  }
 }
 
-export default useFetchData
+export default useFetch

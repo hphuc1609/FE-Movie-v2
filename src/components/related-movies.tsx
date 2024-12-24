@@ -1,5 +1,5 @@
 import PlayButton from '@/components/common/play-button'
-import { MovieCategoryItem, MovieItem } from '@/models/interfaces/list-movie'
+import { MovieCategoryItem, MovieItem } from '@/models/interfaces/list'
 import { StepBack, StepForward } from 'lucide-react'
 import Link from 'next/link'
 import { useRef } from 'react'

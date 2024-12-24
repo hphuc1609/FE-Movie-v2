@@ -1,11 +1,10 @@
-import { myWebsite } from '@/constants/domain'
-import isSuccessResponse from '@/helpers/check-response'
-import movieApi from '@/services/api-client/movies'
-import { Metadata } from 'next'
-import Detail from './detail'
-import { fetchServer } from '@/helpers/fetch-server'
 import { endPoint } from '@/constants/end-point'
+import isSuccessResponse from '@/helpers/check-response'
+import { useFetch, useMetadata } from '@/hooks'
+import { MovieDetail } from '@/models/interfaces/detail'
+import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import Detail from './detail'
 
 interface Params {
   params: { slug: string }
@@ -13,54 +12,36 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   try {
-    const { slug } = params
-    const res = await movieApi.getDetail(slug)
+    const data = await useFetch({ endpoint: `${endPoint.detail}/${params.slug}` })
 
-    if (!isSuccessResponse(res)) {
-      return {
-        title: 'Page Not Found',
-        description: 'The page you are looking for does not exist',
-      }
-    }
+    if (!isSuccessResponse(data))
+      return useMetadata({
+        title: 'Not Found',
+        description: 'The page is not found.',
+        urlPath: `/phim/${params.slug}`,
+      })
 
-    const seoOnPage = res.movie
+    const { name, origin_name, content, year, slug, poster_url } = data.movie as MovieDetail
 
-    // Meta data
-    const metaTitle = `Phim ${seoOnPage.name} | ${seoOnPage.origin_name} (${seoOnPage.year})`
-    const metaDescription = `Xem phim ${seoOnPage.name} - ${seoOnPage.origin_name} (${seoOnPage.year}). ${seoOnPage.content}`
-    const metaUrl = `${myWebsite}/phim/${seoOnPage.slug}`
-    const metaImage = seoOnPage.poster_url || seoOnPage.thumb_url
-
-    return {
-      title: metaTitle,
-      description: metaDescription,
-      openGraph: {
-        title: metaTitle,
-        description: metaDescription,
-        url: metaUrl,
-        images: { url: metaImage, alt: seoOnPage.name },
-        type: 'video.movie',
-      },
-    }
+    return useMetadata({
+      title: `Phim ${name} | ${origin_name} (${year})`,
+      description: `Xem phim ${name} - ${origin_name} (${year}). ${content}`,
+      urlPath: `/phim/${slug}`,
+      images: poster_url,
+    })
   } catch (error: any) {
-    console.error(error.message)
     return {
-      title: 'Page Not Found',
-      description: 'The page you are looking for does not exist',
+      title: 'Not Found',
+      description: 'The page is not found.',
     }
   }
 }
 
 export default async function InfoPage({ params }: Params) {
   const { slug } = params
-  const response = await fetchServer({
-    endpoint: `${endPoint.detail}/${slug}`,
-    nextOptions: {
-      next: { revalidate: 60, tags: [slug] },
-    },
-  })
+  const data = await useFetch({ endpoint: `${endPoint.detail}/${slug}` })
 
-  if (!isSuccessResponse(response)) notFound()
+  if (!isSuccessResponse(data)) notFound()
 
-  return <Detail detail={response} />
+  return <Detail detail={data} />
 }
