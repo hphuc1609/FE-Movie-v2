@@ -8,7 +8,7 @@ type FetchParams = {
 const useFetch = async ({ endpoint, options }: FetchParams) => {
   try {
     const res = await fetch(movieDomain + endpoint, {
-      next: { revalidate: 0 },
+      next: { revalidate: 3 },
       ...options,
     })
 

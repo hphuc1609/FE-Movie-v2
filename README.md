@@ -28,7 +28,7 @@ Backend:
 
 ## Features
 
-- Responsive design
+- Fully Responsive Design
 - Login / Register
 - Filtering
 - Comment

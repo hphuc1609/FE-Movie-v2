@@ -12,7 +12,10 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   try {
-    const data = await useFetch({ endpoint: `${endPoint.detail}/${params.slug}` })
+    const data = await useFetch({
+      endpoint: `${endPoint.detail}/${params.slug}`,
+      options: { next: { revalidate: 60 } },
+    })
 
     if (!isSuccessResponse(data))
       return useMetadata({

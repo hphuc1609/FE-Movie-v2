@@ -30,6 +30,7 @@ export default async function sitemap({ id }: Sitemap): Promise<MetadataRoute.Si
 
     const movies: MovieCategoryItem = await useFetch({
       endpoint: endpoint,
+      options: { next: { revalidate: 60 } },
     })
 
     if (!movies.items.length) {

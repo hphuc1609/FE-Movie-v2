@@ -16,6 +16,7 @@ export const useMetadata = (params: Params) => {
     title: `${title} | Mephim247`,
     description,
     alternates: { canonical: myWebsite + urlPath },
+    keywords: ['phim', 'xem phim', 'mephim247', 'mephim', 'xem phim online'],
     openGraph: {
       title: `${title} | Mephim247`,
       description,
@@ -34,6 +35,7 @@ export const useMetadata = (params: Params) => {
     referrer: 'origin',
     robots: { follow: true, index: true },
     metadataBase: new URL(myWebsite),
+    authors: [{ name: 'PhucLuu', url: 'https://github.com/hphuc1609' }],
     ...rest,
   } as Metadata
 }

@@ -13,9 +13,9 @@ import './globals.css'
 const inter = Inter({ subsets: ['vietnamese'] })
 
 export const metadata = useMetadata({
-  title: 'Phim Mới | Phim Bộ | Xem Phim HD | Phim VietSub & Thuyết Minh',
+  title: 'Phim Hay | Phim mới | Phim HD Vietsub',
   description:
-    'Website cung cấp phim miễn phí chất lượng cao với phụ đề vietsub - thuyết minh - lồng tiếng. Mephim 247 mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
+    'Mephim247 cung cấp phim miễn phí chất lượng cao với phụ đề vietsub - thuyết minh - lồng tiếng, mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
   verification: { google: googleKey },
 })
 

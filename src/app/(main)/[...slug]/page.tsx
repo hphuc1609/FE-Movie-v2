@@ -47,6 +47,7 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
 
     const data = await useFetch({
       endpoint: `${getUrl(lastSegment)}/${lastSegment}?${queryParams}`,
+      options: { next: { revalidate: 60 } },
     })
 
     if (!isSuccessResponse(data))
