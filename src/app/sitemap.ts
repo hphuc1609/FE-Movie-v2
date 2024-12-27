@@ -1,11 +1,11 @@
 import { movieDomain, myWebsite } from '@/constants/domain'
 import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
-import { MovieCountry } from '@/models/interfaces/list'
+import { CountryItem } from '@/models/interfaces/list'
 import { MetadataRoute } from 'next'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
-    const dataQuocGia: MovieCountry[] = await fetch(movieDomain + '/quoc-gia').then((res) =>
+    const dataQuocGia: CountryItem[] = await fetch(movieDomain + '/quoc-gia').then((res) =>
       res.json(),
     )
 

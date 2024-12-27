@@ -1,7 +1,7 @@
 'use client'
 
 import isNotEmpty from '@/helpers/object-empty'
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import type { MovieCategory } from '@/models/interfaces/list'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo } from 'react'
@@ -9,7 +9,7 @@ import CardImage from '../common/card-image'
 import SkeletonCard from '../common/skeleton-card'
 
 interface MovieCategoryProps {
-  data: MovieCategoryItem
+  data: MovieCategory
   slug: string
   title: string
 }
@@ -47,12 +47,12 @@ const MovieCategory = (props: MovieCategoryProps) => {
           />
         </Link>
       </header>
-      <div className='grid grid-cols-4 max-sm:grid-cols-3 gap-x-6 gap-y-7 max-sm:gap-x-3 '>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-7 max-sm:gap-x-4'>
         {!isNotEmpty(filteredMovies) ? (
           <SkeletonCard />
         ) : (
           <CardImage
-            data={filteredMovies as MovieCategoryItem}
+            data={filteredMovies as MovieCategory}
             itemLength={12}
           />
         )}

@@ -1,13 +1,13 @@
 'use client'
 
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import { MovieCategory } from '@/models/interfaces/list'
 import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import CardImage from '../common/card-image'
 import PaginationCustom from './pagination'
 
 interface TablePaginationProps {
-  data: MovieCategoryItem
+  data: MovieCategory
 }
 
 const TablePagination = ({ data }: TablePaginationProps) => {
@@ -41,7 +41,7 @@ const TablePagination = ({ data }: TablePaginationProps) => {
 
   return (
     <div className='flex flex-col gap-10 pb-5 overflow-hidden'>
-      <div className='grid lg:grid-cols-6 max-sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-x-6 gap-y-9 max-sm:gap-x-3'>
+      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-x-6 gap-y-9 max-sm:gap-x-3'>
         <CardImage
           data={data}
           itemLength={dataPagination?.totalItemsPerPage}

@@ -1,8 +1,8 @@
 import { endPoint } from '@/constants/end-point'
-import { dataNamPhatHanh, dataQuocGia, dataTheLoai } from '@/data/category'
 import isSuccessResponse from '@/helpers/check-response'
+import getUrl from '@/helpers/getUrl'
 import { useFetch, useMetadata } from '@/hooks'
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import { MovieCategory } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Detail from './detail'
@@ -10,22 +10,6 @@ import Detail from './detail'
 interface Params {
   params: { slug: string[] }
   searchParams: { page: string }
-}
-
-const lastSegment = {
-  theloai: dataTheLoai.map((item) => item.slug),
-  namPhatHanh: dataNamPhatHanh.map((item) => item.slug),
-  quocGia: dataQuocGia.map((item) => item.slug),
-}
-
-const getUrl = (slug: string) => {
-  const segments = ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows']
-
-  if (segments.includes(slug)) return `${endPoint.list}`
-  if (lastSegment.theloai.includes(slug)) return `${endPoint.category}`
-  if (lastSegment.namPhatHanh.includes(slug)) return `${endPoint.year}`
-  if (lastSegment.quocGia.includes(slug)) return `${endPoint.country}`
-  return null
 }
 
 export async function generateMetadata({ params, searchParams }: Params): Promise<Metadata> {
@@ -57,8 +41,7 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
         urlPath: `/${slug.join('/')}`,
       })
 
-    const { titleHead, descriptionHead, og_image } =
-      data.seoOnPage as MovieCategoryItem['seoOnPage']
+    const { titleHead, descriptionHead, og_image } = data.seoOnPage as MovieCategory['seoOnPage']
 
     return useMetadata({
       title: titleHead,
@@ -101,7 +84,7 @@ export default async function ListingPage({ params, searchParams }: Params) {
 
   return (
     <Detail
-      data={response as MovieCategoryItem}
+      data={response as MovieCategory}
       slug={params.slug}
       page={page}
     />

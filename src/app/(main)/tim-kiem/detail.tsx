@@ -3,10 +3,10 @@
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/table-pagination'
 import isNotEmpty from '@/helpers/object-empty'
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import { MovieCategory } from '@/models/interfaces/list'
 
 interface DetailProps {
-  data: MovieCategoryItem
+  data: MovieCategory
   keyword: string
 }
 

@@ -1,6 +1,6 @@
 import { endPoint } from '@/constants/end-point'
 import { useFetch, useMetadata } from '@/hooks'
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import { MovieCategory } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import Detail from './detail'
 import isSuccessResponse from '@/helpers/check-response'
@@ -29,7 +29,7 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
       })
     }
 
-    const { titleHead, descriptionHead } = data.seoOnPage as MovieCategoryItem['seoOnPage']
+    const { titleHead, descriptionHead } = data.seoOnPage as MovieCategory['seoOnPage']
 
     return useMetadata({
       title: titleHead,

@@ -8,7 +8,7 @@ import { convertToPathname } from '@/helpers/cleanString'
 import openRandomAdLink from '@/helpers/handle-ads'
 import scrollToSection from '@/helpers/scroll-to-section'
 import { cn } from '@/lib/utils'
-import { MovieDetail } from '@/models/interfaces/detail'
+import { Episode, MovieDetail } from '@/models/interfaces/detail'
 import { Lightbulb, LightbulbOff } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
@@ -16,7 +16,7 @@ import ReactHlsPlayer from 'react-hls-player'
 import PlayerEpisode from './player-episode'
 
 interface MoviePlayerProps {
-  dataEpisode: MovieDetail['episodes']
+  dataEpisode: Episode[]
   detail: MovieDetail
 }
 
@@ -62,13 +62,13 @@ const MoviePlayer = (props: MoviePlayerProps) => {
         video =
           linkVideo?.link_embed ||
           episodeData[0]?.data?.link_embed ||
-          dataEpisode[0].server_data[0].link_embed
+          dataEpisode[0]?.server_data[0]?.link_embed
         break
       case 'server 2':
         video =
           linkVideo?.link_m3u8 ||
           episodeData[0]?.data?.link_m3u8 ||
-          dataEpisode[0].server_data[0].link_m3u8
+          dataEpisode[0]?.server_data[0]?.link_m3u8
         break
       default:
         break

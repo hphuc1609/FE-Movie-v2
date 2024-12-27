@@ -3,81 +3,69 @@
 import CommentBox from '@/components/comment-box'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import ErrorMessage from '@/components/common/error-message'
+import ListingWithTitle from '@/components/listing-with-title'
 import MovieInfo from '@/components/movie/detail'
 import MoviePlayer from '@/components/movie/player'
-import RelatedMovies from '@/components/related-movies'
-import { Skeleton } from '@/components/ui/skeleton'
 import { MovieDetailResponse } from '@/models/interfaces/detail'
-import { MovieCategoryItem } from '@/models/interfaces/list'
-import { useMovieType } from '@/services/query-data'
+import { MovieCategory } from '@/models/interfaces/list'
+import { useDetail } from '@/services/query-data'
 import { useMemo } from 'react'
 
 interface DetailProps {
-  detail: MovieDetailResponse
+  urlPath: string
+  detailData: MovieDetailResponse
+  relatedMovies: MovieCategory
+  allMovies: MovieCategory
 }
 
-const Detail = ({ detail }: DetailProps) => {
-  const slugCate = detail?.movie?.category?.[0]?.slug // Lấy thể loại của phim
-
-  const { data: moviesType } = useMovieType({
-    category: slugCate?.toLowerCase() !== 'dang-cap-nhat' ? slugCate : 'phim-le',
-  })
-
-  const { data: phimLe } = useMovieType({ category: 'phim-le' })
-  const { data: phimBo } = useMovieType({ category: 'phim-bo' })
-
-  const allMovies = useMemo(() => {
-    return {
-      ...phimLe,
-      items: [...(phimBo?.items || []), ...(phimLe?.items || [])],
-    }
-  }, [phimBo, phimLe])
+const Detail = (props: DetailProps) => {
+  const { urlPath, detailData, relatedMovies, allMovies } = props
+  const { data } = useDetail({ slug: urlPath })
 
   const filteredNewMovies = useMemo(() => {
     const currentYear = new Date().getFullYear()
     const filtered =
-      allMovies?.items?.filter(
+      allMovies.items?.filter(
         (movie) =>
           movie.year === currentYear && !movie.category.some((cat) => cat.slug === 'phim-18'),
       ) || []
-
-    return {
-      items: filtered,
-    }
-  }, [allMovies?.items])
+    return { ...allMovies, items: filtered }
+  }, [allMovies])
 
   const breadCrumb = [
     {
       isCurrent: false,
-      name: detail.movie && `Phim ${detail.movie.category[0].name}`,
-      slug: detail.movie && `${detail.movie.category[0].slug}`,
+      name: detailData.movie && `Phim ${detailData.movie.category[0].name}`,
+      slug: detailData.movie && `${detailData.movie.category[0].slug}`,
     },
     {
       isCurrent: true,
-      name: detail.movie.name,
+      name: detailData.movie.name,
     },
   ]
 
-  if (!detail?.status || typeof detail !== 'object') return <ErrorMessage message={detail?.msg} />
+  if (!detailData?.status || typeof detailData !== 'object') {
+    return <ErrorMessage message={detailData?.msg} />
+  }
 
   return (
     <>
       <BreadcrumbCustom breadCrumb={breadCrumb} />
       <div className='flex flex-col gap-20 max-sm:gap-10'>
-        <MovieInfo detail={detail.movie} />
+        <MovieInfo detail={detailData.movie} />
         <div className='flex flex-col gap-10'>
           <MoviePlayer
-            detail={detail.movie}
-            dataEpisode={detail.episodes}
+            detail={detailData.movie}
+            dataEpisode={data?.episodes || []}
           />
           <CommentBox />
-          <RelatedMovies
+          <ListingWithTitle
             title='Có thể bạn muốn xem'
-            data={moviesType as MovieCategoryItem}
+            data={relatedMovies}
           />
-          <RelatedMovies
+          <ListingWithTitle
             title='Phim mới đề cử'
-            data={filteredNewMovies as MovieCategoryItem}
+            data={filteredNewMovies}
           />
         </div>
       </div>
@@ -86,29 +74,3 @@ const Detail = ({ detail }: DetailProps) => {
 }
 
 export default Detail
-
-const SkeletonDetail = () => {
-  return (
-    <>
-      <div className='flex max-md:flex-col justify-center gap-[30px]'>
-        <Skeleton className='w-[300px] h-[440px] m-auto rounded-sm bg-skeleton' />
-        <div className='flex flex-1 flex-col gap-6'>
-          <div className='flex flex-col gap-2'>
-            <Skeleton className='max-w-[450px] h-[20px] bg-skeleton' />
-            <Skeleton className='max-w-[300px] h-[20px] bg-skeleton' />
-          </div>
-          <Skeleton className='w-full h-[200px] bg-skeleton' />
-          <div className='flex flex-col gap-2'>
-            {Array.from({ length: 6 }).map((_, index) => (
-              <Skeleton
-                key={index}
-                className='max-w-[300px] h-[15px] bg-skeleton'
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-      <Skeleton className='w-full aspect-video rounded-none bg-skeleton' />
-    </>
-  )
-}

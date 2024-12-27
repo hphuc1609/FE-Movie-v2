@@ -31,7 +31,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
       </span>
       <div
         className={cn('grid gap-5', {
-          'flex items-center gap-2': dataEpisode[0].server_data.length <= 2,
+          'flex items-center gap-2': dataEpisode[0]?.server_data.length <= 2,
         })}
       >
         {dataEpisode.map((item) => (
@@ -44,7 +44,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
                 hidden:
                   !getServerName(item) ||
                   dataEpisode.length < 2 ||
-                  dataEpisode[0].server_data.length <= 2,
+                  dataEpisode[0]?.server_data.length <= 2,
               })}
             >
               # {getServerName(item)}
@@ -53,7 +53,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
               className={cn(
                 'grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-12 gap-2 max-h-[300px] max-sm:max-h-[200px] overflow-x-hidden overflow-y-auto',
                 {
-                  flex: dataEpisode[0].server_data.length <= 2,
+                  flex: dataEpisode[0]?.server_data.length <= 2,
                 },
               )}
             >
@@ -77,7 +77,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
                   episode.slug?.toLowerCase(),
                 )
                   ? episode.name.split(' ')[1]
-                  : dataEpisode[0].server_data.length === 1
+                  : dataEpisode[0]?.server_data.length === 1
                     ? episodeOptions
                     : episode.name.toLowerCase().includes('full')
                       ? 'Vietsub'
@@ -96,7 +96,7 @@ const PlayerEpisode = (props: PlayerEpisodeProps) => {
                     className={cn(
                       `text-sm h-fit min-w-fit hover:bg-primary-color hover:text-black rounded-sm text-center p-2 cursor-pointer text-nowrap bg-zinc-300/5`,
                       { 'bg-primary-color text-black': isActiveEpisode },
-                      { 'min-w-[100px]': dataEpisode[0].server_data.length <= 2 },
+                      { 'min-w-[100px]': dataEpisode[0]?.server_data.length <= 2 },
                     )}
                     onClick={() =>
                       handleEpisodeClick(

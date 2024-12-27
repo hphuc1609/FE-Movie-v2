@@ -1,9 +1,9 @@
 import { endPoint } from '@/constants/end-point'
 import isSuccessResponse from '@/helpers/check-response'
+import getUrl from '@/helpers/getUrl'
 import { useFetch, useMetadata } from '@/hooks'
 import { MovieDetail } from '@/models/interfaces/detail'
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
 import Detail from './detail'
 
 interface Params {
@@ -42,9 +42,33 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function InfoPage({ params }: Params) {
   const { slug } = params
-  const data = await useFetch({ endpoint: `${endPoint.detail}/${slug}` })
 
-  if (!isSuccessResponse(data)) notFound()
+  // Get detail
+  const detail = await useFetch({
+    endpoint: `${endPoint.detail}/${slug}`,
+    options: { next: { revalidate: 60 } },
+  })
 
-  return <Detail detail={data} />
+  // Get movie category
+  const url = detail?.movie?.category?.[0]?.slug
+  const relatedMovies = await useFetch({ endpoint: `${getUrl(url)}/${url}` })
+
+  // Phim lẻ, phim bộ
+  const movies = await Promise.all([
+    useFetch({ endpoint: `${endPoint.list}/phim-le` }),
+    useFetch({ endpoint: `${endPoint.list}/phim-bo` }),
+  ])
+  const [dataPhimLe, dataPhimBo] = movies
+
+  let allMovies = { ...dataPhimLe, items: [] }
+  allMovies.items = [...allMovies.items, ...dataPhimBo.items]
+
+  return (
+    <Detail
+      urlPath={slug}
+      detailData={detail}
+      relatedMovies={relatedMovies}
+      allMovies={allMovies}
+    />
+  )
 }

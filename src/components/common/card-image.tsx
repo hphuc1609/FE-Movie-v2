@@ -43,7 +43,7 @@ const CardImage = (props: CardImageProps) => {
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-all duration-300'
             />
             {!!item.episode_current && (
-              <p className='absolute top-1 left-1 right-1 w-fit text-xs max-sm:text-[8px] font-medium bg-gradient-to-r from-orange-600 to-yellow-500 px-2 py-[3px] max-sm:px-1 max-sm:py-[2px] rounded-[2px] line-clamp-1'>
+              <p className='absolute top-1.5 left-1 right-1 w-fit text-xs max-sm:text-xs font-medium bg-gradient-to-r from-orange-600 to-yellow-500 px-2 py-1 rounded-[2px] line-clamp-1'>
                 {item.episode_current.includes('Full') ? item.lang : item.episode_current}
               </p>
             )}
@@ -67,7 +67,7 @@ const CardImage = (props: CardImageProps) => {
             </span>
           </Link>
           {/* Category tags */}
-          <div className='flex items-center gap-1 max-sm:hidden'>
+          <div className='flex items-center gap-1'>
             {item.category?.slice(0, 2).map(
               (cate) =>
                 cate.name && (

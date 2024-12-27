@@ -3,11 +3,11 @@
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import TablePagination from '@/components/table-pagination'
 import isNotEmpty from '@/helpers/object-empty'
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import { MovieCategory } from '@/models/interfaces/list'
 import { useMemo } from 'react'
 
 interface DetailProps {
-  data: MovieCategoryItem
+  data: MovieCategory
   slug: string[]
   page: string
 }
@@ -56,7 +56,7 @@ const Detail = ({ data, slug, page }: DetailProps) => {
     <>
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
       <section className='grid gap-6'>
-        <h1 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-400 via-orange-500 to-orange-500 bg-clip-text text-transparent'>
+        <h1 className='text-3xl max-sm:text-2xl font-bold capitalize bg-gradient-to-r from-yellow-400 via-orange-500 to-orange-500 bg-clip-text text-transparent'>
           {renderTitle()}
         </h1>
         <TablePagination data={filteredMovies} />

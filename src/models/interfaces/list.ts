@@ -1,10 +1,10 @@
 export interface MovieCategoryResponse {
   status: string
   msg: string
-  data: MovieCategoryItem
+  data: MovieCategory
 }
 
-export interface MovieCategoryItem {
+export interface MovieCategory {
   seoOnPage: SeoOnPage
   breadCrumb: BreadCrumb[]
   titlePage: string
@@ -48,21 +48,21 @@ export interface MovieItem {
   quality: string
   lang: string
   year: number
-  category: MovieCategory[]
-  country: MovieCountry[]
+  category: CategoryItem[]
+  country: CountryItem[]
 }
 
 export interface Modified {
   time: string
 }
 
-export interface MovieCategory {
+export interface CategoryItem {
   id: string
   name: string
   slug: string
 }
 
-export interface MovieCountry {
+export interface CountryItem {
   id: string
   name: string
   slug: string

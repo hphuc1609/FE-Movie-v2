@@ -1,8 +1,8 @@
 import { endPoint } from '@/constants/end-point'
-import { dataNamPhatHanh, dataTheLoai } from '@/data/category'
+import getUrl from '@/helpers/getUrl'
 import axiosClient from '@/lib/axios-client'
 import { MovieDetailResponse } from '@/models/interfaces/detail'
-import { MovieCategory, MovieCategoryResponse, MovieCountry } from '@/models/interfaces/list'
+import { CategoryItem, CountryItem, MovieCategoryResponse } from '@/models/interfaces/list'
 import { NewMovieResponse } from '@/models/interfaces/new-movie'
 import axios from 'axios'
 
@@ -37,25 +37,12 @@ const movieApi = {
   getListByCate: ({ category, page, limit }: GetMoviesParams): Promise<MovieCategoryResponse> => {
     if (!category) throw new Error('Category is required!')
 
-    const slug = {
-      danhSach: ['phim-le', 'phim-bo', 'hoat-hinh', 'tv-shows'],
-      theloai: dataTheLoai.map((item) => item.slug),
-      namPhatHanh: dataNamPhatHanh.map((item) => item.slug),
-    }
-
-    const getSlugUrl = (category: string) => {
-      if (slug.danhSach.includes(category)) return `${endPoint.list}/${category}`
-      if (slug.theloai.includes(category)) return `${endPoint.category}/${category}`
-      if (slug.namPhatHanh.includes(category)) return `${endPoint.year}/${category}`
-      return `${endPoint.country}/${category}`
-    }
-
     const queryParams = new URLSearchParams({
       ...(page && { page: page.toString() }),
       ...(limit && { limit: limit.toString() }),
     })
 
-    const slugUrl = getSlugUrl(category)
+    const slugUrl = getUrl(category)
     const url = `${slugUrl}?${queryParams}`
 
     return axiosClient.get<MovieCategoryResponse>(url)
@@ -86,13 +73,13 @@ const movieApi = {
   },
 
   // Thể loại
-  getCategories: (): Promise<MovieCategory[]> => {
-    return axiosClient.get<MovieCategory[]>('/the-loai')
+  getCategories: (): Promise<CategoryItem[]> => {
+    return axiosClient.get<CategoryItem[]>('/the-loai')
   },
 
   // Quốc gia
-  getCountries: (): Promise<MovieCountry[]> => {
-    return axiosClient.get<MovieCountry[]>('/quoc-gia')
+  getCountries: (): Promise<CountryItem[]> => {
+    return axiosClient.get<CountryItem[]>('/quoc-gia')
   },
 
   // ==================== API Nguonc ===============================

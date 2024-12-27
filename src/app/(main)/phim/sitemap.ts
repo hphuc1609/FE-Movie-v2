@@ -2,7 +2,7 @@ import { myWebsite } from '@/constants/domain'
 import { endPoint } from '@/constants/end-point'
 import { dataTheLoai } from '@/data/category'
 import { useFetch } from '@/hooks'
-import { MovieCategoryItem } from '@/models/interfaces/list'
+import { MovieCategory } from '@/models/interfaces/list'
 import { MetadataRoute } from 'next'
 
 type Sitemap = {
@@ -28,7 +28,7 @@ export default async function sitemap({ id }: Sitemap): Promise<MetadataRoute.Si
       ? `${endPoint.list}/${theLoai[id - 1]}?page=${id}&limit=${limit}`
       : `${endPoint.category}/${theLoai[id - 1]}?page=${id}&limit=${limit}`
 
-    const movies: MovieCategoryItem = await useFetch({
+    const movies: MovieCategory = await useFetch({
       endpoint: endpoint,
       options: { next: { revalidate: 60 } },
     })

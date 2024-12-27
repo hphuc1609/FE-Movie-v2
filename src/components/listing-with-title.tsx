@@ -1,5 +1,5 @@
 import PlayButton from '@/components/common/play-button'
-import { MovieCategoryItem, MovieItem } from '@/models/interfaces/list'
+import { MovieCategory, MovieItem } from '@/models/interfaces/list'
 import { StepBack, StepForward } from 'lucide-react'
 import Link from 'next/link'
 import { useRef } from 'react'
@@ -10,18 +10,17 @@ import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from 'swiper/react'
 import { ImageComponent } from './common/card-image'
 import { Button } from './ui/button'
 
-interface RelatedMoviesProps {
-  data: MovieCategoryItem
+interface ListingWithTitleProps {
+  data: MovieCategory
   title: string
 }
 
-const RelatedMovies = (props: RelatedMoviesProps) => {
+const ListingWithTitle = (props: ListingWithTitleProps) => {
   const { data, title } = props
 
   const nextBtnRef = useRef<HTMLButtonElement>(null)
   const prevBtnRef = useRef<HTMLButtonElement>(null)
   const swiperRef = useRef<SwiperRef>(null)
-
   const mobile = useMediaQuery({ maxWidth: 750 })
 
   const swiperConfig: SwiperProps = {
@@ -41,7 +40,7 @@ const RelatedMovies = (props: RelatedMoviesProps) => {
 
   return (
     <section
-      id='relate-movies'
+      id='related-movies'
       className='flex-1 flex flex-col gap-6'
     >
       <div className='flex items-center justify-between'>
@@ -102,21 +101,18 @@ const RelatedMovies = (props: RelatedMoviesProps) => {
               />
             </Link>
             <Link
+              title={item.name}
               href={handleNavigate(item)}
-              className='text-sm max-sm:text-xs grid gap-1'
+              className='text-sm max-sm:text-xs grid gap-1 hover:text-primary-color font-semibold line-clamp-2'
             >
-              <p
-                title={item.name}
-                className='hover:text-primary-color font-semibold line-clamp-2'
-              >
-                {item.name} ({item.year})
-              </p>
-              <span
-                title={item.origin_name}
-                className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'
-              >
-                {item.origin_name}
-              </span>
+              {item.name} ({item.year})
+            </Link>
+            <Link
+              title={item.origin_name}
+              href={handleNavigate(item)}
+              className='text-sm max-sm:text-xs grid gap-1 text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'
+            >
+              {item.origin_name}
             </Link>
           </SwiperSlide>
         ))}
@@ -125,4 +121,4 @@ const RelatedMovies = (props: RelatedMoviesProps) => {
   )
 }
 
-export default RelatedMovies
+export default ListingWithTitle

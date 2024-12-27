@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { MovieCategoryItem, MovieItem } from '@/models/interfaces/list'
+import { MovieCategory, MovieItem } from '@/models/interfaces/list'
 import { CalendarDays, ChevronLeft, ChevronRight, Clock4, Play } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -18,7 +18,7 @@ import 'swiper/css/pagination'
 import '../css/banner.css'
 
 interface BannerProps {
-  data: MovieCategoryItem
+  data: MovieCategory
 }
 
 const Banner = ({ data }: BannerProps) => {
