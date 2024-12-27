@@ -10,7 +10,7 @@ type Params = {
 }
 
 export const useMetadata = (params: Params) => {
-  const { title, description, urlPath, image = '/icon.png', ...rest } = params
+  const { title, description, urlPath = '', image = '/icon.png', ...rest } = params
 
   return {
     title: `${title} | Mephim247`,
