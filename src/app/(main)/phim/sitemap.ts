@@ -45,7 +45,6 @@ export default async function sitemap({ id }: Sitemap): Promise<MetadataRoute.Si
     return movies.items.map((movie) => ({
       url: `${myWebsite}/phim/${movie.slug}`,
       lastModified: movie?.modified?.time ? new Date(movie.modified.time) : new Date(),
-      changeFrequency: 'daily',
     }))
   } catch (error) {
     return []
