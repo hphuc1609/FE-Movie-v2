@@ -30,23 +30,23 @@ export default async function sitemap({ id }: Sitemap): Promise<MetadataRoute.Si
 
     const movies: MovieCategory = await useFetch({
       endpoint: endpoint,
-      options: { next: { revalidate: 60 } },
+      options: { next: { revalidate: 3600 } },
     })
 
-    if (!movies.items.length) {
-      return [
-        {
-          url: `${myWebsite}`,
-          lastModified: new Date(),
-        },
-      ]
+    if (!movies) {
+      throw new Error(`Invalid response from endpoint: ${endpoint}`)
     }
 
     return movies.items.map((movie) => ({
       url: `${myWebsite}/phim/${movie.slug}`,
-      lastModified: movie?.modified?.time ? new Date(movie.modified.time) : new Date(),
+      lastModified: movie?.modified?.time ? new Date(movie.modified.time) : new Date('2000-01-01'),
     }))
   } catch (error) {
-    return []
+    return [
+      {
+        url: `${myWebsite}`,
+        lastModified: new Date(),
+      },
+    ]
   }
 }
