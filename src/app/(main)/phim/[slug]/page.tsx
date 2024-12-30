@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   }
 }
 
-export default async function InfoPage({ params }: Params) {
+export default async function MovieDetailPage({ params }: Params) {
   const { slug } = params
 
   // Get detail

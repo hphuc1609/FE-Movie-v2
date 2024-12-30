@@ -4,7 +4,7 @@ import NewUpdateMovie from '@/components/movie/new'
 import { endPoint } from '@/constants/end-point'
 import { useFetch } from '@/hooks'
 
-export default async function Home() {
+export default async function HomePage() {
   const currentYear = new Date().getFullYear()
   const LIMIT = 36
 

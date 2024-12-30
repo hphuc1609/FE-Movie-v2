@@ -44,7 +44,7 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
   }
 }
 
-export default async function ListSearchPage({ searchParams }: Params) {
+export default async function SearchPage({ searchParams }: Params) {
   const { keyword, page } = searchParams
 
   const queryParams = new URLSearchParams({
@@ -52,7 +52,10 @@ export default async function ListSearchPage({ searchParams }: Params) {
     ...(page && { page: page.toString() }),
   })
 
-  const data = await useFetch({ endpoint: `${endPoint.search}?${queryParams}` })
+  const data = await useFetch({
+    endpoint: `${endPoint.search}?${queryParams}`,
+    options: { next: { revalidate: 3 } },
+  })
 
   return (
     <Detail

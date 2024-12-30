@@ -9,6 +9,6 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default async function ListFavouritePage() {
+export default async function FavouritePage() {
   return <Detail />
 }
