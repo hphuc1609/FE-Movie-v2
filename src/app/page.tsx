@@ -8,6 +8,10 @@ export default async function Home() {
   const currentYear = new Date().getFullYear()
   const LIMIT = 36
 
+  const nextConfig: RequestInit = {
+    next: { revalidate: 3 },
+  }
+
   const categories = [
     { slug: 'phim-le', title: 'Phim lẻ' },
     { slug: 'phim-bo', title: 'Phim bộ' },
@@ -16,12 +20,12 @@ export default async function Home() {
   ]
 
   const movies = await Promise.all([
-    useFetch({ endpoint: `${endPoint.year}/${currentYear}` }),
-    useFetch({ endpoint: endPoint.newMovies }),
-    useFetch({ endpoint: `${endPoint.list}/phim-le?limit=${LIMIT}` }),
-    useFetch({ endpoint: `${endPoint.list}/phim-bo?limit=${LIMIT}` }),
-    useFetch({ endpoint: `${endPoint.list}/hoat-hinh?limit=${LIMIT}` }),
-    useFetch({ endpoint: `${endPoint.list}/tv-shows?limit=${LIMIT}` }),
+    useFetch({ endpoint: `${endPoint.year}/${currentYear}`, options: nextConfig }),
+    useFetch({ endpoint: endPoint.newMovies, options: nextConfig }),
+    useFetch({ endpoint: `${endPoint.list}/phim-le?limit=${LIMIT}`, options: nextConfig }),
+    useFetch({ endpoint: `${endPoint.list}/phim-bo?limit=${LIMIT}`, options: nextConfig }),
+    useFetch({ endpoint: `${endPoint.list}/hoat-hinh?limit=${LIMIT}`, options: nextConfig }),
+    useFetch({ endpoint: `${endPoint.list}/tv-shows?limit=${LIMIT}`, options: nextConfig }),
   ])
 
   const [dataBanner, dataNewMovie, ...dataMovieByType] = movies

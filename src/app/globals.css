@@ -68,6 +68,10 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body img {
   user-select: none;
   -webkit-user-select: none;

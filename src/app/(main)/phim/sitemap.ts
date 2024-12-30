@@ -28,10 +28,7 @@ export default async function sitemap({ id }: Sitemap): Promise<MetadataRoute.Si
       ? `${endPoint.list}/${theLoai[id - 1]}?page=${id}&limit=${limit}`
       : `${endPoint.category}/${theLoai[id - 1]}?page=${id}&limit=${limit}`
 
-    const movies: MovieCategory = await useFetch({
-      endpoint: endpoint,
-      options: { next: { revalidate: 3600 } },
-    })
+    const movies: MovieCategory = await useFetch({ endpoint: endpoint })
 
     if (!movies) {
       throw new Error(`Invalid response from endpoint: ${endpoint}`)
@@ -40,12 +37,14 @@ export default async function sitemap({ id }: Sitemap): Promise<MetadataRoute.Si
     return movies.items.map((movie) => ({
       url: `${myWebsite}/phim/${movie.slug}`,
       lastModified: movie?.modified?.time ? new Date(movie.modified.time) : new Date('2000-01-01'),
+      priority: 0.8,
     }))
   } catch (error) {
     return [
       {
         url: `${myWebsite}`,
         lastModified: new Date(),
+        priority: 1,
       },
     ]
   }

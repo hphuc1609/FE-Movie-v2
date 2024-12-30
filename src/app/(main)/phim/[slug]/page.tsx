@@ -12,10 +12,7 @@ interface Params {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   try {
-    const data = await useFetch({
-      endpoint: `${endPoint.detail}/${params.slug}`,
-      options: { next: { revalidate: 60 } },
-    })
+    const data = await useFetch({ endpoint: `${endPoint.detail}/${params.slug}` })
 
     if (!isSuccessResponse(data))
       return useMetadata({
@@ -30,7 +27,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       title: `Phim ${name} | ${origin_name} (${year})`,
       description: `Xem phim ${name} - ${origin_name} (${year}). ${content}`,
       urlPath: `/phim/${slug}`,
-      images: poster_url,
+      image: poster_url,
     })
   } catch (error: any) {
     return {
@@ -46,7 +43,6 @@ export default async function InfoPage({ params }: Params) {
   // Get detail
   const detail = await useFetch({
     endpoint: `${endPoint.detail}/${slug}`,
-    options: { next: { revalidate: 60 } },
   })
 
   // Get movie category

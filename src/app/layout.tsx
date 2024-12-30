@@ -8,9 +8,11 @@ import { googleKey } from '@/constants/domain'
 import { useMetadata } from '@/hooks'
 import { cn } from '@/lib/utils'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const inter = Inter({ subsets: ['vietnamese'] })
+const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_TRACKING_ID
 
 export const metadata = useMetadata({
   title: 'Phim Hay | Phim mới | Phim HD Vietsub',
@@ -29,6 +31,24 @@ export default function RootLayout({
       lang='vi'
       suppressHydrationWarning
     >
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        strategy='afterInteractive'
+      />
+      <Script
+        id='google-analytics'
+        strategy='afterInteractive'
+      >
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_TRACKING_ID}', {
+            page_path: window.location.pathname,
+          });
+        `}
+      </Script>
+
       <body className={cn(inter.className, 'relative bg-[#1a1a1a] text-primary-foreground')}>
         <TanstackProvider>
           <ContextProvider>

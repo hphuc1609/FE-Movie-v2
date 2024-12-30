@@ -2,10 +2,10 @@
 
 import { getCookie } from 'cookies-next'
 import { usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
+import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react'
 import Loader from './loader'
 
-const ContextGlobal = React.createContext({
+const ContextGlobal = createContext({
   isLoading: false,
   showLoading: () => {},
   hiddenLoading: () => {},
@@ -13,24 +13,22 @@ const ContextGlobal = React.createContext({
   setLogin: (value: boolean) => {},
 })
 
-export const useContextGlobal = () => React.useContext(ContextGlobal)
+export const useContextGlobal = () => useContext(ContextGlobal)
 
 interface ContextProviderProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
-  const [isLoading, setLoading] = React.useState(false)
-  const [isLogin, setLogin] = React.useState(false)
-
+const ContextProvider: FC<ContextProviderProps> = ({ children }) => {
   const pathname = usePathname()
+  const [isLoading, setLoading] = useState(false)
+  const [isLogin, setLogin] = useState(false)
 
-  // Set last path
+  // Save last path
   useEffect(() => {
     if (['/login', '/register'].includes(pathname)) {
       return
     }
-
     const searchParam = new URLSearchParams(window.location.search)
     const searchToString = searchParam.toString()
     const lastPath = `${pathname}${searchToString ? `?${searchToString}` : ''}`
@@ -38,7 +36,7 @@ const ContextProvider: React.FC<ContextProviderProps> = ({ children }) => {
     localStorage.setItem('lastPath', lastPath)
   }, [pathname])
 
-  // Check login
+  // Check user is login
   useEffect(() => {
     const userInfo = getCookie('userVerify')
     if (userInfo) setLogin(true)

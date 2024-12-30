@@ -5,9 +5,8 @@ type Params = {
   title: string
   description: string
   urlPath?: string
-  image?: string
-  [key: string]: any
-}
+  image?: string | string[]
+} & Partial<Metadata>
 
 export const useMetadata = (params: Params) => {
   const { title, description, urlPath = '', image = '/icon.png', ...rest } = params

@@ -38,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       {
         url: `${myWebsite}`,
         lastModified: new Date(),
+        priority: 1,
       },
     ]
   }

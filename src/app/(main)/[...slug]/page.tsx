@@ -31,7 +31,6 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
 
     const data = await useFetch({
       endpoint: `${getUrl(lastSegment)}/${lastSegment}?${queryParams}`,
-      options: { next: { revalidate: 60 } },
     })
 
     if (!isSuccessResponse(data))
@@ -47,7 +46,7 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
       title: titleHead,
       description: descriptionHead,
       urlPath: `/${slug.join('/')}`,
-      images: og_image.map((image) => `${data?.APP_DOMAIN_CDN_IMAGE}/${image}`),
+      image: og_image.map((path) => `${data?.APP_DOMAIN_CDN_IMAGE}${path}`),
     })
   } catch (error: any) {
     return {
@@ -73,10 +72,12 @@ export default async function ListingPage({ params, searchParams }: Params) {
   if (slug.includes('phim-moi-cap-nhat')) {
     response = await useFetch({
       endpoint: `${endPoint.newMovies}?${queryParams}`,
+      options: { next: { revalidate: 3 } },
     })
   } else {
     response = await useFetch({
       endpoint: `${getUrl(lastSegment)}/${lastSegment}?${queryParams}`,
+      options: { next: { revalidate: 3 } },
     })
   }
 

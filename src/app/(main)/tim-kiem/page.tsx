@@ -18,9 +18,7 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
   })
 
   try {
-    const data = await useFetch({
-      endpoint: `${endPoint.search}?${queryParams}`,
-    })
+    const data = await useFetch({ endpoint: `${endPoint.search}?${queryParams}` })
 
     if (!isSuccessResponse(data)) {
       return useMetadata({
@@ -29,12 +27,14 @@ export async function generateMetadata({ searchParams }: Params): Promise<Metada
       })
     }
 
-    const { titleHead, descriptionHead } = data.seoOnPage as MovieCategory['seoOnPage']
+    const { titleHead, descriptionHead, og_image, og_url } =
+      data.seoOnPage as MovieCategory['seoOnPage']
 
     return useMetadata({
       title: titleHead,
       description: descriptionHead,
-      urlPath: `/tim-kiem?${queryParams}`,
+      urlPath: `/${og_url}`,
+      image: og_image.map((path) => `${process.env.NEXT_PUBLIC_DOMAIN_CDN_IMAGE}${path}`),
     })
   } catch (error: any) {
     return {
