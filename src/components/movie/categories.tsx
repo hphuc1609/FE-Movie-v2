@@ -14,16 +14,16 @@ interface MovieCategoryProps {
   title: string
 }
 
-const MovieCategory = (props: MovieCategoryProps) => {
-  const { title, data, slug } = props
-  const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title.toLowerCase())
+const MovieCategory = ({ title, data, slug }: MovieCategoryProps) => {
+  const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase())
 
   const filteredMovies = useMemo(() => {
     const items = data.items.filter(
       (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
     )
     const itemsCurrentYear = items.filter((movie) => movie.year === new Date().getFullYear())
-    return { ...data, items: itemsCurrentYear }
+    const itemsPreviousYear = items.filter((movie) => movie.year === new Date().getFullYear() - 1)
+    return { ...data, items: itemsCurrentYear.length > 0 ? itemsCurrentYear : itemsPreviousYear }
   }, [data])
 
   return (

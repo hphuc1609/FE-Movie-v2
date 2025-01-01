@@ -1,4 +1,4 @@
-interface YearItem {
+type YearItem = {
   name: string
   slug: string
 }
@@ -8,14 +8,13 @@ interface YearItem {
  * @param {number} startYear - Năm bắt đầu (ví dụ: 2000)
  * @returns {YearItem[]} - Mảng các đối tượng năm
  */
-function generateYearList(startYear: number): YearItem[] {
+function generateYearList(startYear: number) {
   const currentYear = new Date().getFullYear()
   const years: YearItem[] = []
 
-  for (let year = startYear; year <= currentYear; year++) {
+  for (let year = startYear; year <= currentYear - 1; year++) {
     years.push({ name: `${year}`, slug: `${year}` })
   }
-
   return years
 }
 

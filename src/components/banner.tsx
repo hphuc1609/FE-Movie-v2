@@ -30,21 +30,9 @@ const Banner = ({ data }: BannerProps) => {
   const [activeSlide, setActiveSlide] = useState(0)
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
-  const moviesBanner = useMemo(() => {
-    const currentYear = new Date().getFullYear()
-    const yearsToCheck = Array.from({ length: currentYear + 1 }, (_, i) => currentYear - i)
-
-    return yearsToCheck.reduce((movies, year) => {
-      if (movies.length === 0) {
-        return (
-          data?.items.filter(
-            (movie) => movie.year === year && !movie.category.some((cat) => cat.slug === 'phim-18'),
-          ) || []
-        )
-      }
-      return movies
-    }, [] as MovieItem[])
-  }, [data?.items])
+  const moviesFiltered = useMemo(() => {
+    return data.items.filter((movie) => movie.category.filter((cat) => cat.slug !== 'phim-18'))
+  }, [data])
 
   const handleSlideChange = (swiper: SwiperType) => {
     setActiveSlide(swiper.realIndex)
@@ -75,7 +63,7 @@ const Banner = ({ data }: BannerProps) => {
       slidesPerView={1}
       effect='fade'
       fadeEffect={{ crossFade: true }}
-      loop={moviesBanner.length > 1}
+      loop={moviesFiltered.length > 1}
       speed={1500}
       autoplay={{ delay: 7000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, EffectFade]}
@@ -83,7 +71,7 @@ const Banner = ({ data }: BannerProps) => {
     >
       <div className='absolute -bottom-6 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a] z-10' />
 
-      {moviesBanner.slice(0, 8).map((item, index) => {
+      {moviesFiltered.slice(0, 8).map((item, index) => {
         return (
           <SwiperSlide key={item._id}>
             <Image
@@ -144,7 +132,7 @@ const Banner = ({ data }: BannerProps) => {
         )
       })}
 
-      {moviesBanner.length > 0 && (
+      {moviesFiltered.length > 0 && (
         <div className='absolute z-50 bottom-[53px] max-md:bottom-0 right-0 lg:pr-20 pr-[25px] flex items-center gap-2'>
           <Button
             ref={prevBtnRef}

@@ -6,6 +6,7 @@ import { useFetch } from '@/hooks'
 
 export default async function HomePage() {
   const currentYear = new Date().getFullYear()
+  const previousYear = currentYear - 1
   const LIMIT = 36
 
   const nextConfig: RequestInit = {
@@ -21,6 +22,7 @@ export default async function HomePage() {
 
   const movies = await Promise.all([
     useFetch({ endpoint: `${endPoint.year}/${currentYear}`, options: nextConfig }),
+    useFetch({ endpoint: `${endPoint.year}/${previousYear}`, options: nextConfig }),
     useFetch({ endpoint: endPoint.newMovies, options: nextConfig }),
     useFetch({ endpoint: `${endPoint.list}/phim-le?limit=${LIMIT}`, options: nextConfig }),
     useFetch({ endpoint: `${endPoint.list}/phim-bo?limit=${LIMIT}`, options: nextConfig }),
@@ -28,11 +30,12 @@ export default async function HomePage() {
     useFetch({ endpoint: `${endPoint.list}/tv-shows?limit=${LIMIT}`, options: nextConfig }),
   ])
 
-  const [dataBanner, dataNewMovie, ...dataMovieByType] = movies
+  const [dataCurrentYear, dataPreviousYear, dataNewMovie, ...dataMovieByType] = movies
+  const dataBanners = dataCurrentYear?.items?.length > 0 ? dataCurrentYear : dataPreviousYear
 
   return (
     <>
-      <Banner data={dataBanner} />
+      <Banner data={dataBanners} />
       <div className='max-w-screen-xl m-auto px-10 pt-6 pb-10 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-14'>
           {categories.map((item, index) => (
