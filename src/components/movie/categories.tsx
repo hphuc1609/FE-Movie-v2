@@ -23,7 +23,9 @@ const MovieCategory = ({ title, data, slug }: MovieCategoryProps) => {
     )
     const itemsCurrentYear = items.filter((movie) => movie.year === new Date().getFullYear())
     const itemsPreviousYear = items.filter((movie) => movie.year === new Date().getFullYear() - 1)
-    return { ...data, items: itemsCurrentYear.length > 0 ? itemsCurrentYear : itemsPreviousYear }
+    const mergedItems = itemsCurrentYear.concat(itemsPreviousYear)
+
+    return { ...data, items: mergedItems }
   }, [data])
 
   return (

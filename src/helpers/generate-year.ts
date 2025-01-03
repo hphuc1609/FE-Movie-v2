@@ -12,7 +12,7 @@ function generateYearList(startYear: number) {
   const currentYear = new Date().getFullYear()
   const years: YearItem[] = []
 
-  for (let year = startYear; year <= currentYear - 1; year++) {
+  for (let year = startYear; year <= currentYear; year++) {
     years.push({ name: `${year}`, slug: `${year}` })
   }
   return years
