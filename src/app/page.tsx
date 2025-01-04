@@ -1,8 +1,10 @@
 import Banner from '@/components/banner'
+import Loader from '@/components/loader'
 import MovieCategory from '@/components/movie/categories'
 import NewUpdateMovie from '@/components/movie/new'
 import { endPoint } from '@/constants/end-point'
 import { useFetch } from '@/hooks'
+import { Suspense } from 'react'
 
 export default async function HomePage() {
   const currentYear = new Date().getFullYear()
@@ -34,7 +36,7 @@ export default async function HomePage() {
   const dataBanners = dataCurrentYear?.items?.length > 0 ? dataCurrentYear : dataPreviousYear
 
   return (
-    <>
+    <Suspense fallback={<Loader />}>
       <Banner data={dataBanners} />
       <div className='max-w-screen-xl m-auto px-10 pt-6 pb-10 max-lg:px-[25px] flex gap-9'>
         <div className='flex-1 flex flex-col gap-14'>
@@ -49,6 +51,6 @@ export default async function HomePage() {
         </div>
         <NewUpdateMovie data={dataNewMovie} />
       </div>
-    </>
+    </Suspense>
   )
 }

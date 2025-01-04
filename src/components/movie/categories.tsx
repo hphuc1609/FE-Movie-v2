@@ -18,14 +18,14 @@ const MovieCategory = ({ title, data, slug }: MovieCategoryProps) => {
   const isPhimLeOrPhimBo = ['phim lẻ', 'phim bộ'].includes(title?.toLowerCase())
 
   const filteredMovies = useMemo(() => {
-    const items = data.items.filter(
-      (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
-    )
-    const itemsCurrentYear = items.filter((movie) => movie.year === new Date().getFullYear())
-    const itemsPreviousYear = items.filter((movie) => movie.year === new Date().getFullYear() - 1)
-    const mergedItems = itemsCurrentYear.concat(itemsPreviousYear)
-
-    return { ...data, items: mergedItems }
+    const currentYear = new Date().getFullYear()
+    return {
+      ...data,
+      items: data.items
+        .filter((movie) => !movie.category.some((cat) => cat.slug === 'phim-18'))
+        .filter((movie) => movie.year >= currentYear - 1)
+        .sort((a, b) => b.year - a.year),
+    }
   }, [data])
 
   return (

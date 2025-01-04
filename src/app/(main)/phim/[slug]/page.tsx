@@ -5,6 +5,8 @@ import { useFetch, useMetadata } from '@/hooks'
 import { MovieDetail } from '@/models/interfaces/detail'
 import { Metadata } from 'next'
 import Detail from './detail'
+import { Suspense } from 'react'
+import Loader from '@/components/loader'
 
 interface Params {
   params: { slug: string }
@@ -39,32 +41,44 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function MovieDetailPage({ params }: Params) {
   const { slug } = params
+  const revalidate = 10
 
   // Get detail
-  const detail = await useFetch({
-    endpoint: `${endPoint.detail}/${slug}`,
-  })
+  const detail = await useFetch({ endpoint: `${endPoint.detail}/${slug}` })
 
   // Get movie category
   const url = detail?.movie?.category?.[0]?.slug
-  const relatedMovies = await useFetch({ endpoint: `${getUrl(url)}/${url}` })
+  const relatedMovies = await useFetch({
+    endpoint: `${getUrl(url)}/${url}`,
+    options: { next: { revalidate } },
+  })
 
   // Phim lẻ, phim bộ
   const movies = await Promise.all([
-    useFetch({ endpoint: `${endPoint.list}/phim-le` }),
-    useFetch({ endpoint: `${endPoint.list}/phim-bo` }),
+    useFetch({
+      endpoint: `${endPoint.list}/phim-le?limit=36`,
+      options: { next: { revalidate } },
+    }),
+    useFetch({
+      endpoint: `${endPoint.list}/phim-bo?limit=36`,
+      options: { next: { revalidate } },
+    }),
   ])
-  const [dataPhimLe, dataPhimBo] = movies
 
-  let allMovies = { ...dataPhimLe, items: [] }
-  allMovies.items = [...allMovies.items, ...dataPhimBo.items]
+  const [dataPhimLe, dataPhimBo] = movies
+  const allMovies = {
+    ...dataPhimLe,
+    items: dataPhimLe.items.concat(dataPhimBo.items),
+  }
 
   return (
-    <Detail
-      urlPath={slug}
-      detailData={detail}
-      relatedMovies={relatedMovies}
-      allMovies={allMovies}
-    />
+    <Suspense fallback={<Loader />}>
+      <Detail
+        urlPath={slug}
+        detailData={detail}
+        relatedMovies={relatedMovies}
+        allMovies={allMovies}
+      />
+    </Suspense>
   )
 }

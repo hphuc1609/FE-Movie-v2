@@ -34,7 +34,7 @@ export default function BreadcrumbCustom(props: BreadcrumbCustomProps) {
               <BreadcrumbItem>
                 {!item.isCurrent ? (
                   <Link
-                    href={`${item.slug}?page=1`}
+                    href={`${item.slug?.startsWith('/danh-sach') ? item.slug.split('/danh-sach')[0] : `${item.slug}`}`}
                     className='hover:text-primary-color capitalize'
                   >
                     {item.name}

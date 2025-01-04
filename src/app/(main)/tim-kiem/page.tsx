@@ -4,6 +4,8 @@ import { MovieCategory } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import Detail from './detail'
 import isSuccessResponse from '@/helpers/check-response'
+import { Suspense } from 'react'
+import Loader from '@/components/loader'
 
 interface Params {
   searchParams: { keyword: string; page: string }
@@ -58,9 +60,11 @@ export default async function SearchPage({ searchParams }: Params) {
   })
 
   return (
-    <Detail
-      data={data}
-      keyword={keyword}
-    />
+    <Suspense fallback={<Loader />}>
+      <Detail
+        data={data}
+        keyword={keyword}
+      />
+    </Suspense>
   )
 }

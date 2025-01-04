@@ -6,6 +6,8 @@ import { MovieCategory } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Detail from './detail'
+import { Suspense } from 'react'
+import Loader from '@/components/loader'
 
 interface Params {
   params: { slug: string[] }
@@ -62,32 +64,35 @@ export default async function ListingPage({ params, searchParams }: Params) {
 
   const lastSegment = slug[slug.length - 1]
   const LIMIT = 36
-  let response = null
+  const revalidate = 3
 
   const queryParams = new URLSearchParams({
     ...(page && { page: page.toString() }),
     ...(LIMIT && { limit: LIMIT.toString() }),
   })
 
+  let data = null
   if (slug.includes('phim-moi-cap-nhat')) {
-    response = await useFetch({
+    data = await useFetch({
       endpoint: `${endPoint.newMovies}?${queryParams}`,
-      options: { next: { revalidate: 3 } },
+      options: { next: { revalidate } },
     })
   } else {
-    response = await useFetch({
+    data = await useFetch({
       endpoint: `${getUrl(lastSegment)}/${lastSegment}?${queryParams}`,
-      options: { next: { revalidate: 3 } },
+      options: { next: { revalidate } },
     })
   }
 
-  if (!isSuccessResponse(response)) notFound()
+  if (!isSuccessResponse(data)) notFound()
 
   return (
-    <Detail
-      data={response as MovieCategory}
-      slug={params.slug}
-      page={page}
-    />
+    <Suspense fallback={<Loader />}>
+      <Detail
+        data={data}
+        slug={params.slug}
+        page={page}
+      />
+    </Suspense>
   )
 }

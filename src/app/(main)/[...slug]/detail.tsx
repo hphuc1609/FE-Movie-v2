@@ -28,7 +28,6 @@ const Detail = ({ data, slug, page }: DetailProps) => {
 
   const renderTitle = () => {
     if (isPhimMoiCapNhat) return 'Phim mới cập nhật'
-
     if (isNotEmpty(data))
       return data.titlePage?.includes('Phim') ? data.titlePage : `Phim ${data.titlePage}`
   }
@@ -46,9 +45,7 @@ const Detail = ({ data, slug, page }: DetailProps) => {
           name: `Trang ${page || 1}`,
         },
       ]
-
     if (isNotEmpty(data)) return data.breadCrumb
-
     return '...'
   }
 

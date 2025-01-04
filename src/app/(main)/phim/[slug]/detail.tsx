@@ -24,12 +24,10 @@ const Detail = (props: DetailProps) => {
 
   const filteredNewMovies = useMemo(() => {
     const currentYear = new Date().getFullYear()
-    const filtered =
-      allMovies.items?.filter(
-        (movie) =>
-          movie.year === currentYear && !movie.category.some((cat) => cat.slug === 'phim-18'),
-      ) || []
-    return { ...allMovies, items: filtered }
+    const items = allMovies.items
+      ?.filter((movie) => movie.year >= currentYear - 1)
+      .sort((a, b) => b.year - a.year)
+    return { ...allMovies, items }
   }, [allMovies])
 
   const breadCrumb = [

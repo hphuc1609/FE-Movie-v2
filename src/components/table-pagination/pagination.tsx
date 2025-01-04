@@ -30,7 +30,6 @@ const PaginationCustom = (props: PaginationProps) => {
         <div className='flex gap-1'>
           <Link
             href={`?${paramKeyword}page=${currentPage - 1}`}
-            prefetch={false}
             className={cn(
               'cursor-pointer h-9 min-w-10 px-2 flex items-center justify-center bg-white bg-opacity-5 hover:text-primary-color !hover:bg-transparent',
               isFirstPage && 'opacity-50 hover:text-inherit pointer-events-none',
@@ -45,7 +44,6 @@ const PaginationCustom = (props: PaginationProps) => {
               {index === 1 && pagesToShow[1] > 2 && <PaginationEllipsis />}
               <Link
                 href={`?${paramKeyword}page=${page}`}
-                prefetch={false}
                 className={cn(
                   'bg-white bg-opacity-5 h-9 min-w-10 flex items-center justify-center hover:text-primary-color',
                   currentPage === page && 'text-primary-color border border-yellow-400',
@@ -61,7 +59,6 @@ const PaginationCustom = (props: PaginationProps) => {
 
           <Link
             href={`?${paramKeyword}page=${currentPage + 1}`}
-            prefetch={false}
             className={cn(
               'cursor-pointer h-9 min-w-10 px-2 flex items-center justify-center bg-white bg-opacity-5 hover:text-primary-color',
               isLastPage && 'opacity-50 hover:text-inherit pointer-events-none',
