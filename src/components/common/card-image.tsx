@@ -1,17 +1,24 @@
 'use client'
 
 import openRandomAdLink from '@/helpers/handle-ads'
+import imageUrl from '@/helpers/imgUrl'
 import useLazyLoadImg from '@/hooks/useLazyImage'
 import { cn } from '@/lib/utils'
-import { MovieCategoryResponse, MovieItem } from '@/models/interfaces/list'
+import { MovieCategory, MovieItem } from '@/models/interfaces/list'
 import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import PlayButton from './play-button'
 
 interface CardImageProps {
-  data: MovieCategoryResponse['data']
+  data: MovieCategory
   itemLength?: number
+}
+
+interface ImageComponentProps {
+  index: number
+  item: MovieItem
+  ImageProps?: Omit<ImageProps, 'src' | 'alt' | 'width' | 'height' | 'priority'>
 }
 
 const CardImage = (props: CardImageProps) => {
@@ -23,7 +30,7 @@ const CardImage = (props: CardImageProps) => {
 
   return (
     <>
-      {(data?.items || data)?.slice(0, itemLength).map((item, index) => (
+      {(data.items || data).slice(0, itemLength).map((item, index) => (
         <div
           key={item._id}
           className='h-fit flex flex-col gap-3'
@@ -42,11 +49,18 @@ const CardImage = (props: CardImageProps) => {
               PlayIconProps={{ size: 25 }}
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-all duration-300'
             />
-            {!!item.episode_current && (
-              <p className='absolute top-1.5 left-1 right-1 w-fit text-xs max-sm:text-xs font-medium bg-gradient-to-r from-orange-600 to-yellow-500 px-2 py-1 rounded-[2px] line-clamp-1'>
-                {item.episode_current.includes('Full') ? item.lang : item.episode_current}
-              </p>
-            )}
+            <div className='absolute top-1 bottom-1 left-1 right-1 flex flex-col gap-1 text-xs max-sm:text-xs font-medium'>
+              {item.episode_current.toLowerCase() !== 'full' && (
+                <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
+                  {item.episode_current}
+                </span>
+              )}
+              {item.lang && (
+                <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
+                  {item.quality} {item.lang.split('+')[0]}
+                </span>
+              )}
+            </div>
           </Link>
           {/* Movie name */}
           <Link
@@ -89,30 +103,14 @@ const CardImage = (props: CardImageProps) => {
     </>
   )
 }
-
-interface ImageComponentProps {
-  index: number
-  item: MovieItem
-  ImageProps?: Omit<ImageProps, 'src' | 'alt' | 'width' | 'height' | 'priority'>
-}
+export default CardImage
 
 export const ImageComponent = React.memo((props: ImageComponentProps) => {
   const { index, item } = props
-
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
   const imgRef = useRef<HTMLImageElement>(null)
   const isLoadedImage = useLazyLoadImg(imgRef)
-
-  const imageUrl = (item: MovieItem, index: number) => {
-    const hasError = errorImage[index]
-    const posterUrl = hasError ? item.thumb_url : item.poster_url
-    return posterUrl
-      ? (item.thumb_url || item.poster_url).includes('https')
-        ? posterUrl
-        : `${process.env.NEXT_PUBLIC_DOMAIN_CDN_IMAGE}/${posterUrl}`
-      : ''
-  }
 
   const handleErrorImage = (index: number) => {
     setErrorImage((prev) => ({ ...prev, [index]: true }))
@@ -122,12 +120,11 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
     <Image
       {...props.ImageProps}
       ref={imgRef}
-      src={imageUrl(item, index)}
+      src={imageUrl(item, errorImage[index])}
       alt={item.name}
       width={270}
       height={180}
       loading='lazy'
-      quality={80}
       onError={() => handleErrorImage(index)}
       className={cn(
         'object-cover group-hover:scale-110 aspect-[2/3] w-full transition-all duration-500',
@@ -138,5 +135,3 @@ export const ImageComponent = React.memo((props: ImageComponentProps) => {
 })
 
 ImageComponent.displayName = 'ImageComponent'
-
-export default CardImage

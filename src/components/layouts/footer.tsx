@@ -29,7 +29,7 @@ type FooterSectionProps = {
 
 const FooterSection = ({ title, links }: FooterSectionProps) => (
   <div>
-    <h4 className='text-lg font-semibold mb-3 sm:text-left'>{title}</h4>
+    <h4 className='text-base font-semibold mb-3 sm:text-left'>{title}</h4>
     <ul className='flex gap-4 items-center justify-center sm:flex-col sm:items-start sm:gap-3'>
       {links.map((link, index) => (
         <FooterLink
@@ -45,21 +45,27 @@ const FooterSection = ({ title, links }: FooterSectionProps) => (
 
 export default function Footer() {
   const supportLinks = [
-    { href: '#', label: 'Chính sách bảo mật' },
-    { href: '#', label: 'Câu hỏi thường gặp' },
+    { href: 'lien-he:;', label: 'Liên Hệ' },
+    { href: 'chinh-sach:;', label: 'Chính Sách Bảo Mật' },
+    { href: 'cau-hoi:;', label: 'Câu Hỏi Thường Gặp' },
   ]
 
-  const generalLinks = [
+  const xemPhimLinks = [
     { href: '/phim-le', label: 'Phim Lẻ' },
     { href: '/phim-bo', label: 'Phim Bộ' },
-    { href: '/the-loai/hoat-hinh', label: 'Hoạt Hình' },
+    { href: '/the-loai/hoat-hinh', label: 'Phim Hoạt Hình' },
     { href: '/the-loai/tv-shows', label: 'TV Shows' },
   ]
 
-  const getIntouch = [{ href: 'mailto:phucluu1609@gmailcom', label: 'phucluu1609@gmail.com' }]
+  const phimHayLinks = [
+    { href: '/quoc-gia/trung-quoc', label: 'Phim Trung Quốc' },
+    { href: '/quoc-gia/nhat-ban', label: 'Phim Nhật Bản' },
+    { href: '/quoc-gia/au-my', label: 'Phim Âu Mỹ' },
+    { href: '/quoc-gia/han-quoc', label: 'Phim Hàn Quốc' },
+  ]
 
   return (
-    <footer className='relative bg-[#0d0d0d] border-t border-t-gray-600 py-10'>
+    <footer className='relative bg-[#0d0d0d] border-t border-t-gray-100 py-10'>
       <div className='mx-auto max-w-screen-xl px-[25px] lg:px-10'>
         <div className='flex flex-col lg:flex-row justify-between items-center lg:items-start'>
           {/* Logo */}
@@ -72,16 +78,16 @@ export default function Footer() {
           <div className='flex flex-col md:flex-row md:space-x-10 text-center md:text-left mt-6 lg:mt-0'>
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4'>
               <FooterSection
-                title='Liên kết'
-                links={generalLinks}
+                title='Xem Phim'
+                links={xemPhimLinks}
               />
               <FooterSection
-                title='Hỗ trợ'
+                title='Phim Hay'
+                links={phimHayLinks}
+              />
+              <FooterSection
+                title='Thông Tin'
                 links={supportLinks}
-              />
-              <FooterSection
-                title='Liên hệ'
-                links={getIntouch}
               />
             </div>
           </div>
@@ -103,11 +109,11 @@ export default function Footer() {
         {/* Copyright */}
         <div className='mt-10 text-center lg:text-right'>
           <span className='block text-xs text-gray-300'>
-            &copy; {new Date().getFullYear()} Mephim247. All rights reserved.
+            Copyright &copy; {new Date().getFullYear()} Mephim247
           </span>
           <p className='mt-2 text-gray-300'>
-            “Mephim247 – Nơi trải nghiệm những bộ phim đỉnh cao. Chúc bạn có những phút giây thư
-            giãn tuyệt vời!”
+            “Mephim247 – Trải nghiệm những bộ phim đỉnh cao. Chúc bạn có những phút giây thư giãn
+            tuyệt vời!”
           </p>
         </div>
       </div>

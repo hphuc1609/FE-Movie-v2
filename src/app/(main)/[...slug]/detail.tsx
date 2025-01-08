@@ -14,22 +14,21 @@ interface DetailProps {
 
 const Detail = ({ data, slug, page }: DetailProps) => {
   // Get params
-  const lastSegment = slug.pop() || ''
-  const isPhimMoiCapNhat = lastSegment.includes('moi-cap-nhat')
+  const isPhimMoiCapNhat = slug.includes('phim-moi-cap-nhat')
 
   const filteredMovies = useMemo(() => {
-    if (['phim-moi-cap-nhat', 'phim-18'].includes(lastSegment)) return data
+    if (['phim-moi-cap-nhat', 'phim-18'].includes(slug[slug.length - 1])) return data
 
-    const items = data.items?.filter(
-      (movie) => !movie.category.some((cat) => cat.slug === 'phim-18'),
-    )
+    const items =
+      data.items?.filter((movie) => !movie.category.some((cat) => cat.slug === 'phim-18')) || []
     return { ...data, items }
-  }, [data, lastSegment])
+  }, [data, slug])
 
   const renderTitle = () => {
     if (isPhimMoiCapNhat) return 'Phim mới cập nhật'
     if (isNotEmpty(data))
       return data.titlePage?.includes('Phim') ? data.titlePage : `Phim ${data.titlePage}`
+    return '...'
   }
 
   const getBreadCrumb = () => {

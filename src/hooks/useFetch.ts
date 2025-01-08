@@ -13,8 +13,8 @@ const useFetch = async ({ endpoint, options }: FetchParams) => {
       throw new Error('Failed to fetch data')
     }
 
-    const { data, items, ...rest } = await res.json()
-    return data || items || rest
+    const { data, ...rest } = await res.json()
+    return data || rest
   } catch (error) {
     return null
   }

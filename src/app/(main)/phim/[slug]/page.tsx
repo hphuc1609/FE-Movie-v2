@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
     return useMetadata({
       title: `Phim ${name} | ${origin_name} (${year})`,
-      description: `Xem phim ${name} - ${origin_name} (${year}). ${content}`,
+      description: content,
       urlPath: `/phim/${slug}`,
       image: poster_url,
     })
@@ -45,27 +45,17 @@ export default async function MovieDetailPage({ params }: Params) {
 
   // Get detail
   const detail = await useFetch({ endpoint: `${endPoint.detail}/${slug}` })
-
   // Get movie category
   const url = detail?.movie?.category?.[0]?.slug
-  const relatedMovies = await useFetch({
-    endpoint: `${getUrl(url)}/${url}`,
-    options: { next: { revalidate } },
-  })
 
   // Phim lẻ, phim bộ
   const movies = await Promise.all([
-    useFetch({
-      endpoint: `${endPoint.list}/phim-le?limit=36`,
-      options: { next: { revalidate } },
-    }),
-    useFetch({
-      endpoint: `${endPoint.list}/phim-bo?limit=36`,
-      options: { next: { revalidate } },
-    }),
+    useFetch({ endpoint: `${getUrl(url)}/${url}`, options: { next: { revalidate } } }),
+    useFetch({ endpoint: `${endPoint.list}/phim-le?limit=36`, options: { next: { revalidate } } }),
+    useFetch({ endpoint: `${endPoint.list}/phim-bo?limit=36`, options: { next: { revalidate } } }),
   ])
 
-  const [dataPhimLe, dataPhimBo] = movies
+  const [relatedMovies, dataPhimLe, dataPhimBo] = movies
   const allMovies = {
     ...dataPhimLe,
     items: dataPhimLe.items.concat(dataPhimBo.items),

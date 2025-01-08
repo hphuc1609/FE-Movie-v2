@@ -77,13 +77,12 @@ const Banner = ({ data }: BannerProps) => {
             <Image
               src={imageUrl(item, index)}
               alt={item.origin_name}
-              priority
               fill
+              priority
               onError={() => handleErrorImage(index)}
-              className='w-full h-full object-cover'
             />
             <div className='absolute top-0 w-full h-full bg-black/55' />
-            <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[650px] flex flex-col gap-4 md:px-20 px-[25px]'>
+            <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[650px] flex flex-col gap-4 px-[25px] sm:px-10 xl:px-20'>
               <div
                 className={cn('transition-all opacity-100 grid gap-y-7 max-sm:gap-y-5', {
                   'opacity-0 ': index !== activeSlide,

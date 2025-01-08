@@ -1,13 +1,15 @@
+import Loader from '@/components/loader'
 import { endPoint } from '@/constants/end-point'
+import { dataNamPhatHanh, dataQuocGia, dataTheLoai, movieTypes } from '@/data/category'
 import isSuccessResponse from '@/helpers/check-response'
+import generateKeywords from '@/helpers/generateKeywords'
 import getUrl from '@/helpers/getUrl'
 import { useFetch, useMetadata } from '@/hooks'
 import { MovieCategory } from '@/models/interfaces/list'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Detail from './detail'
 import { Suspense } from 'react'
-import Loader from '@/components/loader'
+import Detail from './detail'
 
 interface Params {
   params: { slug: string[] }
@@ -21,6 +23,18 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
 
   const queryParams = new URLSearchParams({
     ...(page && { page: page.toString() }),
+  })
+
+  const matchedType = movieTypes.find((item) => item.slug === lastSegment)?.name
+  const matchedGenre = dataTheLoai.find((item) => item.slug === lastSegment)?.name
+  const matchedCountry = dataQuocGia.find((item) => item.slug === lastSegment)?.name
+  const matchedYear = dataNamPhatHanh.find((item) => item.slug === lastSegment)?.name
+
+  const keywords = generateKeywords({
+    type: matchedType,
+    genre: matchedGenre,
+    country: matchedCountry,
+    year: matchedYear,
   })
 
   try {
@@ -49,6 +63,7 @@ export async function generateMetadata({ params, searchParams }: Params): Promis
       description: descriptionHead,
       urlPath: `/${slug.join('/')}`,
       image: og_image.map((path) => `${data?.APP_DOMAIN_CDN_IMAGE}${path}`),
+      keywords,
     })
   } catch (error: any) {
     return {
@@ -90,7 +105,7 @@ export default async function ListingPage({ params, searchParams }: Params) {
     <Suspense fallback={<Loader />}>
       <Detail
         data={data}
-        slug={params.slug}
+        slug={slug}
         page={page}
       />
     </Suspense>

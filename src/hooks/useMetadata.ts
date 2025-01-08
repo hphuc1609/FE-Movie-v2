@@ -1,4 +1,4 @@
-import { myWebsite } from '@/constants/domain'
+import { googleKey, myWebsite } from '@/constants/domain'
 import { Metadata } from 'next'
 
 type Params = {
@@ -14,8 +14,10 @@ export const useMetadata = (params: Params) => {
   return {
     title: `${title} | Mephim247`,
     description,
-    alternates: { canonical: myWebsite + urlPath },
-    keywords: ['phim', 'xem phim', 'mephim247', 'mephim', 'xem phim online'],
+    alternates: {
+      canonical: myWebsite + urlPath,
+      types: { 'text/html': myWebsite + urlPath },
+    },
     openGraph: {
       title: `${title} | Mephim247`,
       description,
@@ -31,10 +33,10 @@ export const useMetadata = (params: Params) => {
       card: 'summary',
       images: image,
     },
-    referrer: 'origin',
     robots: { follow: true, index: true },
     metadataBase: new URL(myWebsite),
-    authors: [{ name: 'PhucLuu', url: 'https://github.com/hphuc1609' }],
+    authors: [{ name: 'PhucLuu' }],
+    verification: { google: googleKey },
     ...rest,
   } as Metadata
 }

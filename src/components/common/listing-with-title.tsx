@@ -7,8 +7,8 @@ import { useMediaQuery } from 'react-responsive'
 import 'swiper/css'
 import { Autoplay } from 'swiper/modules'
 import { Swiper, SwiperProps, SwiperRef, SwiperSlide } from 'swiper/react'
-import { ImageComponent } from './common/card-image'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
+import { ImageComponent } from './card-image'
 
 interface ListingWithTitleProps {
   data: MovieCategory

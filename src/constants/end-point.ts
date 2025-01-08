@@ -1,5 +1,5 @@
 export const endPoint = {
-  newMovies: '/danh-sach/phim-moi-cap-nhat',
+  newMovies: '/danh-sach/phim-moi-cap-nhat-v2',
   list: '/v1/api/danh-sach',
   category: '/v1/api/the-loai',
   country: '/v1/api/quoc-gia',

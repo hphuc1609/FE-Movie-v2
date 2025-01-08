@@ -1,12 +1,10 @@
 'use client'
 
-import isNotEmpty from '@/helpers/object-empty'
 import type { MovieCategory } from '@/models/interfaces/list'
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import CardImage from '../common/card-image'
-import SkeletonCard from '../common/skeleton-card'
 
 interface MovieCategoryProps {
   data: MovieCategory
@@ -33,7 +31,7 @@ const MovieCategory = ({ title, data, slug }: MovieCategoryProps) => {
       id={slug}
       className='flex-1 flex flex-col gap-8 max-lg:gap-6'
     >
-      <header className='flex items-center justify-between'>
+      <div className='flex items-center justify-between'>
         <h3 className='text-3xl max-sm:text-xl font-bold uppercase bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           {title}
           {isPhimLeOrPhimBo && <span className='text-white'> mới cập nhật</span>}
@@ -48,16 +46,12 @@ const MovieCategory = ({ title, data, slug }: MovieCategoryProps) => {
             className='group-hover:animate-spin group-hover:translate-x-0.5'
           />
         </Link>
-      </header>
+      </div>
       <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-7 max-sm:gap-x-4'>
-        {!isNotEmpty(filteredMovies) ? (
-          <SkeletonCard />
-        ) : (
-          <CardImage
-            data={filteredMovies as MovieCategory}
-            itemLength={12}
-          />
-        )}
+        <CardImage
+          data={filteredMovies as MovieCategory}
+          itemLength={12}
+        />
       </div>
     </section>
   )

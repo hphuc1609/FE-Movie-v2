@@ -4,7 +4,6 @@ import Header from '@/components/layouts/header'
 import QRCodeButton from '@/components/qrcode'
 import TanstackProvider from '@/components/tanstack-provider'
 import { Toaster } from '@/components/ui/toaster'
-import { googleKey } from '@/constants/domain'
 import { useMetadata } from '@/hooks'
 import { cn } from '@/lib/utils'
 import { Inter } from 'next/font/google'
@@ -17,8 +16,10 @@ const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_TRACKING_ID
 export const metadata = useMetadata({
   title: 'Phim Hay | Phim mới | Phim HD Vietsub',
   description:
-    'Mephim247 cung cấp phim miễn phí chất lượng cao với phụ đề vietsub - thuyết minh - lồng tiếng, mang đến những bộ phim hấp dẫn hay nhất và mới nhất với nhiều thể loại.',
-  verification: { google: googleKey },
+    'Mephim247 - Website xem phim miễn phí chất lượng cao với phụ đề vietsub - thuyết minh - lồng tiếng, cập nhật phim mới mỗi ngày với hàng nghìn bộ phim HD/4K đa thể loại.',
+  keywords: [
+    'Phim Trung Quốc, Phim Hàn Quốc, Phim chiếu rạp, Phim hành động, Phim kinh di, Phim hài, Phim hoạt hình, Phim Mỹ, Phim Võ Thuật, Phim bộ hay nhất, Xem phim Online',
+  ],
 })
 
 export default function RootLayout({

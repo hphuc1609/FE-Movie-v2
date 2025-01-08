@@ -18,6 +18,8 @@ import DialogCustom from '../common/dialog'
 import Ratings from '../common/rating'
 import { useContextGlobal } from '../context-provider'
 import { Button } from '../ui/button'
+import { MovieItem } from '@/models/interfaces/list'
+import imageUrl from '@/helpers/imgUrl'
 
 interface MovieInfoProps {
   detail: MovieDetail
@@ -174,6 +176,7 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
       id='info-movie'
       className='flex max-md:flex-col gap-[30px] overflow-hidden'
     >
+      {/* Banner */}
       <div className='absolute top-0 left-0 w-full min-h-[650px] overflow-hidden -z-10'>
         <Image
           fill
@@ -187,15 +190,13 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
         <div className='absolute -bottom-3 max-sm:bottom-0 left-0 w-full h-16 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a] to-transparent' />
       </div>
 
+      {/* Poster */}
       <div className='relative w-[300px] h-[440px] bg-skeleton mx-auto rounded-md overflow-hidden'>
         <Image
-          src={errorImage ? detail.thumb_url : detail.poster_url}
-          width={300}
-          height={440}
+          fill
+          src={imageUrl(detail, errorImage)}
           alt={detail.name}
-          priority
           onError={() => setErrorImage(true)}
-          className='w-full h-full object-cover'
         />
         <div className='absolute bottom-5 w-full flex justify-evenly'>
           <Button

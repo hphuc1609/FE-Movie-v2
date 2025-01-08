@@ -105,11 +105,13 @@ const LoginForm = () => {
       </Button>
 
       <div className='flex justify-between items-center'>
-        <div className='flex gap-2 items-center'>
+        <div
+          className='flex gap-2 items-center cursor-pointer'
+          onClick={() => setRememberMe((prev) => !prev)}
+        >
           <Checkbox
             className='w-5 h-5 bg-secondary data-[state=checked]:bg-white data-[state=checked]:text-primary'
             checked={rememberMe}
-            onClick={() => setRememberMe((prev) => !prev)}
           />
           <p className='text-[15px] font-medium'>Nhớ đăng nhập</p>
         </div>

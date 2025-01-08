@@ -1,6 +1,6 @@
 import Banner from '@/components/banner'
 import Loader from '@/components/loader'
-import MovieCategory from '@/components/movie/categories'
+import MovieCategory from '@/components/movie/category'
 import NewUpdateMovie from '@/components/movie/new'
 import { endPoint } from '@/constants/end-point'
 import { useFetch } from '@/hooks'

@@ -3,7 +3,7 @@
 import CommentBox from '@/components/comment-box'
 import BreadcrumbCustom from '@/components/common/breadcrumb-custom'
 import ErrorMessage from '@/components/common/error-message'
-import ListingWithTitle from '@/components/listing-with-title'
+import ListingWithTitle from '@/components/common/listing-with-title'
 import MovieInfo from '@/components/movie/detail'
 import MoviePlayer from '@/components/movie/player'
 import { MovieDetailResponse } from '@/models/interfaces/detail'
