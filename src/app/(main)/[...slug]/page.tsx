@@ -79,7 +79,7 @@ export default async function ListingPage({ params, searchParams }: Params) {
 
   const lastSegment = slug[slug.length - 1]
   const LIMIT = 36
-  const revalidate = 3
+  const revalidate = 10
 
   const queryParams = new URLSearchParams({
     ...(page && { page: page.toString() }),

@@ -44,8 +44,8 @@ export default function Drawer(props: DrawerProps) {
   return (
     <div
       className={cn(
-        'fixed top-0 right-0 w-full min-h-screen bg-black/80 transition-all duration-300 overflow-hidden opacity-0 invisible',
-        { 'opacity-100 visible': open },
+        'fixed top-0 right-0 w-full min-h-screen bg-black/80 transition-all duration-300 overflow-hidden invisible',
+        { visible: open },
       )}
       onClick={handleClose}
     >
@@ -105,30 +105,31 @@ export default function Drawer(props: DrawerProps) {
                     )}
                   />
                 </div>
-                <div
-                  className={cn('overflow-hidden transition-all duration-500 ease-in-out', {
-                    'max-h-0': openSubMenu !== menuItem.name,
-                    'max-h-screen': openSubMenu === menuItem.name,
-                  })}
-                >
-                  {menuItem.subMenu && (
-                    <div className='pl-10 grid grid-cols-2 gap-x-3 text-sm font-normal'>
-                      {menuItem.subMenu.map((item) => (
-                        <Link
-                          key={item.slug}
-                          href={getUrl(item.slug)}
-                          className={cn(
-                            'hover:text-primary-color py-2',
-                            activeLink(item.slug) ? 'text-primary-color' : 'text-gray-100',
-                          )}
-                          onClick={handleClose}
-                        >
-                          {menuItem.name.includes('Năm') ? `Năm ${item.name}` : item.name}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                {menuItem.subMenu && (
+                  <div
+                    className={cn(
+                      'overflow-hidden transition-all duration-500 ease-in-out pl-10 grid grid-cols-2 gap-x-3 text-sm font-normal',
+                      {
+                        'max-h-0': openSubMenu !== menuItem.name,
+                        'max-h-screen': openSubMenu === menuItem.name,
+                      },
+                    )}
+                  >
+                    {menuItem.subMenu.map((item) => (
+                      <Link
+                        key={item.slug}
+                        href={getUrl(item.slug)}
+                        className={cn(
+                          'hover:text-primary-color py-2',
+                          activeLink(item.slug) ? 'text-primary-color' : 'text-gray-100',
+                        )}
+                        onClick={handleClose}
+                      >
+                        {menuItem.name.includes('Năm') ? `Năm ${item.name}` : item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </>
             )}
           </div>

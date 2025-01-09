@@ -12,7 +12,7 @@ export default async function HomePage() {
   const LIMIT = 36
 
   const nextConfig: RequestInit = {
-    next: { revalidate: 3 },
+    next: { revalidate: 10 },
   }
 
   const categories = [

@@ -82,7 +82,7 @@ const Banner = ({ data }: BannerProps) => {
               onError={() => handleErrorImage(index)}
             />
             <div className='absolute top-0 w-full h-full bg-black/55' />
-            <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[650px] flex flex-col gap-4 px-[25px] sm:px-10 xl:px-20'>
+            <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[700px] flex flex-col gap-4 px-[25px] sm:px-10 xl:px-20'>
               <div
                 className={cn('transition-all opacity-100 grid gap-y-7 max-sm:gap-y-5', {
                   'opacity-0 ': index !== activeSlide,
@@ -90,24 +90,22 @@ const Banner = ({ data }: BannerProps) => {
               >
                 <div>
                   <h1 className='text-[36px] font-bold line-clamp-2 max-sm:text-xl'>{item.name}</h1>
-                  <h2 className='line-clamp-1 text-lg md:text-xl'>{item.origin_name}</h2>
+                  <h2 className='line-clamp-1 text-base md:text-xl'>{item.origin_name}</h2>
                 </div>
-                <div className='text-base max-sm:text-xs flex items-center lg:gap-5 gap-3 max-sm:gap-2'>
-                  <span className='border-2 border-white font-semibold px-1.5'>{item.quality}</span>
+                <div className='text-base max-sm:text-xs flex items-center gap-3 max-sm:gap-2'>
+                  <span className='border-2 border-white font-semibold py-1 px-1.5'>
+                    {item.quality}
+                  </span>
                   <span className='line-clamp-1'>
                     {item.category
                       .slice(0, 2)
                       .map((cat) => cat.name)
                       .join(', ')}
                   </span>
-                  <span className='flex items-center gap-2 text-nowrap'>
-                    <Clock4 size={17} />
-                    {item.time}
-                  </span>
-                  <span className='flex items-center gap-2 text-nowrap'>
-                    <CalendarDays size={17} />
-                    {item.year}
-                  </span>
+                  <Clock4 size={17} />
+                  {item.time}
+                  <CalendarDays size={17} />
+                  {item.year}
                 </div>
                 <Button
                   variant='default'
