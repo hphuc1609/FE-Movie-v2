@@ -50,14 +50,14 @@ const CardImage = (props: CardImageProps) => {
               className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-all duration-300'
             />
             <div className='absolute top-1 bottom-1 left-1 right-1 flex flex-col gap-1 text-xs max-sm:text-xs font-medium'>
-              {item.episode_current.toLowerCase() !== 'full' && (
-                <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
-                  {item.episode_current}
-                </span>
-              )}
               {item.lang && (
                 <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
                   {item.quality} {item.lang.split('+')[0]}
+                </span>
+              )}
+              {item.episode_current.toLowerCase() !== 'full' && (
+                <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
+                  {item.episode_current}
                 </span>
               )}
             </div>
