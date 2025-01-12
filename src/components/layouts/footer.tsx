@@ -6,7 +6,7 @@ import { Button } from '../ui/button'
 import { ChevronUp } from 'lucide-react'
 import MyLogo from '../common/logo'
 
-type FooterLinkProps = {
+interface FooterLinkProps {
   href: string
   children: React.ReactNode
 }
@@ -22,7 +22,7 @@ const FooterLink = ({ href, children }: FooterLinkProps) => (
   </li>
 )
 
-type FooterSectionProps = {
+interface FooterSectionProps {
   title: string
   links: { href: string; label: string }[]
 }
@@ -76,7 +76,7 @@ export default function Footer() {
 
           {/* Navigation Links */}
           <div className='flex flex-col md:flex-row md:space-x-10 text-center md:text-left mt-6 lg:mt-0'>
-            <div className='grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-4'>
+            <div className='grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6 sm:gap-y-4'>
               <FooterSection
                 title='Xem Phim'
                 links={xemPhimLinks}

@@ -23,11 +23,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
         urlPath: `/phim/${params.slug}`,
       })
 
-    const { name, origin_name, content, year, slug, poster_url } = data.movie as MovieDetail
+    const { name, content, year, slug, poster_url } = data.movie as MovieDetail
+    const description = content.length > 160 ? `${content.slice(0, 157)}...` : content
 
     return useMetadata({
-      title: `Phim ${name} | ${origin_name} (${year})`,
-      description: content,
+      title: `${name} ${year} Full HD Vietsub`,
+      description,
       urlPath: `/phim/${slug}`,
       image: poster_url,
     })

@@ -1,20 +1,16 @@
 'use client'
 
 import imageUrl from '@/helpers/imgUrl'
-import { cn } from '@/lib/utils'
 import { NewMovieResponse } from '@/models/interfaces/new-movie'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { useMediaQuery } from 'react-responsive'
-import { Skeleton } from '../ui/skeleton'
 
 interface NewUpdateMoviesProps {
   data: NewMovieResponse
 }
 
 const NewUpdateMovies = ({ data }: NewUpdateMoviesProps) => {
-  const isMobile = useMediaQuery({ maxWidth: 750 })
   const [errorImage, setErrorImage] = useState<{ [key: number]: boolean }>({})
 
   const handleErrorImage = (index: number) => {
@@ -23,14 +19,8 @@ const NewUpdateMovies = ({ data }: NewUpdateMoviesProps) => {
 
   return (
     <section className='flex flex-col gap-3 w-[360px] max-lg:flex-2 max-[950px]:hidden'>
-      <h3 className='text-xl uppercase font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
-        Phim đề cử
-      </h3>
-      <div
-        className={cn(`rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3`, {
-          'max-h-[450px]': isMobile,
-        })}
-      >
+      <h2 className='text-xl uppercase font-bold text-primary-color'>Phim đề cử</h2>
+      <div className='rounded-sm bg-black bg-opacity-30 overflow-auto p-3 flex flex-col gap-3'>
         {data.items.map((item, index) => (
           <Link
             key={item._id}

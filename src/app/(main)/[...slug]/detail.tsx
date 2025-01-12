@@ -52,7 +52,7 @@ const Detail = ({ data, slug, page }: DetailProps) => {
     <>
       <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
       <section className='grid gap-6'>
-        <h1 className='text-3xl max-sm:text-2xl font-bold capitalize bg-gradient-to-r from-yellow-400 via-orange-500 to-orange-500 bg-clip-text text-transparent'>
+        <h1 className='text-3xl max-sm:text-2xl font-bold capitalize text-primary-color'>
           {renderTitle()}
         </h1>
         <TablePagination data={filteredMovies} />

@@ -67,7 +67,7 @@ const Banner = ({ data }: BannerProps) => {
       speed={1500}
       autoplay={{ delay: 7000, disableOnInteraction: false }}
       modules={[Pagination, Autoplay, EffectFade]}
-      className='relative max-w-screen-2xl h-[635px] max-sm:h-[300px]'
+      className='relative max-w-screen-2xl h-[650px] max-sm:h-[350px]'
     >
       <div className='absolute -bottom-6 max-sm:bottom-0 left-0 w-full h-20 max-sm:h-10 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a] z-10' />
 
@@ -75,11 +75,12 @@ const Banner = ({ data }: BannerProps) => {
         return (
           <SwiperSlide key={item._id}>
             <Image
+              width={1920}
+              height={1080}
               src={imageUrl(item, index)}
               alt={item.origin_name}
-              fill
-              priority
               onError={() => handleErrorImage(index)}
+              className='object-cover w-full h-full'
             />
             <div className='absolute top-0 w-full h-full bg-black/55' />
             <div className='absolute top-1/2 -translate-y-1/2 left-0 w-full md:max-w-[700px] flex flex-col gap-4 px-[25px] sm:px-10 xl:px-20'>
@@ -89,8 +90,8 @@ const Banner = ({ data }: BannerProps) => {
                 })}
               >
                 <div>
-                  <h1 className='text-[36px] font-bold line-clamp-2 max-sm:text-xl'>{item.name}</h1>
-                  <h2 className='line-clamp-1 text-base md:text-xl'>{item.origin_name}</h2>
+                  <h3 className='text-[36px] font-bold line-clamp-2 max-sm:text-xl'>{item.name}</h3>
+                  <p className='line-clamp-1 text-base md:text-xl'>{item.origin_name}</p>
                 </div>
                 <div className='text-base max-sm:text-xs flex items-center gap-3 max-sm:gap-2'>
                   <span className='border-2 border-white font-semibold py-1 px-1.5'>
@@ -130,7 +131,7 @@ const Banner = ({ data }: BannerProps) => {
       })}
 
       {moviesFiltered.length > 0 && (
-        <div className='absolute z-50 bottom-[53px] max-md:bottom-0 right-0 lg:pr-20 pr-[25px] flex items-center gap-2'>
+        <div className='absolute z-50 bottom-[53px] max-md:bottom-8 right-0 lg:pr-20 pr-[25px] flex items-center gap-2'>
           <Button
             ref={prevBtnRef}
             title='Previous'

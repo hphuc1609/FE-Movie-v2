@@ -9,6 +9,7 @@ import Image, { ImageProps } from 'next/image'
 import Link from 'next/link'
 import React, { useRef, useState } from 'react'
 import PlayButton from './play-button'
+import { Play } from 'lucide-react'
 
 interface CardImageProps {
   data: MovieCategory
@@ -33,9 +34,10 @@ const CardImage = (props: CardImageProps) => {
       {(data.items || data).slice(0, itemLength).map((item, index) => (
         <div
           key={item._id}
-          className='h-fit flex flex-col gap-3'
+          className='flex flex-col'
         >
           <Link
+            title={item.name}
             href={handleNavigate(item)}
             className='relative group bg-gray-50 bg-opacity-10 flex items-center justify-center overflow-hidden shadow-black/50 shadow-lg'
             onClick={openRandomAdLink}
@@ -44,44 +46,52 @@ const CardImage = (props: CardImageProps) => {
               item={item}
               index={index}
             />
-            <div className='absolute w-full h-full bg-black opacity-0 transition-all duration-300 group-hover:opacity-50' />
-            <PlayButton
-              PlayIconProps={{ size: 25 }}
-              className='w-[50px] h-[50px] max-sm:w-[40px] max-sm:h-[40px] opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-all duration-300'
-            />
+            <div className='absolute w-full h-full bg-black/0 transition-all flex group-hover:bg-black/50'>
+              <Play
+                size={50}
+                fill='currentColor'
+                className='m-auto group-hover:block hidden border border-white rounded-full p-2'
+              />
+            </div>
             <div className='absolute top-1 bottom-1 left-1 right-1 flex flex-col gap-1 text-xs max-sm:text-xs font-medium'>
               {item.lang && (
                 <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
                   {item.quality} {item.lang.split('+')[0]}
                 </span>
               )}
-              {item.episode_current.toLowerCase() !== 'full' && (
-                <span className='w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1'>
+              {item.episode_current?.toLowerCase() !== 'full' && (
+                <span
+                  className={cn(
+                    'w-fit bg-gradient-to-r from-orange-700 to-yellow-500 px-2 py-1 rounded-sm line-clamp-1',
+                    { hidden: !item.episode_current },
+                  )}
+                >
                   {item.episode_current}
                 </span>
               )}
             </div>
           </Link>
+
           {/* Movie name */}
-          <Link
-            href={handleNavigate(item)}
-            className='text-sm max-[400px]:text-xs grid gap-1'
-          >
-            <p
+          <h3 className='text-sm max-sm:text-xs hover:text-primary-color font-semibold line-clamp-2 mt-3'>
+            <Link
+              href={handleNavigate(item)}
               title={item.name}
-              className='hover:text-primary-color font-semibold line-clamp-2'
             >
               {item.name} ({item.year})
-            </p>
-            <span
+            </Link>
+          </h3>
+          <h3 className='text-sm max-sm:text-xs text-white/50 line-clamp-2 hover:text-primary-color mt-1'>
+            <Link
+              href={handleNavigate(item)}
               title={item.origin_name}
-              className='text-white text-opacity-50 line-clamp-2 hover:text-primary-color break-keep'
             >
               {item.origin_name}
-            </span>
-          </Link>
+            </Link>
+          </h3>
+
           {/* Category tags */}
-          <div className='flex items-center gap-1'>
+          <div className='flex items-center gap-1 mt-3'>
             {item.category?.slice(0, 2).map(
               (cate) =>
                 cate.name && (

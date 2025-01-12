@@ -38,7 +38,7 @@ export default async function HomePage() {
   return (
     <Suspense fallback={<Loader />}>
       <Banner data={dataBanners} />
-      <div className='max-w-screen-xl m-auto px-10 pt-6 pb-10 max-lg:px-[25px] flex gap-9'>
+      <div className='max-w-screen-xl m-auto px-10 pt-6 pb-10 max-lg:px-[25px] max-sm:pt-0 flex gap-9'>
         <div className='flex-1 flex flex-col gap-14'>
           {categories.map((item, index) => (
             <MovieCategory

@@ -8,7 +8,7 @@ import { IUser } from '@/models/interfaces/user'
 import { useFavourites } from '@/services/query-data'
 import { getCookie } from 'cookies-next'
 import { Loader } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 
 const transformFavouritesData = (favourites: IFavourite['data'], username: string) => {
   return favourites
@@ -48,18 +48,16 @@ const Detail = () => {
     setLoading(false)
   }
 
-  const getBreadCrumb = () => {
-    return [
-      {
-        isCurrent: true,
-        name: 'Phim yêu thích',
-      },
-    ]
-  }
+  const breadCrumb = [
+    {
+      isCurrent: true,
+      name: 'Phim yêu thích',
+    },
+  ]
 
   return (
-    <>
-      <BreadcrumbCustom breadCrumb={getBreadCrumb()} />
+    <Suspense fallback={<Loader />}>
+      <BreadcrumbCustom breadCrumb={breadCrumb} />
       <section className='grid gap-6'>
         <h2 className='text-3xl max-sm:text-xl font-bold capitalize bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent'>
           Phim yêu thích
@@ -78,7 +76,7 @@ const Detail = () => {
         )}
         {convertData.length === 0 && <p className='text-lg'>Chưa có phim yêu thích nào.</p>}
       </section>
-    </>
+    </Suspense>
   )
 }
 

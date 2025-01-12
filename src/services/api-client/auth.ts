@@ -1,5 +1,5 @@
 import { authEndPoint } from '@/constants/end-point'
-import axiosHeaders from '@/lib/axios-headers'
+import axiosHeaders from '@/lib/axios-auth'
 import { ILoginResponse, ILogoutResponse, IRegisterResponse } from '@/models/interfaces/auth'
 
 const authApi = {

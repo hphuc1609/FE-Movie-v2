@@ -1,7 +1,6 @@
-import React from 'react'
-import { Star } from 'lucide-react'
-
 import { cn } from '@/lib/utils'
+import { Star } from 'lucide-react'
+import React from 'react'
 
 const ratingVariants = {
   default: {
@@ -20,19 +19,19 @@ const ratingVariants = {
 
 interface RatingsProps extends React.HTMLAttributes<HTMLDivElement> {
   rating: number
-  ratingCount?: number
-  totalStars?: number
+  ratedcount?: number
+  totalstars?: number
   size?: number
   fill?: boolean
   Icon?: React.ReactElement
   variant?: keyof typeof ratingVariants
 }
 
-const Ratings = ({ ...props }: RatingsProps) => {
+const Ratings = (props: RatingsProps) => {
   const {
     rating,
-    ratingCount = 0,
-    totalStars = 5,
+    ratedcount = 0,
+    totalstars = 5,
     size = 18,
     fill = true,
     Icon = <Star fill='currentColor' />,
@@ -64,7 +63,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
           }),
         )}
         {partialStar}
-        {[...Array(totalStars - fullStars - (partialStar ? 1 : 0))].map((_, i) =>
+        {[...Array(totalstars - fullStars - (partialStar ? 1 : 0))].map((_, i) =>
           React.cloneElement(Icon, {
             key: i + fullStars + 1,
             size,
@@ -73,7 +72,7 @@ const Ratings = ({ ...props }: RatingsProps) => {
         )}
       </div>
       <span className='text-primary-foreground text-sm line-clamp-1'>
-        {rating > 1 ? `${rating.toFixed(1)}đ / ${ratingCount}` : 0} đánh giá
+        {rating > 1 ? `${rating.toFixed(1)}đ / ${ratedcount}` : 0} đánh giá
       </span>
     </div>
   )
@@ -85,7 +84,7 @@ interface PartialStarProps {
   className?: string
   Icon: React.ReactElement
 }
-const PartialStar = ({ ...props }: PartialStarProps) => {
+const PartialStar = (props: PartialStarProps) => {
   const { fillPercentage, size, className, Icon } = props
 
   return (

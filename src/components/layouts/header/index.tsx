@@ -188,7 +188,7 @@ const HeaderMenubar = React.memo(() => {
               <React.Fragment key={menuItem.name}>
                 {menuItem.href ? (
                   <Link
-                    role='link'
+                    role={menuItem.name}
                     href={getUrl(menuItem.href)}
                     className={cn('text-base font-semibold hover:text-primary-color')}
                   >
@@ -215,7 +215,7 @@ const HeaderMenubar = React.memo(() => {
                       >
                         {menuItem.subMenu.map((subItem) => (
                           <Link
-                            role='link'
+                            role={subItem.name}
                             key={subItem.slug}
                             href={getUrl(subItem.slug)}
                           >

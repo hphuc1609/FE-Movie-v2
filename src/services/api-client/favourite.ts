@@ -1,5 +1,5 @@
 import { endPoint } from '@/constants/end-point'
-import axiosHeaders from '@/lib/axios-headers'
+import axiosHeaders from '@/lib/axios-auth'
 import { IFavourite, IFavouriteItem } from '@/models/interfaces/favourite'
 
 const favouriteApi = {

@@ -38,19 +38,14 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
   const episodeParam = params.get('episode') as string
 
   const mobile = useMediaQuery({ maxWidth: 640 })
-
   const { data: favourites = [] } = useFavourites({ options: { staleTime: 0 } })
 
   // Check movie in favourite list
-  const movieFavour = favourites
-    .find((item) => item.username === username)
-    ?.favourites.find((favourite) => favourite.movieId === detail._id)
 
   // Set isFavourite
   useEffect(() => {
     const userInfo = getCookie('userVerify')
     const username = userInfo ? JSON.parse(userInfo).username : null
-
     setUsername(username)
 
     if (!username) {
@@ -58,8 +53,12 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
       return
     }
 
-    setIsFavourite(movieFavour !== undefined)
-  }, [movieFavour, isLogin])
+    const findMovieFavour = favourites
+      .find((item) => item.username === username)
+      ?.favourites.find((favourite) => favourite.movieId === detail._id)
+
+    setIsFavourite(findMovieFavour !== undefined)
+  }, [detail._id, favourites, isLogin])
 
   // ----------------- Get Details -----------------------------
   const categories = useMemo(
@@ -122,8 +121,16 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
       }
       return await favouriteApi.add(data)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.status === 'error') {
+        handleErrorToast(data.message)
+        return
+      }
       setIsFavourite(true)
+      showToast({
+        variant: 'success',
+        description: 'Đã thêm phim vào danh sách yêu thích!',
+      })
     },
     onError: (error) => {
       if (error.message === 'please login') {
@@ -138,12 +145,14 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
     mutationFn: async (id: string) => {
       return await favouriteApi.delete(id)
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      if (data.status === 'error') {
+        handleErrorToast(data.message)
+        return
+      }
       setIsFavourite(false)
     },
-    onError: (error) => {
-      handleErrorToast(error.message)
-    },
+    onError: (error) => handleErrorToast(error.message),
   })
 
   const handleFavourite = () => {
@@ -155,14 +164,21 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
       year: detail.year,
       movieId: detail._id,
       posterUrl: detail.poster_url,
+      lang: detail.lang,
+      episodeCurrent: detail.episode_current,
     }
 
     try {
       if (isFavourite) {
-        if (movieFavour) {
-          deleteMutation.mutate(movieFavour?._id as string)
+        const favouriteItem = favourites
+          .find((item) => item.username === username)
+          ?.favourites.find((favourite) => favourite.movieId === detail._id)
+
+        if (favouriteItem) {
+          deleteMutation.mutate(favouriteItem._id as string)
           return
         }
+        return
       }
       submitMutation.mutate(payload)
     } catch (error: any) {
@@ -241,23 +257,23 @@ const MovieInfo = ({ detail }: MovieInfoProps) => {
       </div>
 
       {/* Information */}
-      <div className='relative flex flex-1 flex-col gap-6'>
+      <div className='relative flex flex-1 flex-col gap-5 sm:gap-6'>
         <div className='flex sm:justify-between sm:gap-5 max-sm:flex-col'>
           <div className='flex flex-col gap-1 max-sm:gap-2'>
             <h1 className='text-3xl font-semibold text-primary-color'>{detail.name}</h1>
             <h2 className='opacity-70 font-medium text-lg'>{detail.origin_name}</h2>
             <Ratings
               rating={detail.tmdb.vote_average}
-              ratingCount={detail.tmdb.vote_count}
+              ratedcount={detail.tmdb.vote_count}
               variant='yellow'
-              totalStars={10}
+              totalstars={10}
             />
           </div>
 
           {/* Favourite button */}
           <Button
             variant='ghost'
-            className='hover:bg-transparent hover:text-current'
+            className='hover:bg-transparent hover:text-current justify-start max-sm:p-0 max-sm:mt-4 h-fit'
             onClick={handleFavourite}
           >
             {isFavourite ? (
