@@ -42,6 +42,10 @@ export default function Drawer({ open, onClose, dataMenu }: DrawerProps) {
     setOpenSubMenu(null)
   }
 
+  const toggleSubMenu = (menuName: string) => {
+    setOpenSubMenu(openSubMenu === menuName ? null : menuName)
+  }
+
   return (
     <div
       className={cn(
@@ -63,6 +67,7 @@ export default function Drawer({ open, onClose, dataMenu }: DrawerProps) {
           onClick={handleClose}
         />
         <div className='flex flex-col'>
+          {/* Sub Menu */}
           {dataMenu.map((menuItem) => (
             <div
               key={menuItem.name}
@@ -70,7 +75,7 @@ export default function Drawer({ open, onClose, dataMenu }: DrawerProps) {
             >
               {menuItem.href ? (
                 <Link
-                  role={menuItem.name}
+                  aria-label={menuItem.name}
                   href={getUrl(menuItem.href)}
                   className={cn(
                     'text-base hover:text-primary-color py-2 px-5 flex items-center gap-2 transition-all',
@@ -84,9 +89,7 @@ export default function Drawer({ open, onClose, dataMenu }: DrawerProps) {
               ) : (
                 <>
                   <div
-                    onClick={() =>
-                      setOpenSubMenu(openSubMenu === menuItem.name ? null : menuItem.name)
-                    }
+                    onClick={() => toggleSubMenu(menuItem.name)}
                     className='py-2 px-5 flex items-center justify-between cursor-pointer hover:text-primary-color transition-all duration-300 rounded-md text-gray-100'
                   >
                     <span className='text-base flex items-center gap-2'>
@@ -106,7 +109,7 @@ export default function Drawer({ open, onClose, dataMenu }: DrawerProps) {
                     <div className='pl-10 grid grid-cols-2 gap-x-3 text-sm font-normal'>
                       {menuItem.subMenu.map((item) => (
                         <Link
-                          role={item.name}
+                          aria-label={item.name}
                           key={item.slug}
                           href={getUrl(item.slug)}
                           className={cn(

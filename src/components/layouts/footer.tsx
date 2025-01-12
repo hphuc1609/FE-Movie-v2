@@ -78,7 +78,7 @@ export default function Footer() {
           <div className='flex flex-col md:flex-row md:space-x-10 text-center md:text-left mt-6 lg:mt-0'>
             <div className='grid grid-cols-1 sm:grid-cols-3 gap-x-8 gap-y-6 sm:gap-y-4'>
               <FooterSection
-                title='Xem Phim'
+                title='Phim Mới'
                 links={xemPhimLinks}
               />
               <FooterSection

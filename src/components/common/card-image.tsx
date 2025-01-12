@@ -73,7 +73,7 @@ const CardImage = (props: CardImageProps) => {
           </Link>
 
           {/* Movie name */}
-          <h3 className='text-sm max-sm:text-xs hover:text-primary-color font-semibold line-clamp-2 mt-3'>
+          <h3 className='text-sm max-sm:text-xs hover:text-primary-color font-semibold line-clamp-2 mt-4'>
             <Link
               href={handleNavigate(item)}
               title={item.name}
@@ -81,7 +81,7 @@ const CardImage = (props: CardImageProps) => {
               {item.name} ({item.year})
             </Link>
           </h3>
-          <h3 className='text-sm max-sm:text-xs text-white/50 line-clamp-2 hover:text-primary-color mt-1'>
+          <h3 className='text-sm max-sm:text-xs text-white/50 line-clamp-2 hover:text-primary-color mt-2'>
             <Link
               href={handleNavigate(item)}
               title={item.origin_name}
